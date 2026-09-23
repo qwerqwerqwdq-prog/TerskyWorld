@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark noselect">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Терский Мир — РВПИ</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
+<meta name="referrer" content="no-referrer">
+<meta name="rating" content="restricted">
+<meta name="distribution" content="private">
+<meta name="theme-color" content="#0a0f0f">
+<meta name="description" content="Ролевая-Военно-Политическая Игра «Терский Мир»">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<style>
+:root{
+  --bg:#0a0f0f;--bg-card:#11181a;--bg-sidebar:#0d1414;--bg-muted:#18211f;
+  --fg:#e8f0ed;--fg-muted:#8fbfb5;--fg-dim:#5a7a75;
+  --primary:#2d8a7e;--primary-hover:#35a294;--accent:#3a7d74;--accent-light:#8fbfb5;
+  --secondary:#1a3a35;--border:rgba(58,125,116,0.25);--border-strong:rgba(58,125,116,0.5);
+  --danger:#c44d4d;--warning:#d4a543;--success:#5dba84;--radius:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}
+html,body{height:100%;font-family:'Cormorant Garamond',Georgia,serif;background:var(--bg);color:var(--fg);font-size:16px;line-height:1.5}
+body{background-image:radial-gradient(ellipse at top,rgba(58,125,116,0.18) 0%,transparent 55%),radial-gradient(ellipse at bottom,rgba(26,58,53,0.22) 0%,transparent 50%);background-attachment:fixed;min-height:100vh}
+h1,h2,h3,h4,h5,h6{font-family:'Cinzel',Georgia,serif;letter-spacing:0.04em;color:var(--fg)}
+a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg-card)}
+::-webkit-scrollbar-thumb{background:rgba(58,125,116,0.4);border-radius:4px;border:2px solid var(--bg-card)}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+@media print{body{display:none!important}}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.header{position:sticky;top:0;z-index:40;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;background:rgba(17,24,26,0.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.header-title{font-family:'Cinzel',serif;font-size:15px;font-weight:600;letter-spacing:0.08em;color:var(--fg)}
+.header-subtitle{font-size:10px;color:var(--fg-muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:2px}
+.header-spacer{flex:1}.header-user{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px}
+.header-avatar{width:32px;height:32px;border-radius:50%;background:rgba(58,125,116,0.2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:'Cinzel',serif;font-weight:600}
+.layout{display:flex;flex:1;min-height:0}
+.sidebar{width:240px;flex-shrink:0;background:rgba(13,20,20,0.8);backdrop-filter:blur(8px);border-right:1px solid var(--border);overflow-y:auto;padding:12px;position:sticky;top:56px;height:calc(100vh - 56px)}
+.sidebar-section-title{padding:8px 12px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim)}
+.nav-item{width:100%;display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:6px;border:1px solid transparent;background:none;color:var(--fg-muted);font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.03em;text-align:left;transition:all 0.15s;margin-bottom:2px}
+.nav-item:hover{color:var(--fg);background:rgba(58,125,116,0.1)}
+.nav-item.active{color:var(--accent-light);background:rgba(58,125,116,0.15);border-color:rgba(58,125,116,0.3)}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.main{flex:1;min-width:0;padding:16px 24px;overflow-x:hidden}
+.main-inner{max-width:1200px;margin:0 auto}
+.footer{margin-top:auto;padding:16px 24px;text-align:center;border-top:1px solid var(--border);background:rgba(17,24,26,0.4)}
+.footer-text{font-size:12px;color:var(--fg-dim);font-style:italic}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg-muted);color:var(--fg);font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.04em;transition:all 0.15s}
+.btn:hover{background:rgba(58,125,116,0.2);border-color:var(--accent)}
+.btn-primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:none;border:none;color:var(--fg-muted)}
+.btn-ghost:hover{color:var(--fg);background:rgba(58,125,116,0.1)}
+.btn-danger{color:var(--danger)}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-icon{padding:8px;width:36px;height:36px;justify-content:center}
+.card{background:rgba(17,24,26,0.6);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-hover:hover{background:rgba(17,24,26,0.85);border-color:var(--accent);cursor:pointer}
+.card-glow{box-shadow:0 0 12px rgba(58,125,116,0.15),0 0 24px rgba(58,125,116,0.08)}
+.input,.textarea,.select{width:100%;padding:8px 12px;background:rgba(10,15,15,0.6);border:1px solid var(--border);border-radius:var(--radius);color:var(--fg);font-family:'Cormorant Garamond',serif;font-size:15px}
+.input:focus,.textarea:focus,.select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(58,125,116,0.15)}
+.textarea{min-height:80px;resize:vertical}
+.label{display:block;font-size:11px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:6px;font-family:'Cinzel',serif}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);font-size:10px;font-family:'Cinzel',serif;letter-spacing:0.08em;color:var(--fg-muted)}
+.badge-success{background:rgba(93,186,132,0.15);color:var(--success);border-color:rgba(93,186,132,0.3)}
+.badge-warning{background:rgba(212,165,67,0.15);color:var(--warning);border-color:rgba(212,165,67,0.3)}
+.badge-accent{background:rgba(58,125,116,0.15);color:var(--accent-light);border-color:rgba(58,125,116,0.3)}
+.badge-danger{background:rgba(196,77,77,0.15);color:var(--danger);border-color:rgba(196,77,77,0.3)}
+.ornament{height:24px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='24' viewBox='0 0 80 24'%3E%3Cg fill='none' stroke='%233a7d74' stroke-width='1.2' opacity='0.55'%3E%3Cpath d='M0 12 L10 12 L14 6 L22 6 L26 12 L34 12 L30 16 L22 16 L18 12'/%3E%3Cpath d='M40 12 L50 12 L54 6 L62 6 L66 12 L74 12 L70 16 L62 16 L58 12'/%3E%3Ccircle cx='38' cy='12' r='1.5' fill='%233a7d74'/%3E%3C/g%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center;background-size:80px 24px;opacity:0.6}
+.page-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.page-header h1{font-size:28px;font-weight:700;text-shadow:0 0 8px rgba(58,125,116,0.3)}
+.page-header p{color:var(--fg-muted);font-size:14px;margin-top:6px}
+.page-header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.auth-wrap{min-height:100vh;display:flex}
+.auth-left{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;position:relative}
+.auth-right{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+.auth-logo{width:120px;height:120px;margin-bottom:32px}
+.auth-title{font-size:48px;font-weight:700;text-shadow:0 0 12px rgba(58,125,116,0.4);letter-spacing:0.1em}
+.auth-subtitle{color:var(--fg-muted);font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;margin-top:12px}
+.auth-quote{color:var(--fg-muted);font-style:italic;font-size:18px;max-width:400px;line-height:1.6;margin-top:32px}
+.auth-features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:400px;margin-top:32px}
+.auth-feature{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;border:1px solid var(--border);border-radius:6px;background:rgba(17,24,26,0.4)}
+.auth-feature span{font-size:11px;color:var(--fg-muted);font-family:'Cinzel',serif}
+.auth-form-wrap{width:100%;max-width:400px}
+.auth-tabs{display:flex;gap:4px;padding:4px;background:rgba(24,33,31,0.4);border-radius:6px;margin-bottom:24px}
+.auth-tab{flex:1;padding:8px;border:none;background:none;color:var(--fg-muted);font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.04em;border-radius:4px;transition:all 0.15s}
+.auth-tab.active{background:var(--accent);color:var(--bg)}
+.auth-form-card{position:relative;background:rgba(17,24,26,0.8);backdrop-filter:blur(8px);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:0 0 12px rgba(58,125,116,0.15)}
+.auth-form-card::before,.auth-form-card::after{content:'';position:absolute;width:18px;height:18px;border:1.5px solid rgba(58,125,116,0.7)}
+.auth-form-card::before{top:6px;left:6px;border-right:none;border-bottom:none}
+.auth-form-card::after{bottom:6px;right:6px;border-left:none;border-top:none}
+.field-group{margin-bottom:16px}
+.input-with-icon{position:relative}
+.input-with-icon .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--fg-muted)}
+.input-with-icon .input{padding-left:36px}
+.toast-container{position:fixed;top:16px;right:16px;z-index:100;display:flex;flex-direction:column;gap:8px;max-width:360px}
+.toast{padding:12px 16px;background:rgba(17,24,26,0.95);border:1px solid var(--border);border-radius:var(--radius);backdrop-filter:blur(8px);animation:slideIn 0.3s ease;display:flex;gap:8px;align-items:flex-start}
+.toast-success{border-color:var(--success)}.toast-error{border-color:var(--danger)}.toast-info{border-color:var(--accent)}
+.toast-title{font-family:'Cinzel',serif;font-size:13px;font-weight:600}
+.toast-desc{font-size:13px;color:var(--fg-muted)}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeInUp 0.4s ease-out}
+@keyframes flicker{0%,100%{opacity:1}45%{opacity:0.85}55%{opacity:0.92}}
+.flicker{animation:flicker 4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.dot-loading{display:inline-flex;gap:4px}.dot-loading span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:bounce 1s ease-in-out infinite}
+.dot-loading span:nth-child(2){animation-delay:0.15s}.dot-loading span:nth-child(3){animation-delay:0.3s}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.stat-card{padding:16px;background:rgba(17,24,26,0.4);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;text-align:left}
+.stat-card:hover{background:rgba(17,24,26,0.6);border-color:var(--accent)}
+.stat-card-icon{width:32px;height:32px;border-radius:6px;background:rgba(58,125,116,0.15);display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:8px}
+.stat-card-value{font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:var(--fg)}
+.stat-card-label{font-size:11px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.1em;font-family:'Cinzel',serif;margin-top:2px}
+.list-item{padding:16px;background:rgba(17,24,26,0.4);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:all 0.15s}
+.list-item:hover{background:rgba(17,24,26,0.6);border-color:var(--accent)}
+.list-item-row{display:flex;gap:16px;align-items:flex-start}
+.list-item-icon{width:44px;height:44px;border-radius:6px;background:rgba(58,125,116,0.15);border:1px solid rgba(58,125,116,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.stat-section{background:rgba(17,24,26,0.3);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.stat-section-header{width:100%;display:flex;align-items:center;gap:12px;padding:16px;background:none;border:none;text-align:left;cursor:pointer;transition:background 0.15s}
+.stat-section-header:hover{background:rgba(58,125,116,0.05)}
+.stat-section-icon{width:36px;height:36px;border-radius:6px;background:rgba(58,125,116,0.15);border:1px solid rgba(58,125,116,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.stat-section-title{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--fg)}
+.stat-section-desc{font-size:12px;color:var(--fg-muted);margin-top:2px}
+.stat-section-body{padding:0 16px 16px}
+.stat-field{padding:12px;background:rgba(24,33,31,0.4);border:1px solid var(--border);border-radius:6px;margin-bottom:8px}
+.stat-field-label{font-size:10px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.1em;font-family:'Cinzel',serif;margin-bottom:4px}
+.stat-field-value{font-size:14px;color:var(--fg)}
+.stat-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.chat-messages{max-height:400px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-msg{max-width:80%}
+.chat-msg-system{align-self:center;font-size:11px;color:var(--fg-dim);font-style:italic;padding:4px 12px;background:rgba(24,33,31,0.4);border-radius:12px}
+.chat-msg-meta{display:flex;gap:8px;align-items:center;margin-bottom:4px}
+.chat-msg-author{font-size:12px;font-family:'Cinzel',serif;color:var(--accent-light)}
+.chat-msg-time{font-size:10px;color:var(--fg-dim)}
+.chat-msg-bubble{padding:8px 12px;background:rgba(24,33,31,0.5);border:1px solid var(--border);border-radius:8px;font-size:14px}
+.force-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.force-stat{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(10,15,15,0.4);border-radius:4px}
+.force-stat-label{font-size:10px;color:var(--fg-muted);text-transform:uppercase}
+.force-stat-value{font-size:14px;font-family:'Cinzel',serif;color:var(--fg)}
+.empty{text-align:center;padding:64px 16px}
+.empty-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:rgba(24,33,31,0.4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--fg-dim)}
+.empty-title{font-family:'Cinzel',serif;font-size:18px;color:var(--fg);margin-bottom:4px}
+.empty-desc{color:var(--fg-muted);font-size:14px;max-width:360px;margin:0 auto}
+.loading-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+@media(max-width:1024px){.auth-left{display:none}}
+@media(max-width:768px){.sidebar{position:fixed;left:-240px;transition:left 0.3s;z-index:50}.sidebar.open{left:0}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40}.sidebar-overlay.open{display:block}.main{padding:12px}.stat-grid-4,.force-grid{grid-template-columns:repeat(2,1fr)}.menu-toggle{display:flex!important}}
+.menu-toggle{display:none}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.p-4{padding:16px}.p-6{padding:24px}.text-sm{font-size:14px}.text-xs{font-size:12px}.text-muted{color:var(--fg-muted)}.text-accent{color:var(--accent-light)}.text-danger{color:var(--danger)}.text-warning{color:var(--warning)}.text-success{color:var(--success)}.text-center{text-align:center}.italic{font-style:italic}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.05em}.flex-1{flex:1}.min-w-0{min-width:0}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flex-wrap{flex-wrap:wrap}.hidden{display:none!important}.w-full{width:100%}.text-glow{text-shadow:0 0 8px rgba(58,125,116,0.4)}
+.markdown h1{font-size:22px;margin:16px 0 8px}.markdown h2{font-size:18px;margin:16px 0 8px}.markdown h3{font-size:16px;margin:12px 0 6px}.markdown p{margin-bottom:12px;line-height:1.6}.markdown ul,.markdown ol{margin:8px 0 12px 20px}.markdown li{margin-bottom:4px}.markdown blockquote{border-left:2px solid var(--accent);padding-left:16px;font-style:italic;color:var(--fg-muted);margin:12px 0}.markdown code{background:rgba(24,33,31,0.6);padding:2px 6px;border-radius:3px;color:var(--accent-light);font-family:monospace}.markdown strong{color:var(--accent-light)}.markdown em{color:var(--accent-light);opacity:0.8}.markdown hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast-container" class="toast-container"></div>
+<script>
+'use strict';
+
+/* ====== КОНФИГУРАЦИЯ FIREBASE (твой конфиг) ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBqWQkOVHBMs2CWCHPE5i6TVfE0Vwd5G8I",
+  authDomain: "terskimir.firebaseapp.com",
+  databaseURL: "https://terskimir-default-rtdb.firebaseio.com",
+  projectId: "terskimir",
+  storageBucket: "terskimir.firebasestorage.app",
+  messagingSenderId: "773757148017",
+  appId: "1:773757148017:web:239f2aea3f9dfa12aff4d0",
+  measurementId: "G-5FVZJTJLQ2"
+};
+
+let firebaseReady=false,fbAuth=null,fbDb=null;
+try{
+  firebase.initializeApp(firebaseConfig);
+  fbAuth=firebase.auth();
+  fbDb=firebase.database();
+  firebaseReady=true;
+}catch(e){console.error('Firebase init error:',e)}
+
+/* ====== Логотип SVG ====== */
+const LOGO_SVG=(size=48)=>`<svg width="${size}" height="${size}" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="lg${size}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3a7d74" stop-opacity="0.6"/><stop offset="60%" stop-color="#1a3a35" stop-opacity="0.2"/><stop offset="100%" stop-color="#0a0f0f" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#lg${size})"/><circle cx="50" cy="50" r="36" stroke="#3a7d74" stroke-width="1.5" fill="none" opacity="0.7"/><circle cx="50" cy="50" r="32" stroke="#8fbfb5" stroke-width="0.8" fill="none" opacity="0.5"/><g stroke="#e8f0ed" stroke-width="2.2" stroke-linecap="round" fill="none"><line x1="35" y1="38" x2="65" y2="38"/><line x1="50" y1="38" x2="50" y2="70"/><line x1="40" y1="44" x2="50" y2="44"/><line x1="60" y1="44" x2="50" y2="44"/><line x1="46" y1="70" x2="54" y2="70"/></g><circle cx="50" cy="22" r="1.8" fill="#3a7d74"/><circle cx="50" cy="78" r="1.8" fill="#3a7d74"/><circle cx="22" cy="50" r="1.8" fill="#3a7d74"/><circle cx="78" cy="50" r="1.8" fill="#3a7d74"/></svg>`;
+
+const ICONS={
+  dashboard:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  shield:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>',
+  scroll:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M2 6v14a2 2 0 0 0 2 2h12"/></svg>',
+  chat:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+  swords:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/></svg>',
+  news:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/></svg>',
+  book:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  paw:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10z"/></svg>',
+  users:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+  flag:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>',
+  file:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+  logout:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+  menu:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+  close:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  plus:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  chevron:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+  back:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
+  clock:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  check:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+  save:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>',
+  trash:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  edit:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  pin:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>',
+  send:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  crown:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>',
+  coins:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/></svg>',
+  church:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 7l4 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9l4-2"/><path d="M12 2v20"/><path d="M8 7V2h8v5"/></svg>',
+  horse:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 8.4l-1.5-3a1 1 0 0 0-1.4-.4L14 6.5l-1-3a1 1 0 0 0-1.8 0L9 9l-3 1.5a2 2 0 0 0-1 1.7V18a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V10a2 2 0 0 0-.5-1.3z"/></svg>',
+  building:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/></svg>',
+  handshake:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-5-5 4-4 5 5"/><path d="M21 12l-5 5-2-2"/><path d="M3 12l5-5 2 2"/></svg>',
+  alert:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+  mail:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+  sword:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/></svg>',
+  ship:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18h18M5 14l7-10 7 10M9 18v-4M15 18v-4"/></svg>',
+};
+
+const $=(s,r=document)=>r.querySelector(s);
+const el=(tag,attrs={},...children)=>{
+  const e=document.createElement(tag);
+  for(const k in attrs){
+    if(k==='class')e.className=attrs[k];
+    else if(k==='html')e.innerHTML=attrs[k];
+    else if(k==='style'&&typeof attrs[k]==='object')Object.assign(e.style,attrs[k]);
+    else if(k.startsWith('on')&&typeof attrs[k]==='function')e.addEventListener(k.slice(2).toLowerCase(),attrs[k]);
+    else if(attrs[k]!=null)e.setAttribute(k,attrs[k]);
+  }
+  for(const c of children){
+    if(c==null||c===false)continue;
+    if(typeof c==='string'||typeof c==='number')e.appendChild(document.createTextNode(String(c)));
+    else if(Array.isArray(c))c.forEach(x=>{if(x){if(x.nodeType)e.appendChild(x);else e.appendChild(document.createTextNode(String(x)))}});
+    else e.appendChild(c);
+  }
+  return e;
+};
+function escapeHtml(s){return s==null?'':String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function mdToHtml(md){
+  if(!md)return '';
+  let h=escapeHtml(md);
+  h=h.replace(/```([\s\S]*?)```/g,(m,c)=>`<pre><code>${c}</code></pre>`);
+  h=h.replace(/`([^`]+)`/g,'<code>$1</code>');
+  h=h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+  h=h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+  h=h.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  h=h.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  h=h.replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>');
+  h=h.replace(/^---$/gm,'<hr>');
+  h=h.replace(/^\d+\.\s(.+)$/gm,'<li>$1</li>');
+  h=h.replace(/^[-*]\s(.+)$/gm,'<li>$1</li>');
+  h=h.replace(/(<li>.*<\/li>\n?)+/g,m=>`<ul>${m}</ul>`);
+  h=h.replace(/\n\n/g,'</p><p>');
+  h='<p>'+h+'</p>';
+  h=h.replace(/<p><(h[1-3]|ul|ol|blockquote|pre|hr)/g,'<$1');
+  h=h.replace(/<\/(h[1-3]|ul|ol|blockquote|pre)><\/p>/g,'</$1>');
+  h=h.replace(/<p><\/p>/g,'');
+  return h;
+}
+function fmtDate(d){return new Date(d).toLocaleString('ru-RU',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}
+function fmtDateShort(d){return new Date(d).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}
+function formatTimeLeft(ms){
+  const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
+  if(h>0)return h+'ч '+m+'м';
+  if(m>0)return m+'м';
+  return 'Менее минуты';
+}
+function toast(title,desc='',type='info'){
+  const c=$('#toast-container');
+  const t=el('div',{class:`toast toast-${type}`},
+    el('div',{class:'flex-1'},el('div',{class:'toast-title'},title),desc?el('div',{class:'toast-desc'},desc):null)
+  );
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300)},3500);
+}
+
+/* ====== Секции статистики фракции ====== */
+const STAT_SECTIONS=[
+  {key:'NAME',title:'Название',icon:'flag',desc:'Наименование государства',fields:[
+    {key:'state',label:'Государство',type:'text'},
+    {key:'ruler',label:'Правитель',type:'text'},
+    {key:'motto',label:'Девиз',type:'text'},
+  ]},
+  {key:'RELATIONS',title:'Связи',icon:'handshake',desc:'Дипломатия, военные, экономические и тайные связи',fields:[
+    {key:'diplomacy',label:'Дипломатия',type:'list'},
+    {key:'military',label:'Военные связи',type:'list'},
+    {key:'economic',label:'Экономические',type:'list'},
+    {key:'internal',label:'Внутренние',type:'list'},
+    {key:'secret',label:'Секретные',type:'list'},
+  ]},
+  {key:'TREASURY',title:'Казна',icon:'coins',desc:'Доходы, расходы, баланс, резервы',fields:[
+    {key:'income',label:'Доходы/мес (солей)',type:'number'},
+    {key:'expenses',label:'Расходы/мес (солей)',type:'number'},
+    {key:'balance',label:'Баланс/мес (солей)',type:'number'},
+    {key:'diamondTreasury',label:'Алмазная казна',type:'number'},
+    {key:'reserve',label:'Резерв',type:'number'},
+    {key:'shares',label:'Паи',type:'text'},
+    {key:'pending',label:'Ждут денег',type:'text'},
+  ]},
+  {key:'ARMY',title:'Армия',icon:'swords',desc:'Пехота, кавалерия, флот, ордена',fields:[
+    {key:'meleeInfantry',label:'Пехота ближнего боя',type:'number'},
+    {key:'rangedInfantry',label:'Пехота дальнего боя',type:'number'},
+    {key:'cavalry',label:'Кавалерия',type:'number'},
+    {key:'fleet',label:'Флот (ушкуи)',type:'number'},
+    {key:'orders',label:'Ордена',type:'text'},
+    {key:'convoyService',label:'Конвойная служба',type:'text'},
+    {key:'cadres',label:'Кадры',type:'text'},
+  ]},
+  {key:'RELIGION',title:'Религия',icon:'church',desc:'Религиозный состав населения',fields:[
+    {key:'faiths',label:'Вероисповедания',type:'list'},
+  ]},
+  {key:'POPULATION',title:'Население',icon:'users',desc:'Численность и состав населения',fields:[
+    {key:'total',label:'Всего',type:'number'},
+    {key:'authorities',label:'Власти',type:'number'},
+    {key:'militaryGarrisons',label:'Гарнизоны',type:'number'},
+    {key:'tradeFamilies',label:'Торговые семьи',type:'number'},
+    {key:'ruralUrban',label:'Город/село',type:'number'},
+    {key:'monastery',label:'Монастыри',type:'number'},
+    {key:'mages',label:'Маги',type:'number'},
+    {key:'vagrants',label:'Бродяги',type:'number'},
+  ]},
+  {key:'HORSES',title:'Коневодство',icon:'horse',desc:'Поголовье, приплод, экспорт, дефицит',fields:[
+    {key:'total',label:'Поголовье',type:'number'},
+    {key:'offspring',label:'Приплод/год',type:'number'},
+    {key:'exportObligations',label:'Экспорт',type:'number'},
+    {key:'deficit',label:'Дефицит',type:'number'},
+    {key:'expeditions',label:'Экспедиции',type:'text'},
+    {key:'rules',label:'Правила',type:'text'},
+    {key:'mageService',label:'Маги при деле',type:'text'},
+  ]},
+  {key:'INSTITUTIONS',title:'Учреждения',icon:'building',desc:'Работающие и ожидающие учреждения',fields:[
+    {key:'working',label:'Работающие',type:'list'},
+    {key:'pending',label:'Ожидают срока',type:'list'},
+  ]},
+  {key:'GOVERNANCE',title:'Управление',icon:'crown',desc:'Сенат, бюрократия, планирование, князь',fields:[
+    {key:'rating',label:'Рейтинг управления (%)',type:'number'},
+    {key:'senateHouses',label:'Дома Сената',type:'text'},
+    {key:'bureaucracy',label:'Бюрократия',type:'text'},
+    {key:'planning',label:'Планирование',type:'text'},
+    {key:'secretCourse',label:'Тайный курс',type:'text'},
+    {key:'prince',label:'Князь',type:'text'},
+  ]},
+];
+function defaultStatContent(key){
+  const s=STAT_SECTIONS.find(x=>x.key===key);
+  if(!s)return {};
+  const o={};
+  s.fields.forEach(f=>{o[f.key]=f.type==='list'?[]:(f.type==='number'?0:'')});
+  return o;
+}
+function createDefaultStats(){
+  return STAT_SECTIONS.map((s,i)=>({sectionKey:s.key,sectionTitle:s.title,content:defaultStatContent(s.key),order:i}));
+}
+
+/* ====== Realtime Database helpers ====== */
+const RTDB={
+  async push(path,data){
+    const ref=fbDb.ref(path).push();
+    await ref.set({...data,createdAt:firebase.database.ServerValue.TIMESTAMP});
+    return ref.key;
+  },
+  async set(path,data){await fbDb.ref(path).set(data)},
+  async update(path,data){await fbDb.ref(path).update(data)},
+  async remove(path){await fbDb.ref(path).remove()},
+  async get(path){
+    const snap=await fbDb.ref(path).get();
+    if(!snap.exists())return null;
+    const val=snap.val();
+    return Array.isArray(val)?val:Object.entries(val).map(([id,v])=>({id,...(v||{})}));
+  },
+  async getList(path,sortBy='createdAt'){
+    const snap=await fbDb.ref(path).get();
+    if(!snap.exists())return [];
+    const val=snap.val()||{};
+    return Object.entries(val).map(([id,v])=>({id,...(v||{})})).sort((a,b)=>{
+      const da=a[sortBy],db=b[sortBy];
+      if(typeof da==='number'&&typeof db==='number')return db-da;
+      const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
+      return tb-ta;
+    });
+  },
+  onValue(path,callback){
+    const ref=fbDb.ref(path);
+    const unsub=ref.on('value',snap=>{
+      const val=snap.val();
+      const list=val?Object.entries(val).map(([id,v])=>({id,...(v||{})})).sort((a,b)=>{
+        const da=a.createdAt,db=b.createdAt;
+        if(typeof da==='number'&&typeof db==='number')return db-da;
+        const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
+        return tb-ta;
+      }):[];
+      callback(list);
+    });
+    return ()=>ref.off('value',unsub);
+  },
+  ts(v){
+    if(!v)return new Date().toISOString();
+    if(typeof v==='number')return new Date(v).toISOString();
+    if(typeof v==='string')return v;
+    return new Date().toISOString();
+  }
+};
+
+/* ====== Состояние приложения ====== */
+const App={
+  view:'dashboard',selectedId:null,sidebarOpen:false,
+  currentUser:null,userProfile:null,
+  unsubscribers:[],
+  cache:{factions:[],posts:[],news:[],chats:[],battles:[],chronicle:[],bestiary:[],users:[]},
+
+  init(){
+    document.addEventListener('contextmenu',e=>{e.preventDefault();return false});
+    document.addEventListener('dragstart',e=>{e.preventDefault();return false});
+    document.addEventListener('copy',e=>{
+      const t=e.target;
+      if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+      e.preventDefault();return false;
+    });
+    document.addEventListener('keydown',e=>{
+      const k=e.key.toLowerCase();
+      if(e.key==='F12'){e.preventDefault();return false}
+      if(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k)){e.preventDefault();return false}
+      if(e.ctrlKey&&['u','s','p'].includes(k)){e.preventDefault();return false}
+    });
+
+    if(!firebaseReady){this.render();return}
+
+    fbAuth.onAuthStateChanged(async(user)=>{
+      this.clearSubscriptions();
+      if(user){
+        const snap=await fbDb.ref('users/'+user.uid).get();
+        if(snap.exists()){
+          this.currentUser=user;
+          this.userProfile={id:user.uid,...snap.val()};
+        }else{
+          const usersSnap=await fbDb.ref('users').get();
+          const isFirst=!usersSnap.exists();
+          const profile={
+            email:user.email,name:user.email.split('@')[0],
+            role:isFirst?'ADMIN':'PLAYER',
+            createdAt:new Date().toISOString(),
+            lastLoginAt:new Date().toISOString(),
+          };
+          await fbDb.ref('users/'+user.uid).set(profile);
+          this.currentUser=user;
+          this.userProfile={id:user.uid,...profile};
+        }
+        await fbDb.ref('users/'+user.uid+'/lastLoginAt').set(new Date().toISOString());
+        this.subscribeToData();
+      }else{
+        this.currentUser=null;
+        this.userProfile=null;
+      }
+      this.render();
+    });
+    this.render();
+  },
+
+  clearSubscriptions(){this.unsubscribers.forEach(u=>{try{u()}catch(e){}});this.unsubscribers=[]},
+
+  subscribeToData(){
+    const collections=['factions','posts','news','chats','battles','chronicle','bestiary','users'];
+    collections.forEach(col=>{
+      this.unsubscribers.push(
+        fbDb.ref(col).on('value',snap=>{
+          const val=snap.val()||{};
+          this.cache[col]=Object.entries(val).map(([id,v])=>({id,...(v||{})})).sort((a,b)=>{
+            if(col==='news')return (b.isPinned?1:0)-(a.isPinned?1:0)||((b.createdAt||0)-(a.createdAt||0));
+            const da=a.createdAt,db=b.createdAt;
+            if(typeof da==='number'&&typeof db==='number')return db-da;
+            const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
+            return tb-ta;
+          });
+          if(this.currentUser)this.render();
+        })
+      );
+    });
+  },
+
+  setView(view,selectedId=null){this.view=view;this.selectedId=selectedId;this.sidebarOpen=false;this.render();window.scrollTo(0,0)},
+  async logout(){try{await fbAuth.signOut()}catch(e){}},
+
+  render(){
+    const root=$('#app');
+    root.innerHTML='';
+    if(!firebaseReady){root.appendChild(SetupScreen());return}
+    if(!this.currentUser){root.appendChild(AuthScreen());return}
+    root.appendChild(AppShell());
+  },
+};
+
+/* ====== LoadingScreen ====== */
+function LoadingScreen(){
+  return el('div',{class:'loading-screen'},
+    el('div',{html:LOGO_SVG(80),class:'flicker'}),
+    el('div',{class:'dot-loading'},el('span'),el('span'),el('span')),
+    el('p',{class:'text-muted uppercase tracking-wide',style:{fontFamily:'Cinzel,serif',fontSize:'12px'}},'Врата открываются…')
+  );
+}
+
+/* ====== SetupScreen (если Firebase не настроен) ====== */
+function SetupScreen(){
+  return el('div',{class:'loading-screen'},
+    el('div',{html:LOGO_SVG(80)}),
+    el('h1',{},'Терский Мир'),
+    el('p',{class:'text-muted'},'Ошибка подключения к Firebase. Проверьте конфигурацию в коде файла.'),
+    el('button',{class:'btn btn-primary',onclick:()=>location.reload()},'Обновить страницу')
+  );
+}
+
+/* ====== AUTH SCREEN ====== */
+function AuthScreen(){
+  const state={mode:'login',name:'',email:'',password:''};
+  const wrap=el('div',{class:'auth-wrap'});
+  wrap.appendChild(el('div',{class:'auth-left'},
+    el('div',{html:LOGO_SVG(120),class:'flicker'}),
+    el('h1',{class:'auth-title'},'ТЕРСКИЙ МИР'),
+    el('p',{class:'auth-subtitle'},'Ролевая · Военно · Политическая · Игра'),
+    el('div',{class:'ornament',style:{width:'100%',maxWidth:'400px',margin:'24px 0'}}),
+    el('p',{class:'auth-quote'},'«Великие княжества рождаются не мечом единым, но словом, золотом и мудростью правителей своих»'),
+    el('div',{class:'auth-features'},
+      el('div',{class:'auth-feature'},el('div',{html:ICONS.shield}),el('span',{},'Дипломатия')),
+      el('div',{class:'auth-feature'},el('div',{html:ICONS.book}),el('span',{},'Хроника')),
+      el('div',{class:'auth-feature'},el('div',{html:ICONS.swords}),el('span',{},'Война')),
+    )
+  ));
+  const right=el('div',{class:'auth-right'});
+  const formWrap=el('div',{class:'auth-form-wrap'});
+  function renderForm(){
+    formWrap.innerHTML='';
+    const card=el('div',{class:'auth-form-card'});
+    card.appendChild(el('div',{class:'auth-tabs'},
+      el('button',{class:'auth-tab'+(state.mode==='login'?' active':''),onclick:()=>{state.mode='login';renderForm()}},'Вход'),
+      el('button',{class:'auth-tab'+(state.mode==='register'?' active':''),onclick:()=>{state.mode='register';renderForm()}},'Регистрация'),
+    ));
+    const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
+    if(state.mode==='register'){
+      form.appendChild(el('div',{class:'field-group'},
+        el('label',{class:'label'},'Имя правителя'),
+        el('input',{class:'input',placeholder:'Князь...',value:state.name,oninput:e=>state.name=e.target.value,required:true})
+      ));
+    }
+    form.appendChild(el('div',{class:'field-group'},
+      el('label',{class:'label'},'Электронная почта'),
+      el('div',{class:'input-with-icon'},
+        el('span',{class:'icon',html:ICONS.mail}),
+        el('input',{class:'input',type:'email',placeholder:'посол@княжество.рф',value:state.email,oninput:e=>state.email=e.target.value,required:true})
+      )
+    ));
+    form.appendChild(el('div',{class:'field-group'},
+      el('label',{class:'label'},'Пароль'),
+      el('div',{class:'input-with-icon'},
+        el('span',{class:'icon',html:ICONS.shield}),
+        el('input',{class:'input',type:'password',placeholder:'••••••••',value:state.password,oninput:e=>state.password=e.target.value,required:true})
+      )
+    ));
+    form.appendChild(el('button',{type:'submit',class:'btn btn-primary w-full',style:{height:'44px',marginTop:'8px'}},state.mode==='login'?'Войти в мир':'Создать правителя'));
+    card.appendChild(form);
+    card.appendChild(el('p',{class:'text-center text-muted text-xs italic',style:{marginTop:'20px'}},'Первый зарегистрированный становится Администратором игры'));
+    formWrap.appendChild(card);
+  }
+  async function submit(){
+    const{name,email,password}=state;
+    if(!email||!password||(state.mode==='register'&&!name)){toast('Ошибка','Заполните все поля','error');return}
+    if(state.mode==='register'&&password.length<6){toast('Ошибка','Пароль минимум 6 символов','error');return}
+    try{
+      if(state.mode==='register'){
+        const cred=await fbAuth.createUserWithEmailAndPassword(email.toLowerCase(),password);
+        const usersSnap=await fbDb.ref('users').get();
+        const isFirst=!usersSnap.exists();
+        await fbDb.ref('users/'+cred.user.uid).set({
+          email:email.toLowerCase(),name,role:isFirst?'ADMIN':'PLAYER',
+          createdAt:new Date().toISOString(),lastLoginAt:new Date().toISOString(),
+        });
+        toast('Добро пожаловать',isFirst?'Аккаунт администратора создан':'Аккаунт создан','success');
+      }else{
+        await fbAuth.signInWithEmailAndPassword(email.toLowerCase(),password);
+        toast('Вход выполнен','Да пребудет с вами мудрость предков','success');
+      }
+    }catch(e){
+      let msg=e.message||'Ошибка';
+      if(e.code==='auth/email-already-in-use')msg='Email уже используется';
+      else if(e.code==='auth/wrong-password')msg='Неверный пароль';
+      else if(e.code==='auth/user-not-found')msg='Пользователь не найден';
+      else if(e.code==='auth/invalid-email')msg='Некорректный email';
+      else if(e.code==='auth/weak-password')msg='Слабый пароль';
+      toast('Ошибка',msg,'error');
+    }
+  }
+  renderForm();right.appendChild(formWrap);wrap.appendChild(right);
+  return wrap;
+}
+
+/* ====== APP SHELL ====== */
+function AppShell(){
+  const u=App.userProfile;
+  const isAdmin=u.role==='ADMIN';
+  const faction=App.cache.factions.find(f=>f.userId===u.id);
+  const playerNav=[
+    {key:'dashboard',label:'Сводка',icon:'dashboard'},
+    {key:'my-faction',label:'Моё княжество',icon:'shield'},
+    {key:'posts',label:'Мои посты',icon:'scroll'},
+    {key:'chats',label:'Переговоры',icon:'chat'},
+    {key:'battles',label:'Военные дела',icon:'swords'},
+    {key:'news',label:'Вести мира',icon:'news'},
+    {key:'chronicle',label:'Хроника',icon:'book'},
+    {key:'bestiary',label:'Бестиарий',icon:'paw'},
+  ];
+  const adminNav=[
+    {key:'admin-users',label:'Игроки',icon:'users'},
+    {key:'admin-factions',label:'Фракции',icon:'flag'},
+    {key:'admin-posts',label:'Все посты',icon:'file'},
+    {key:'admin-news',label:'Новости',icon:'news'},
+    {key:'admin-chats',label:'Чаты',icon:'chat'},
+    {key:'admin-battles',label:'Баталии',icon:'swords'},
+    {key:'admin-chronicle',label:'Хроника',icon:'book'},
+    {key:'admin-bestiary',label:'Бестиарий',icon:'paw'},
+  ];
+  const allNav=[...playerNav,...(isAdmin?adminNav:[])];
+  const currentTitle=allNav.find(n=>n.key===App.view)?.label||'Сводка';
+  const shell=el('div',{class:'app'});
+  shell.appendChild(el('header',{class:'header'},
+    el('button',{class:'btn btn-ghost btn-icon menu-toggle',onclick:()=>{App.sidebarOpen=!App.sidebarOpen;App.render()}},el('span',{html:ICONS.menu})),
+    el('div',{html:LOGO_SVG(32)}),
+    el('div',{},el('div',{class:'header-title'},'ТЕРСКИЙ МИР'),el('div',{class:'header-subtitle'},currentTitle)),
+    el('div',{class:'header-spacer'}),
+    faction?el('div',{class:'hidden',style:{display:'flex',alignItems:'center',gap:'8px',padding:'6px 12px',borderRadius:'6px',background:'rgba(26,58,53,0.4)',border:'1px solid var(--border)'}},
+      el('span',{html:ICONS.shield,style:{color:'var(--accent)'}}),
+      el('span',{class:'header-title',style:{fontSize:'13px'}},faction.name),
+      faction.isApproved?null:el('span',{class:'text-warning',style:{fontSize:'10px'}},'(на утверждении)')
+    ):null,
+    el('div',{class:'header-user'},
+      el('div',{class:'header-avatar'},u.name[0]?.toUpperCase()||'?'),
+      el('div',{},el('div',{style:{fontSize:'13px',fontWeight:'500'}},u.name),el('div',{style:{fontSize:'10px',color:'var(--fg-muted)'}},isAdmin?'Администратор':'Игрок'))
+    ),
+    el('button',{class:'btn btn-ghost btn-icon',title:'Выйти',onclick:()=>App.logout()},el('span',{html:ICONS.logout}))
+  ));
+  const layout=el('div',{class:'layout'});
+  if(App.sidebarOpen){
+    layout.appendChild(el('div',{class:'sidebar-overlay open',onclick:()=>{App.sidebarOpen=false;App.render()}}));
+  }
+  const sidebar=el('aside',{class:'sidebar'+(App.sidebarOpen?' open':'')});
+  const nav=el('nav',{},el('div',{class:'sidebar-section-title'},'Держава'));
+  playerNav.forEach(item=>nav.appendChild(navItem(item)));
+  if(isAdmin){
+    nav.appendChild(el('div',{class:'ornament',style:{margin:'12px 0',opacity:'0.4'}}));
+    nav.appendChild(el('div',{class:'sidebar-section-title'},'Управление'));
+    adminNav.forEach(item=>nav.appendChild(navItem(item)));
+  }
+  sidebar.appendChild(nav);
+  function navItem(item){
+    const active=App.view===item.key;
+    const btn=el('button',{class:'nav-item'+(active?' active':''),onclick:()=>App.setView(item.key)});
+    btn.innerHTML=ICONS[item.icon]||ICONS.file;
+    btn.appendChild(el('span',{},item.label));
+    return btn;
+  }
+  layout.appendChild(sidebar);
+  const main=el('main',{class:'main'});
+  const inner=el('div',{class:'main-inner fade-in'});
+  inner.appendChild(renderView());
+  main.appendChild(inner);
+  layout.appendChild(main);
+  shell.appendChild(layout);
+  shell.appendChild(el('footer',{class:'footer'},
+    el('div',{class:'ornament',style:{maxWidth:'300px',margin:'0 auto 8px',opacity:'0.3'}}),
+    el('p',{class:'footer-text'},`Терский Мир · РВПИ · ${new Date().getFullYear()}`)
+  ));
+  return shell;
+}
+
+function renderView(){
+  switch(App.view){
+    case'dashboard':return DashboardView();
+    case'my-faction':return FactionView();
+    case'posts':return PostsView();
+    case'chats':return ChatsView();
+    case'battles':return BattlesView();
+    case'news':return NewsView();
+    case'chronicle':return ChronicleView();
+    case'bestiary':return BestiaryView();
+    case'admin-users':return AdminUsersView();
+    case'admin-factions':return AdminFactionsView();
+    case'admin-posts':return AdminPostsView();
+    case'admin-news':return AdminNewsView();
+    case'admin-chats':return AdminChatsView();
+    case'admin-battles':return AdminBattlesView();
+    case'admin-chronicle':return ChronicleView(true);
+    case'admin-bestiary':return BestiaryView(true);
+    default:return DashboardView();
+  }
+}
+
+/* ====== Общие компоненты ====== */
+function PageHeader(title,desc,action){
+  const d=el('div',{class:'page-header'});
+  d.appendChild(el('div',{class:'page-header-row'},
+    el('div',{},el('h1',{},title),desc?el('p',{},desc):null),
+    action?el('div',{},action):null
+  ));
+  d.appendChild(el('div',{class:'ornament',style:{marginTop:'16px',opacity:'0.3'}}));
+  return d;
+}
+function EmptyState(icon,title,desc,action){
+  return el('div',{class:'empty'},
+    el('div',{class:'empty-icon',html:ICONS[icon]||ICONS.file}),
+    el('div',{class:'empty-title'},title),
+    desc?el('div',{class:'empty-desc'},desc):null,
+    action?el('div',{style:{marginTop:'16px'}},action):null
+  );
+}
+function StatCard(icon,label,value,onClick){
+  return el('button',{class:'stat-card',onclick:onClick},
+    el('div',{class:'stat-card-icon',html:ICONS[icon]||ICONS.file}),
+    el('div',{class:'stat-card-value'},String(value)),
+    el('div',{class:'stat-card-label'},label)
+  );
+}
+
+/* ====== DASHBOARD ====== */
+function DashboardView(){
+  const u=App.userProfile;
+  const faction=App.cache.factions.find(f=>f.userId===u.id);
+  const myPosts=App.cache.posts.filter(p=>p.authorId===u.id);
+  const pendingPosts=myPosts.filter(p=>p.status==='PENDING');
+  const verdictedPosts=myPosts.filter(p=>p.status==='VERDICTED');
+  const recentNews=App.cache.news.slice(0,5);
+  const h=new Date().getHours();
+  const greeting=h<6?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';
+  const wrap=el('div',{class:'flex flex-col gap-6'});
+  const greetCard=el('div',{class:'card card-glow',style:{background:'linear-gradient(135deg,rgba(17,24,26,0.6),rgba(26,58,53,0.3))'}});
+  const row=el('div',{class:'flex justify-between items-center',style:{flexWrap:'wrap',gap:'16px'}});
+  row.appendChild(el('div',{},
+    el('p',{class:'text-muted uppercase tracking-wide',style:{fontFamily:'Cinzel,serif',fontSize:'12px'}},greeting+', правитель'),
+    el('h1',{class:'text-glow',style:{fontSize:'28px',marginTop:'4px'}},u.name),
+    faction?el('div',{class:'flex items-center gap-2 mt-2'},
+      el('span',{html:ICONS.shield,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+      el('span',{},faction.name),
+      faction.isApproved?el('span',{class:'badge badge-success'},'Утверждено'):el('span',{class:'badge badge-warning'},'На утверждении')
+    ):el('p',{class:'text-muted text-sm mt-2'},'Зарегистрируйте своё княжество, чтобы начать игру')
+  ));
+  if(!faction)row.appendChild(el('button',{class:'btn btn-primary',onclick:()=>App.setView('my-faction')},'Создать княжество'));
+  greetCard.appendChild(row);wrap.appendChild(greetCard);
+  const stats=el('div',{class:'stat-grid'});
+  stats.appendChild(StatCard('scroll','Всего постов',myPosts.length,()=>App.setView('posts')));
+  stats.appendChild(StatCard('clock','Ожидают вердикта',pendingPosts.length,()=>App.setView('posts')));
+  stats.appendChild(StatCard('shield','Вердиктов получено',verdictedPosts.length,()=>App.setView('posts')));
+  stats.appendChild(StatCard('news','Вестей мира',App.cache.news.length,()=>App.setView('news')));
+  wrap.appendChild(stats);
+  const newsCard=el('div',{class:'card'});
+  newsCard.appendChild(el('div',{class:'flex justify-between items-center mb-4'},
+    el('div',{class:'flex items-center gap-2'},
+      el('span',{html:ICONS.news,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+      el('h2',{style:{fontSize:'16px'}},'Последние вести мира')
+    ),
+    el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('news')},'Все вести')
+  ));
+  if(recentNews.length===0){
+    newsCard.appendChild(EmptyState('news','Вестей пока нет','Новости мира появятся здесь'));
+  }else{
+    const list=el('div',{class:'flex flex-col gap-2',style:{maxHeight:'500px',overflowY:'auto'}});
+    recentNews.forEach(n=>{
+      const ts=RTDB.ts(n.createdAt);
+      list.appendChild(el('div',{class:'card card-hover',style:{padding:'12px'},onclick:()=>App.setView('news',n.id)},
+        el('div',{class:'flex items-center gap-2 mb-2'},
+          n.isPinned?el('span',{class:'badge badge-accent',html:ICONS.pin+' Закреплено'}):null,
+          el('span',{class:'badge'},n.category||'Общие'),
+          el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},fmtDateShort(ts))
+        ),
+        el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},n.title),
+        n.excerpt?el('div',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},n.excerpt):null
+      ));
+    });
+    newsCard.appendChild(list);
+  }
+  wrap.appendChild(newsCard);
+  const quick=el('div',{class:'stat-grid',style:{gridTemplateColumns:'repeat(4,1fr)'}});
+  [['shield','Княжество','my-faction'],['scroll','Посты','posts'],['chat','Переговоры','chats'],['swords','Война','battles']].forEach(([icon,label,view])=>{
+    quick.appendChild(el('button',{class:'stat-card text-center',onclick:()=>App.setView(view)},
+      el('div',{class:'stat-card-icon',style:{margin:'0 auto 8px'},html:ICONS[icon]}),
+      el('div',{class:'stat-card-label'},label)
+    ));
+  });
+  wrap.appendChild(quick);
+  return wrap;
+}
+
+/* ====== FACTION VIEW ====== */
+const _expandedSections={};
+function FactionView(){
+  let faction;
+  if(App.selectedId){faction=App.cache.factions.find(f=>f.id===App.selectedId)}
+  else{faction=App.cache.factions.find(f=>f.userId===App.userProfile.id)}
+  if(!faction)return RegisterFaction();
+  return FactionDetails(faction);
+}
+function RegisterFaction(){
+  const state={name:'',shortName:'',motto:'',description:'',bannerColor:'#3a7d74'};
+  const wrap=el('div',{style:{maxWidth:'700px',margin:'0 auto'}});
+  wrap.appendChild(PageHeader('Регистрация княжества','Создайте своё государство в Терском Мире'));
+  const card=el('div',{class:'card card-glow'});
+  const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
+  form.appendChild(el('div',{class:'field-group'},
+    el('label',{class:'label'},'Название государства *'),
+    el('input',{class:'input',placeholder:'Великое Княжество Помское',value:state.name,oninput:e=>state.name=e.target.value,required:true})
+  ));
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Короткое название'),el('input',{class:'input',placeholder:'Пома',value:state.shortName,oninput:e=>state.shortName=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Цвет герба'),
+      el('div',{class:'flex items-center gap-2'},
+        el('input',{type:'color',value:state.bannerColor,oninput:e=>state.bannerColor=e.target.value,style:{height:'40px',width:'56px',borderRadius:'6px',border:'1px solid var(--border)',background:'rgba(10,15,15,0.6)',cursor:'pointer'}}),
+        el('input',{class:'input',value:state.bannerColor,oninput:e=>state.bannerColor=e.target.value})
+      )
+    )
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Девиз'),el('input',{class:'input',placeholder:'Сила в единстве, мудрость в совете',value:state.motto,oninput:e=>state.motto=e.target.value})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание княжества'),el('textarea',{class:'textarea',placeholder:'Опишите географию, историю и особенности вашего государства...',style:{minHeight:'120px'},oninput:e=>state.description=e.target.value},state.description)));
+  form.appendChild(el('div',{class:'card',style:{background:'rgba(212,165,67,0.1)',borderColor:'rgba(212,165,67,0.3)',display:'flex',gap:'8px',padding:'12px'}},
+    el('span',{html:ICONS.alert,style:{color:'var(--warning)',flexShrink:'0',marginTop:'2px'}}),
+    el('p',{class:'text-xs',style:{color:'rgba(255,230,180,0.8)'}},'После регистрации княжество будет ожидать утверждения администратором. Статистика будет заполнена и обновляться администратором по итогам ваших постов.')
+  ));
+  form.appendChild(el('button',{type:'submit',class:'btn btn-primary w-full',style:{height:'44px',marginTop:'8px'}},'Зарегистрировать княжество'));
+  card.appendChild(form);wrap.appendChild(card);
+  return wrap;
+  async function submit(){
+    if(state.name.length<3){toast('Ошибка','Название минимум 3 символа','error');return}
+    if(App.cache.factions.find(f=>f.userId===App.userProfile.id)){toast('Ошибка','У вас уже есть княжество','error');return}
+    try{
+      const id=await RTDB.push('factions',{
+        name:state.name,shortName:state.shortName,motto:state.motto,
+        description:state.description,bannerColor:state.bannerColor,
+        isApproved:false,userId:App.userProfile.id,
+        stats:createDefaultStats(),
+      });
+      toast('Княжество создано','Ожидает утверждения администратором','success');
+      App.setView('my-faction',id);
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+function FactionDetails(faction){
+  const isAdmin=App.userProfile.role==='ADMIN';
+  const wrap=el('div',{class:'flex flex-col gap-6'});
+  const header=el('div',{class:'card card-glow',style:{overflow:'hidden',padding:'0'}});
+  header.appendChild(el('div',{style:{height:'8px',background:faction.bannerColor||'#3a7d74'}}));
+  const hb=el('div',{class:'p-6 flex items-start gap-4',style:{flexWrap:'wrap'}});
+  hb.appendChild(el('div',{style:{width:'64px',height:'64px',borderRadius:'6px',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0',border:'2px solid '+(faction.bannerColor||'#3a7d74'),background:(faction.bannerColor||'#3a7d74')+'22'},html:ICONS.shield.replace(/currentColor/g,faction.bannerColor||'#3a7d74')}));
+  hb.appendChild(el('div',{class:'flex-1'},
+    el('div',{class:'flex items-center gap-3',style:{flexWrap:'wrap'}},
+      el('h1',{class:'text-glow',style:{fontSize:'24px'}},faction.name),
+      faction.isApproved?el('span',{class:'badge badge-success'},'Утверждено'):el('span',{class:'badge badge-warning'},'На утверждении')
+    ),
+    faction.shortName?el('p',{class:'text-muted text-sm mt-2'},'Короткое название: '+faction.shortName):null,
+    faction.motto?el('p',{class:'italic text-accent mt-2',style:{fontSize:'14px'}},'«'+faction.motto+'»'):null,
+    faction.description?el('p',{class:'text-sm mt-2',style:{lineHeight:'1.6'}},faction.description):null,
+  ));
+  if(isAdmin&&!faction.isApproved){
+    hb.appendChild(el('button',{class:'btn btn-primary btn-sm',onclick:async()=>{
+      try{await RTDB.update('factions/'+faction.id,{isApproved:true});toast('Утверждено',faction.name+' утверждено','success')}catch(e){toast('Ошибка',e.message,'error')}
+    }},'Утвердить'));
+  }
+  header.appendChild(hb);wrap.appendChild(header);
+  wrap.appendChild(el('h2',{class:'flex items-center gap-2',style:{fontSize:'18px'}},el('span',{html:ICONS.crown,style:{color:'var(--accent)'}}),'Статистика государства'));
+  const stats=faction.stats||[];
+  stats.forEach((stat,i)=>{
+    const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey)||{icon:'file',desc:''};
+    const card=el('div',{class:'stat-section'});
+    const isOpen=_expandedSections[stat.sectionKey]||(i===0&&!_expandedSections.hasOwnProperty(stat.sectionKey));
+    const hdr=el('button',{class:'stat-section-header',onclick:()=>{_expandedSections[stat.sectionKey]=!isOpen;App.render()}});
+    hdr.appendChild(el('div',{class:'stat-section-icon',html:ICONS[section.icon]||ICONS.file}));
+    hdr.appendChild(el('div',{class:'flex-1'},el('div',{class:'stat-section-title'},stat.sectionTitle),el('div',{class:'stat-section-desc'},section.desc)));
+    hdr.appendChild(el('div',{class:'text-muted',html:isOpen?ICONS.close:ICONS.plus}));
+    card.appendChild(hdr);
+    if(isOpen){
+      const body=el('div',{class:'stat-section-body'});
+      body.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'12px'}}));
+      body.appendChild(renderStatContent(stat));
+      if(isAdmin){
+        body.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{marginTop:'12px'},onclick:()=>openStatEditor(faction,stat)},el('span',{html:ICONS.edit}),'Редактировать секцию'));
+      }
+      card.appendChild(body);
+    }
+    wrap.appendChild(card);
+  });
+  return wrap;
+}
+function renderStatContent(stat){
+  const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey);
+  if(!section)return el('p',{class:'text-muted italic text-sm'},'Нет данных');
+  const wrap=el('div',{});
+  const gridClass=section.fields.length<=4?'stat-grid-2':(section.fields.length<=6?'stat-grid-3':'stat-grid-4');
+  const grid=el('div',{class:gridClass});
+  section.fields.forEach(f=>{
+    const val=stat.content?stat.content[f.key]:undefined;
+    if(f.type==='list'){
+      if(!val||!val.length)return;
+      grid.appendChild(el('div',{class:'stat-field',style:{gridColumn:'1 / -1'}},
+        el('div',{class:'stat-field-label'},f.label),
+        el('ul',{style:{listStyle:'none',paddingLeft:'0'}},
+          ...val.map(item=>el('li',{style:{marginBottom:'4px',display:'flex',gap:'8px'}},el('span',{style:{color:'var(--accent)'}},'•'),el('span',{class:'text-sm'},item)))
+        )
+      ));
+    }else if(f.type==='number'){
+      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value',style:{fontFamily:'Cinzel,serif',fontWeight:'600',fontSize:'18px'}},String(val||0))));
+    }else{
+      if(!val)return;
+      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value'},val)));
+    }
+  });
+  if(grid.children.length===0)return el('p',{class:'text-muted italic text-sm'},'Нет данных');
+  wrap.appendChild(grid);
+  return wrap;
+}
+function openStatEditor(faction,stat){
+  const modal=el('div',{style:{position:'fixed',inset:'0',background:'rgba(0,0,0,0.7)',zIndex:'200',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'}});
+  const card=el('div',{class:'card card-glow',style:{maxWidth:'600px',width:'100%',maxHeight:'80vh',overflowY:'auto'}});
+  const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey);
+  card.appendChild(el('h2',{style:{marginBottom:'16px'}},'Редактирование: '+stat.sectionTitle));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  const inputs={};
+  section.fields.forEach(f=>{
+    const val=stat.content?stat.content[f.key]:'';
+    if(f.type==='list'){
+      const ta=el('textarea',{class:'textarea',style:{minHeight:'100px'},placeholder:'Каждый пункт с новой строки'},Array.isArray(val)?val.join('\n'):'');
+      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),ta));
+      inputs[f.key]={el:ta,type:'list'};
+    }else if(f.type==='number'){
+      const inp=el('input',{class:'input',type:'number',value:val||0});
+      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
+      inputs[f.key]={el:inp,type:'number'};
+    }else{
+      const inp=el('input',{class:'input',value:val||''});
+      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
+      inputs[f.key]={el:inp,type:'text'};
+    }
+  });
+  form.appendChild(el('div',{class:'flex gap-2 justify-end',style:{marginTop:'16px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>modal.remove()},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Сохранить')
+  ));
+  card.appendChild(form);modal.appendChild(card);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
+  document.body.appendChild(modal);
+  async function save(){
+    const newContent={};
+    Object.entries(inputs).forEach(([key,{el:e,type}])=>{
+      if(type==='list')newContent[key]=e.value.split('\n').map(s=>s.trim()).filter(Boolean);
+      else if(type==='number')newContent[key]=Number(e.value)||0;
+      else newContent[key]=e.value;
+    });
+    stat.content=newContent;
+    try{
+      await RTDB.update('factions/'+faction.id,{stats:faction.stats});
+      toast('Сохранено','Секция обновлена','success');
+      modal.remove();App.render();
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== POSTS VIEW ====== */
+function PostsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  const myPosts=App.cache.posts.filter(p=>p.authorId===App.userProfile.id);
+  if(App.selectedId&&App.selectedId!=='__new__'){
+    const post=myPosts.find(p=>p.id===App.selectedId)||App.cache.posts.find(p=>p.id===App.selectedId);
+    if(post&&(post.authorId===App.userProfile.id||App.userProfile.role==='ADMIN')){
+      wrap.appendChild(PostDetail(post));return wrap;
+    }
+  }
+  wrap.appendChild(PageHeader('Мои посты','Здесь вы пишете ролевые посты и получаете вердикты администратора',
+    el('button',{class:'btn btn-primary',onclick:()=>App.setView('posts','__new__')},el('span',{html:ICONS.plus}),'Новый пост')
+  ));
+  if(App.selectedId==='__new__')wrap.appendChild(PostForm());
+  if(myPosts.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('scroll','Постов пока нет','Создайте первый пост — опишите действия вашего княжества, и администратор вынесет вердикт',
+      el('button',{class:'btn btn-primary',onclick:()=>App.setView('posts','__new__')},el('span',{html:ICONS.plus}),'Создать пост')
+    ));
+  }else{
+    myPosts.forEach(p=>wrap.appendChild(PostCard(p)));
+  }
+  return wrap;
+}
+function PostCard(post){
+  const statusMap={PENDING:{label:'Ожидает',cls:'badge-warning',icon:ICONS.clock},VERDICTED:{label:'Вердикт',cls:'badge-success',icon:ICONS.check},ARCHIVED:{label:'Архив',cls:'',icon:ICONS.file}};
+  const s=statusMap[post.status]||statusMap.PENDING;
+  const ts=RTDB.ts(post.createdAt);
+  return el('div',{class:'card card-hover',onclick:()=>App.setView('posts',post.id)},
+    el('div',{class:'list-item-row'},
+      el('div',{class:'flex-1 min-w-0'},
+        el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
+          el('span',{class:'badge '+s.cls,html:s.icon+' '+s.label}),
+          post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
+          post.attachments&&post.attachments.length?el('span',{class:'badge',html:ICONS.file+' '+post.attachments.length}):null
+        ),
+        el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},post.title),
+        el('p',{class:'text-muted text-sm mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},post.content),
+        el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'8px',opacity:'0.6'}},fmtDate(ts))
+      ),
+      el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0'}})
+    )
+  );
+}
+function PostForm(){
+  const state={title:'',content:'',context:'',turnNumber:'',weekNumber:'',attachments:[]};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},
+    el('h2',{style:{fontSize:'18px'}},'Новый пост'),
+    el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('posts')},el('span',{html:ICONS.close}))
+  ));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',placeholder:'Действия княжества на 5-й неделе...',oninput:e=>state.title=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',placeholder:'5',oninput:e=>state.turnNumber=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Неделя'),el('input',{class:'input',type:'number',placeholder:'13',oninput:e=>state.weekNumber=e.target.value}))
+  ));
+  form.appendChild(el('div',{class:'field-group'},
+    el('label',{class:'label'},'Ролевое содержание *'),
+    el('textarea',{class:'textarea',placeholder:'Опишите действия вашего княжества... Поддерживается Markdown.',style:{minHeight:'200px'},oninput:e=>state.content=e.target.value,required:true}),
+    el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'4px',opacity:'0.6'}},'Поддерживается Markdown-форматирование')
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Контекст / Пояснение (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения для администратора...',style:{minHeight:'80px'},oninput:e=>state.context=e.target.value})));
+  const attList=el('div',{class:'flex flex-wrap gap-2'});
+  const fileLabel=el('label',{class:'flex items-center gap-2',style:{cursor:'pointer'}},
+    el('input',{type:'file',style:{display:'none'},onchange:e=>{
+      const file=e.target.files[0];
+      if(!file)return;
+      if(file.size>500*1024){toast('Ошибка','Файл слишком большой (макс. 500КБ для Realtime DB)','error');return}
+      const reader=new FileReader();
+      reader.onload=()=>{
+        state.attachments.push({id:'att_'+Date.now(),fileName:file.name,filePath:reader.result,fileType:file.type.startsWith('image/')?'IMAGE':'DOCUMENT',mimeType:file.type,fileSize:file.size});
+        renderAttachments();
+      };
+      reader.readAsDataURL(file);
+      e.target.value='';
+    }}),
+    el('span',{class:'btn btn-ghost btn-sm',style:{border:'1px dashed var(--border)'},html:ICONS.plus+' Добавить файл'})
+  );
+  function renderAttachments(){
+    attList.innerHTML='';
+    state.attachments.forEach(a=>{
+      attList.appendChild(el('div',{class:'flex items-center gap-2',style:{padding:'6px 12px',borderRadius:'6px',background:'rgba(24,33,31,0.3)',border:'1px solid var(--border)'}},
+        el('span',{html:ICONS.file,style:{color:a.fileType==='IMAGE'?'var(--accent)':'var(--fg-muted)',width:'14px',height:'14px'}}),
+        el('span',{class:'text-xs truncate',style:{maxWidth:'150px'}},a.fileName),
+        el('button',{type:'button',class:'btn btn-ghost',style:{padding:'2px'},onclick:()=>{state.attachments=state.attachments.filter(x=>x.id!==a.id);renderAttachments()}},el('span',{html:ICONS.close,style:{width:'12px',height:'12px'}}))
+      ));
+    });
+  }
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Вложения'),attList,fileLabel));
+  form.appendChild(el('div',{class:'flex gap-2 justify-end',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('posts')},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.send}),'Отправить')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function submit(){
+    if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните заголовок и содержание','error');return}
+    const faction=App.cache.factions.find(f=>f.userId===App.userProfile.id);
+    try{
+      await RTDB.push('posts',{
+        title:state.title,content:state.content,context:state.context,
+        turnNumber:state.turnNumber?Number(state.turnNumber):null,
+        weekNumber:state.weekNumber?Number(state.weekNumber):null,
+        status:'PENDING',isPublic:false,
+        authorId:App.userProfile.id,authorName:App.userProfile.name,
+        factionId:faction?faction.id:null,
+        attachments:state.attachments,
+      });
+      toast('Пост отправлен','Ожидает вердикта администратора','success');
+      App.setView('posts');
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+function PostDetail(post){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('posts')},el('span',{html:ICONS.back}),'Назад к постам'));
+  const ts=RTDB.ts(post.createdAt);
+  const card=el('div',{class:'card card-glow p-6'});
+  card.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
+    post.status==='PENDING'?el('span',{class:'badge badge-warning'},'Ожидает вердикта'):
+    post.status==='VERDICTED'?el('span',{class:'badge badge-success'},'Вердикт получен'):
+    el('span',{class:'badge'},'Архив'),
+    post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
+    post.weekNumber?el('span',{class:'badge'},'Неделя '+post.weekNumber):null
+  ));
+  card.appendChild(el('h1',{class:'text-glow',style:{fontSize:'22px',marginBottom:'8px'}},post.title));
+  card.appendChild(el('p',{class:'text-muted text-xs mb-4'},fmtDate(ts)));
+  card.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
+  card.appendChild(el('div',{class:'markdown',html:mdToHtml(post.content)}));
+  if(post.context){
+    card.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},el('p',{class:'label'},'Контекст'),el('p',{class:'text-sm italic'},post.context)));
+  }
+  if(post.attachments&&post.attachments.length){
+    card.appendChild(el('div',{class:'mt-4'},
+      el('p',{class:'label'},'Вложения'),
+      el('div',{class:'stat-grid-2'},
+        ...post.attachments.map(a=>
+          el('a',{href:a.filePath,target:'_blank',class:'flex items-center gap-2',style:{padding:'8px',borderRadius:'6px',background:'rgba(24,33,31,0.4)',border:'1px solid var(--border)',textDecoration:'none'}},
+            a.fileType==='IMAGE'?el('img',{src:a.filePath,alt:a.fileName,style:{width:'40px',height:'40px',borderRadius:'4px',objectFit:'cover'}}):
+            el('div',{style:{width:'40px',height:'40px',borderRadius:'4px',background:'rgba(24,33,31,0.6)',display:'flex',alignItems:'center',justifyContent:'center'},html:ICONS.file}),
+            el('div',{},el('div',{class:'text-xs'},a.fileName),el('div',{class:'text-muted',style:{fontSize:'10px'}},(a.fileSize/1024).toFixed(1)+' КБ'))
+          )
+        )
+      )
+    ));
+  }
+  wrap.appendChild(card);
+  const verdict=post.verdict;
+  if(verdict){
+    const vts=RTDB.ts(verdict.createdAt);
+    const vCard=el('div',{class:'card',style:{background:'linear-gradient(135deg,rgba(58,125,116,0.1),rgba(17,24,26,0.4))',borderColor:'rgba(58,125,116,0.3)'}});
+    vCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3'},
+      el('div',{class:'stat-section-icon',html:ICONS.shield}),
+      el('div',{},el('h2',{class:'text-accent',style:{fontSize:'16px'}},'Вердикт администратора'),el('p',{class:'text-muted',style:{fontSize:'10px'}},(verdict.adminName||'')+' · '+fmtDate(vts)))
+    ));
+    vCard.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
+    vCard.appendChild(el('div',{class:'markdown',html:mdToHtml(verdict.roleplayText)}));
+    if(verdict.technicalText){
+      vCard.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},el('p',{class:'label'},'Техническая часть'),el('p',{class:'text-sm',style:{whiteSpace:'pre-wrap'}},verdict.technicalText)));
+    }
+    wrap.appendChild(vCard);
+  }else{
+    wrap.appendChild(el('div',{class:'card text-center',style:{background:'rgba(212,165,67,0.05)',borderColor:'rgba(212,165,67,0.2)'}},
+      el('div',{html:ICONS.clock,style:{color:'rgba(212,165,67,0.6)',margin:'0 auto 8px',width:'32px',height:'32px'}}),
+      el('p',{class:'text-warning'},'Пост ожидает вердикта администратора')
+    ));
+  }
+  return wrap;
+}
+
+/* ====== ADMIN POSTS VIEW ====== */
+function AdminPostsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  if(App.selectedId&&App.selectedId!=='__new__'){
+    const post=App.cache.posts.find(p=>p.id===App.selectedId);
+    if(post){wrap.appendChild(VerdictEditor(post));return wrap}
+  }
+  const filter=App._postFilter||'PENDING';
+  wrap.appendChild(PageHeader('Все посты','Вынесение вердиктов по постам игроков'));
+  const tabs=el('div',{class:'flex gap-2 mb-4'});
+  [['PENDING','Ожидают'],['VERDICTED','С вердиктом'],['ALL','Все']].forEach(([k,label])=>{
+    const count=k==='ALL'?App.cache.posts.length:App.cache.posts.filter(p=>p.status===k).length;
+    tabs.appendChild(el('button',{class:'btn '+(filter===k?'btn-primary':'btn-ghost'),onclick:()=>{App._postFilter=k;App.render()}},label+' ('+count+')'));
+  });
+  wrap.appendChild(tabs);
+  const filtered=filter==='ALL'?App.cache.posts:App.cache.posts.filter(p=>p.status===filter);
+  if(filtered.length===0){
+    wrap.appendChild(EmptyState('file','Постов нет','В выбранной категории постов не найдено'));
+  }else{
+    filtered.forEach(post=>{
+      const faction=App.cache.factions.find(f=>f.id===post.factionId);
+      const ts=RTDB.ts(post.createdAt);
+      wrap.appendChild(el('div',{class:'card card-hover',onclick:()=>App.setView('admin-posts',post.id)},
+        el('div',{class:'flex items-start justify-between gap-3'},
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
+              post.status==='PENDING'?el('span',{class:'badge badge-warning',html:ICONS.clock+' Ожидает'}):el('span',{class:'badge badge-success',html:ICONS.check+' Вердикт'}),
+              faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+faction.name}):null,
+              post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null
+            ),
+            el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},post.title),
+            el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},post.content),
+            el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'6px',opacity:'0.6'}},(post.authorName||'')+' · '+fmtDate(ts))
+          ),
+          el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0',marginTop:'4px'}})
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+function VerdictEditor(post){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('admin-posts')},el('span',{html:ICONS.back}),'Назад к постам'));
+  const faction=App.cache.factions.find(f=>f.id===post.factionId);
+  const existingVerdict=post.verdict;
+  const state={roleplayText:existingVerdict?existingVerdict.roleplayText:'',technicalText:existingVerdict?existingVerdict.technicalText:'',statChanges:existingVerdict&&existingVerdict.statChanges?[...existingVerdict.statChanges]:[]};
+  const postCard=el('div',{class:'card'});
+  const ts=RTDB.ts(post.createdAt);
+  postCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
+    faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+faction.name}):null,
+    post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
+    el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},(post.authorName||'')+' · '+fmtDate(ts))
+  ));
+  postCard.appendChild(el('h2',{style:{fontSize:'18px',marginBottom:'8px'}},post.title));
+  postCard.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'12px'}}));
+  postCard.appendChild(el('div',{class:'markdown text-sm',html:mdToHtml(post.content)}));
+  if(post.context){
+    postCard.appendChild(el('div',{class:'card mt-3',style:{background:'rgba(24,33,31,0.4)'}},el('p',{class:'label'},'Контекст от автора'),el('p',{class:'text-sm italic'},post.context)));
+  }
+  wrap.appendChild(postCard);
+  const editorCard=el('div',{class:'card card-glow',style:{background:'linear-gradient(135deg,rgba(58,125,116,0.05),rgba(17,24,26,0.4))',borderColor:'rgba(58,125,116,0.3)'}});
+  editorCard.appendChild(el('div',{class:'flex items-center justify-between mb-4'},
+    el('div',{class:'flex items-center gap-2'},
+      el('div',{class:'stat-section-icon',html:ICONS.shield}),
+      el('h2',{class:'text-accent',style:{fontSize:'16px'}},'Вердикт администратора'),
+      existingVerdict?el('span',{class:'badge badge-success'},'Редактирование'):null
+    ),
+    existingVerdict?el('button',{class:'btn btn-ghost btn-sm text-danger',onclick:async()=>{
+      if(!confirm('Отозвать вердикт?'))return;
+      try{
+        await RTDB.update('posts/'+post.id,{status:'PENDING',verdict:null});
+        toast('Вердикт отозван','','info');
+        App.setView('admin-posts');
+      }catch(e){toast('Ошибка',e.message,'error')}
+    }},el('span',{html:ICONS.trash}),'Отозвать'):null
+  ));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Ролевая часть (нарратив) *'),el('textarea',{class:'textarea',placeholder:'Опишите, что произошло по итогам поста игрока...',style:{minHeight:'150px'},oninput:e=>state.roleplayText=e.target.value},state.roleplayText)));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Техническая часть (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения...',style:{minHeight:'80px'},oninput:e=>state.technicalText=e.target.value},state.technicalText)));
+  const statSection=el('div',{class:'field-group'});
+  statSection.appendChild(el('div',{class:'flex items-center justify-between'},el('label',{class:'label'},'Изменения статистики'),el('button',{type:'button',class:'btn btn-ghost btn-sm',onclick:()=>{state.statChanges.push({sectionKey:'TREASURY',content:defaultStatContent('TREASURY')});renderStatChanges()}},el('span',{html:ICONS.plus}),'Добавить секцию')));
+  const statList=el('div',{class:'flex flex-col gap-3'});
+  statSection.appendChild(statList);
+  form.appendChild(statSection);
+  function renderStatChanges(){
+    statList.innerHTML='';
+    if(state.statChanges.length===0){
+      statList.appendChild(el('p',{class:'text-muted italic text-xs',style:{padding:'12px',textAlign:'center',border:'1px dashed var(--border)',borderRadius:'6px'}},'Нет изменений статистики. Добавьте секцию, чтобы автоматически обновить статы фракции.'));
+      return;
+    }
+    state.statChanges.forEach((change,index)=>{
+      const section=STAT_SECTIONS.find(s=>s.key===change.sectionKey);
+      const item=el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)'}});
+      const select=el('select',{class:'select',style:{marginBottom:'8px'},onchange:e=>{change.sectionKey=e.target.value;change.content=defaultStatContent(change.sectionKey);renderStatChanges()}});
+      STAT_SECTIONS.forEach(s=>{const opt=el('option',{value:s.key},s.title);if(s.key===change.sectionKey)opt.selected=true;select.appendChild(opt)});
+      item.appendChild(el('div',{class:'flex items-center gap-2 mb-2'},select,el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm',onclick:()=>{state.statChanges.splice(index,1);renderStatChanges()}},el('span',{html:ICONS.close}))));
+      if(section){
+        section.fields.forEach(f=>{
+          const val=change.content[f.key];
+          if(f.type==='list'){
+            const ta=el('textarea',{class:'textarea',style:{minHeight:'60px',fontSize:'12px'},placeholder:f.label+' (каждый пункт с новой строки)'},Array.isArray(val)?val.join('\n'):'');
+            ta.oninput=()=>{change.content[f.key]=ta.value.split('\n').map(s=>s.trim()).filter(Boolean)};
+            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),ta));
+          }else if(f.type==='number'){
+            const inp=el('input',{class:'input',type:'number',value:val||0,style:{fontSize:'12px'}});
+            inp.oninput=()=>{change.content[f.key]=Number(inp.value)||0};
+            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
+          }else{
+            const inp=el('input',{class:'input',value:val||'',style:{fontSize:'12px'}});
+            inp.oninput=()=>{change.content[f.key]=inp.value};
+            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
+          }
+        });
+      }
+      statList.appendChild(item);
+    });
+  }
+  renderStatChanges();
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-posts')},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),existingVerdict?'Обновить вердикт':'Вынести вердикт')
+  ));
+  editorCard.appendChild(form);
+  wrap.appendChild(editorCard);
+  async function save(){
+    if(state.roleplayText.length<5){toast('Ошибка','Ролевая часть обязательна','error');return}
+    const verdict={
+      roleplayText:state.roleplayText,technicalText:state.technicalText,
+      statChanges:state.statChanges,adminId:App.userProfile.id,adminName:App.userProfile.name,
+      createdAt:new Date().toISOString(),
+    };
+    try{
+      await RTDB.update('posts/'+post.id,{status:'VERDICTED',verdict});
+      if(faction&&state.statChanges.length){
+        const factionStats=[...faction.stats];
+        state.statChanges.forEach(change=>{
+          let stat=factionStats.find(s=>s.sectionKey===change.sectionKey);
+          if(!stat){
+            const section=STAT_SECTIONS.find(s=>s.key===change.sectionKey);
+            stat={sectionKey:change.sectionKey,sectionTitle:section?section.title:change.sectionKey,content:defaultStatContent(change.sectionKey),order:factionStats.length};
+            factionStats.push(stat);
+          }
+          stat.content=change.content;
+        });
+        await RTDB.update('factions/'+faction.id,{stats:factionStats});
+      }
+      toast('Вердикт вынесен','Статистика обновлена','success');
+      App.setView('admin-posts');
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+  return wrap;
+}
+
+/* ====== NEWS VIEW ====== */
+function NewsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  if(App.selectedId){
+    const n=App.cache.news.find(x=>x.id===App.selectedId);
+    if(n){
+      const ts=RTDB.ts(n.createdAt);
+      wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('news')},el('span',{html:ICONS.back}),'Назад к вестям'));
+      const card=el('div',{class:'card card-glow p-6'});
+      card.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
+        n.isPinned?el('span',{class:'badge badge-accent',html:ICONS.pin+' Закреплено'}):null,
+        el('span',{class:'badge'},n.category||'Общие'),
+        n.turnNumber?el('span',{class:'badge'},'Ход '+n.turnNumber):null,
+        el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},fmtDate(ts))
+      ));
+      card.appendChild(el('h1',{class:'text-glow',style:{fontSize:'22px',marginBottom:'8px'}},n.title));
+      if(n.excerpt)card.appendChild(el('p',{class:'text-muted italic mb-3'},n.excerpt));
+      card.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
+      card.appendChild(el('div',{class:'markdown',html:mdToHtml(n.content)}));
+      card.appendChild(el('div',{class:'mt-4 pt-3',style:{borderTop:'1px solid var(--border)',fontSize:'12px',color:'var(--fg-muted)'}},'Автор: '+(n.authorName||'Хронист')));
+      wrap.appendChild(card);
+      return wrap;
+    }
+  }
+  wrap.appendChild(PageHeader('Вести мира','Общедоступные новости и события Терского Мира'));
+  if(App.cache.news.length===0){
+    wrap.appendChild(EmptyState('news','Вестей нет','Новости пока не опубликованы'));
+  }else{
+    App.cache.news.forEach(n=>{
+      const ts=RTDB.ts(n.createdAt);
+      wrap.appendChild(el('div',{class:'card card-hover',onclick:()=>App.setView('news',n.id)},
+        el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
+          n.isPinned?el('span',{html:ICONS.pin,style:{color:'var(--accent)',width:'12px',height:'12px'}}):null,
+          el('span',{class:'badge'},n.category||'Общие'),
+          n.turnNumber?el('span',{class:'badge'},'Ход '+n.turnNumber):null,
+          el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},fmtDateShort(ts))
+        ),
+        el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},n.title),
+        n.excerpt?el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},n.excerpt):
+        el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},n.content.replace(/[#*`]/g,'').slice(0,150)+'...')
+      ));
+    });
+  }
+  return wrap;
+}
+
+/* ====== ADMIN NEWS VIEW ====== */
+function AdminNewsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Управление новостями','Публикация вестей мира для всех игроков',
+    el('button',{class:'btn btn-primary',onclick:()=>App.setView('admin-news','__new__')},el('span',{html:ICONS.plus}),'Новая весть')
+  ));
+  if(App.selectedId==='__new__')wrap.appendChild(NewsForm(null));
+  else if(App.selectedId&&App.selectedId!=='__new__'){
+    const editing=App.cache.news.find(n=>n.id===App.selectedId);
+    if(editing)wrap.appendChild(NewsForm(editing));
+  }
+  if(App.cache.news.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('news','Новостей нет','Создайте первую новость мира'));
+  }else{
+    App.cache.news.forEach(n=>{
+      const ts=RTDB.ts(n.createdAt);
+      wrap.appendChild(el('div',{class:'card flex items-start gap-3'},
+        el('div',{class:'flex-1 min-w-0'},
+          el('div',{class:'flex items-center gap-2 mb-1',style:{flexWrap:'wrap'}},
+            n.isPinned?el('span',{html:ICONS.pin,style:{color:'var(--accent)',width:'12px',height:'12px'}}):null,
+            el('span',{class:'badge'},n.category||'Общие'),
+            n.turnNumber?el('span',{class:'badge'},'Ход '+n.turnNumber):null,
+            el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},fmtDateShort(ts))
+          ),
+          el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},n.title),
+          n.excerpt?el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'1',WebkitBoxOrient:'vertical',overflow:'hidden'}},n.excerpt):null
+        ),
+        el('div',{class:'flex flex-col gap-1'},
+          el('button',{class:'btn btn-ghost btn-icon btn-sm',style:{color:n.isPinned?'var(--accent)':'var(--fg-muted)'},onclick:async()=>{try{await RTDB.update('news/'+n.id,{isPinned:!n.isPinned});toast(n.isPinned?'Откреплено':'Закреплено')}catch(e){toast('Ошибка',e.message,'error')}},html:ICONS.pin}),
+          el('button',{class:'btn btn-ghost btn-icon btn-sm',onclick:()=>App.setView('admin-news',n.id),html:ICONS.edit}),
+          el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async()=>{if(confirm('Удалить новость?')){try{await RTDB.remove('news/'+n.id);toast('Удалено')}catch(e){toast('Ошибка',e.message,'error')}}},html:ICONS.trash})
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+function NewsForm(editing){
+  const state={title:editing?editing.title:'',content:editing?editing.content:'',excerpt:editing?(editing.excerpt||''):'',category:editing?editing.category:'GENERAL',isPinned:editing?editing.isPinned:false,turnNumber:editing?(editing.turnNumber||''):''};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},editing?'Редактировать новость':'Новая весть'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('admin-news')},el('span',{html:ICONS.close}))));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',value:state.title,oninput:e=>state.title=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
+      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+        [['GENERAL','Общие'],['WAR','Военные'],['DIPLOMACY','Дипломатия'],['ECONOMY','Экономика'],['RELIGION','Религия']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
+        return sel;
+      })()
+    ),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',value:state.turnNumber,oninput:e=>state.turnNumber=e.target.value}))
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Краткое описание'),el('input',{class:'input',value:state.excerpt,oninput:e=>state.excerpt=e.target.value,placeholder:'Короткая аннотация...'})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),el('textarea',{class:'textarea',style:{minHeight:'200px'},oninput:e=>state.content=e.target.value,placeholder:'Markdown поддерживается...'},state.content)));
+  form.appendChild(el('div',{class:'flex items-center gap-2'},el('input',{type:'checkbox',id:'pinned',checked:state.isPinned,onchange:e=>state.isPinned=e.target.checked}),el('label',{for:'pinned',class:'text-sm text-muted'},'Закрепить новость')));
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-news')},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),editing?'Обновить':'Опубликовать')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function save(){
+    if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
+    try{
+      if(editing){
+        await RTDB.update('news/'+editing.id,{title:state.title,content:state.content,excerpt:state.excerpt,category:state.category,isPinned:state.isPinned,turnNumber:state.turnNumber?Number(state.turnNumber):null});
+      }else{
+        await RTDB.push('news',{title:state.title,content:state.content,excerpt:state.excerpt,category:state.category,isPinned:state.isPinned,turnNumber:state.turnNumber?Number(state.turnNumber):null,authorId:App.userProfile.id,authorName:App.userProfile.name});
+      }
+      toast(editing?'Новость обновлена':'Новость опубликована','','success');
+      App.setView('admin-news');
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== CHATS VIEW ====== */
+function ChatsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  const isAdmin=App.userProfile.role==='ADMIN';
+  let chats;
+  if(isAdmin){chats=App.cache.chats}
+  else{chats=App.cache.chats.filter(c=>c.participants&&c.participants.some(p=>p.userId===App.userProfile.id))}
+  if(App.selectedId){
+    const chat=App.cache.chats.find(c=>c.id===App.selectedId);
+    if(chat){wrap.appendChild(ChatDetail(chat));return wrap}
+  }
+  wrap.appendChild(PageHeader('Переговоры','Дипломатические чаты между правителями'));
+  if(chats.length===0){
+    wrap.appendChild(EmptyState('chat','Переговоров пока нет',isAdmin?'Создайте чаты для дипломатических встреч':'Администратор создаст чаты для дипломатических встреч'));
+  }else{
+    chats.forEach(chat=>{
+      wrap.appendChild(el('div',{class:'card card-hover list-item',onclick:()=>App.setView('chats',chat.id)},
+        el('div',{class:'list-item-row'},
+          el('div',{class:'list-item-icon',html:ICONS.chat}),
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2 mb-1',style:{flexWrap:'wrap'}},
+              el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},chat.name),
+              chat.status==='SUMMARIZED'?el('span',{class:'badge badge-accent',html:ICONS.book+' Итог'}):null,
+              chat.status==='CLOSED'?el('span',{class:'badge',html:ICONS.close+' Закрыт'}):null
+            ),
+            chat.topic?el('p',{class:'text-muted text-xs'},chat.topic):null,
+            el('div',{class:'flex items-center gap-3 mt-1',style:{fontSize:'10px',color:'var(--fg-dim)'}},
+              el('span',{class:'flex items-center gap-1',html:ICONS.users+' '+(chat.participants?chat.participants.length:0)})
+            )
+          ),
+          el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0'}})
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+const _chatMsgUnsubs={};
+function ChatDetail(chat){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>{if(_chatMsgUnsubs[chat.id]){_chatMsgUnsubs[chat.id]();delete _chatMsgUnsubs[chat.id]}App.setView('chats')}},el('span',{html:ICONS.back}),'Назад к переговорам'));
+  const card=el('div',{class:'card',style:{padding:'0',overflow:'hidden'}});
+  const header=el('div',{class:'p-4',style:{borderBottom:'1px solid var(--border)',background:'rgba(26,58,53,0.2)'}});
+  header.appendChild(el('div',{class:'flex items-center gap-3'},
+    el('div',{class:'list-item-icon',html:ICONS.chat,style:{width:'40px',height:'40px'}}),
+    el('div',{class:'flex-1'},el('h2',{style:{fontSize:'16px'}},chat.name),chat.topic?el('p',{class:'text-muted text-xs'},chat.topic):null),
+    (chat.status==='CLOSED'||chat.status==='SUMMARIZED')?el('span',{class:'badge',html:ICONS.close+' Завершено'}):null
+  ));
+  if(chat.participants&&chat.participants.length){
+    const parts=el('div',{class:'flex items-center gap-2 mt-3',style:{flexWrap:'wrap'}},el('span',{html:ICONS.users,style:{color:'var(--fg-muted)',width:'14px',height:'14px'}}));
+    chat.participants.forEach(p=>{
+      const user=App.cache.users.find(u=>u.id===p.userId)||{name:p.userId};
+      const faction=App.cache.factions.find(f=>f.userId===p.userId);
+      parts.appendChild(el('span',{class:'badge'},
+        p.role==='ADMIN'?el('span',{html:ICONS.crown,style:{color:'var(--accent)',width:'10px',height:'10px'}}):null,
+        user.name||'?',
+        faction?el('span',{style:{color:'var(--accent)',opacity:'0.7'}},'· '+faction.name):null
+      ));
+    });
+    header.appendChild(parts);
+  }
+  card.appendChild(header);
+  if(chat.summary){
+    card.appendChild(el('div',{class:'p-4',style:{background:'rgba(88,28,135,0.1)',borderBottom:'1px solid rgba(88,28,135,0.2)'}},
+      el('div',{class:'flex items-center gap-2 mb-2'},el('span',{html:ICONS.book,style:{color:'#c084fc',width:'16px',height:'16px'}}),el('h3',{style:{fontSize:'14px',color:'#d8b4fe'}},'Итог встречи')),
+      el('p',{class:'text-sm italic',style:{lineHeight:'1.6'}},chat.summary)
+    ));
+  }
+  const msgWrap=el('div',{class:'chat-messages'});
+  msgWrap.appendChild(el('div',{class:'dot-loading',style:{margin:'0 auto'}},el('span'),el('span'),el('span')));
+  card.appendChild(msgWrap);
+  if(_chatMsgUnsubs[chat.id]){_chatMsgUnsubs[chat.id]()}
+  _chatMsgUnsubs[chat.id]=fbDb.ref('chats/'+chat.id+'/messages').on('value',snap=>{
+    msgWrap.innerHTML='';
+    const val=snap.val()||{};
+    const messages=Object.entries(val).map(([id,m])=>({id,...(m||{})})).sort((a,b)=>{
+      const da=a.createdAt,db=b.createdAt;
+      if(typeof da==='number'&&typeof db==='number')return da-db;
+      const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
+      return ta-tb;
+    });
+    if(messages.length===0){
+      msgWrap.appendChild(el('p',{class:'text-center text-muted text-sm',style:{padding:'32px 0'}},'Сообщений пока нет'));
+    }else{
+      messages.forEach(m=>{
+        const ts=RTDB.ts(m.createdAt);
+        const user=App.cache.users.find(u=>u.id===m.userId)||{name:m.userId};
+        const faction=App.cache.factions.find(f=>f.userId===m.userId);
+        if(m.isSystem){
+          msgWrap.appendChild(el('div',{class:'chat-msg-system'},m.content));
+        }else{
+          msgWrap.appendChild(el('div',{class:'chat-msg'},
+            el('div',{class:'chat-msg-meta'},
+              el('span',{class:'chat-msg-author'},user.name||'?'),
+              faction?el('span',{class:'text-muted',style:{fontSize:'10px'}},'· '+faction.name):null,
+              el('span',{class:'chat-msg-time'},new Date(ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}))
+            ),
+            el('div',{class:'chat-msg-bubble'},m.content)
+          ));
+        }
+      });
+    }
+    msgWrap.scrollTop=msgWrap.scrollHeight;
+  });
+  if(chat.status!=='CLOSED'&&chat.status!=='SUMMARIZED'){
+    const inputWrap=el('div',{class:'p-4',style:{borderTop:'1px solid var(--border)'}});
+    const ta=el('textarea',{class:'textarea',placeholder:'Сообщение...',style:{minHeight:'44px',maxHeight:'120px',resize:'none'}});
+    ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+    inputWrap.appendChild(el('div',{class:'flex gap-2'},ta,el('button',{class:'btn btn-primary',onclick:send,html:ICONS.send})));
+    card.appendChild(inputWrap);
+    async function send(){
+      const text=ta.value.trim();
+      if(!text)return;
+      try{
+        await fbDb.ref('chats/'+chat.id+'/messages').push({
+          content:text,userId:App.userProfile.id,userName:App.userProfile.name,isSystem:false,
+          createdAt:new Date().toISOString(),
+        });
+        ta.value='';
+      }catch(e){toast('Ошибка',e.message,'error')}
+    }
+  }
+  wrap.appendChild(card);
+  return wrap;
+}
+
+/* ====== ADMIN CHATS VIEW ====== */
+function AdminChatsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Управление чатами','Создание дипломатических переговоров между фракциями',
+    el('button',{class:'btn btn-primary',onclick:()=>App.setView('admin-chats','__new__')},el('span',{html:ICONS.plus}),'Создать чат')
+  ));
+  if(App.selectedId==='__new__')wrap.appendChild(ChatForm());
+  if(App.cache.chats.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('chat','Чатов нет','Создайте первый дипломатический чат'));
+  }else{
+    App.cache.chats.forEach(chat=>{
+      wrap.appendChild(el('div',{class:'card'},
+        el('div',{class:'flex items-start gap-4'},
+          el('div',{class:'list-item-icon',html:ICONS.chat}),
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},
+              el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},chat.name),
+              chat.status==='SUMMARIZED'?el('span',{class:'badge badge-accent',html:ICONS.book+' Итог'}):null,
+              chat.status==='CLOSED'?el('span',{class:'badge',html:ICONS.close+' Закрыт'}):null
+            ),
+            chat.topic?el('p',{class:'text-muted text-xs mt-1'},chat.topic):null,
+            chat.summary?el('div',{class:'card mt-2',style:{background:'rgba(88,28,135,0.1)',borderColor:'rgba(88,28,135,0.2)',padding:'8px'}},
+              el('p',{class:'text-xs',style:{color:'#d8b4fe',textTransform:'uppercase',letterSpacing:'0.1em',fontFamily:'Cinzel,serif',marginBottom:'4px'}},'Итог встречи'),
+              el('p',{class:'text-xs italic',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},chat.summary)
+            ):null
+          ),
+          el('div',{class:'flex flex-col gap-1'},
+            el('button',{class:'btn btn-ghost btn-sm',onclick:()=>openSummary(chat),html:ICONS.book+' Итог'}),
+            el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async()=>{if(confirm('Удалить чат?')){try{await RTDB.remove('chats/'+chat.id);toast('Чат удалён')}catch(e){toast('Ошибка',e.message,'error')}}},html:ICONS.trash})
+          )
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+function openSummary(chat){
+  const modal=el('div',{style:{position:'fixed',inset:'0',background:'rgba(0,0,0,0.7)',zIndex:'200',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'}});
+  const card=el('div',{class:'card card-glow',style:{maxWidth:'500px',width:'100%'}});
+  card.appendChild(el('h2',{class:'mb-4'},'Итог встречи'));
+  const ta=el('textarea',{class:'textarea',style:{minHeight:'120px'},placeholder:'Опишите итог дипломатической встречи...'},chat.summary||'');
+  card.appendChild(ta);
+  card.appendChild(el('div',{class:'flex gap-2 justify-end mt-4'},
+    el('button',{class:'btn btn-ghost',onclick:()=>modal.remove()},'Отмена'),
+    el('button',{class:'btn btn-primary',onclick:async()=>{
+      try{
+        await RTDB.update('chats/'+chat.id,{summary:ta.value,status:'SUMMARIZED'});
+        await fbDb.ref('chats/'+chat.id+'/messages').push({
+          content:'Итог встречи: '+ta.value,userId:App.userProfile.id,userName:App.userProfile.name,isSystem:true,
+          createdAt:new Date().toISOString(),
+        });
+        toast('Итог зафиксирован','','success');
+        modal.remove();
+      }catch(e){toast('Ошибка',e.message,'error')}
+    }},el('span',{html:ICONS.check}),'Зафиксировать')
+  ));
+  modal.appendChild(card);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
+  document.body.appendChild(modal);
+}
+function ChatForm(){
+  const state={name:'',topic:'',description:'',selectedUsers:[]};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новые переговоры'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('admin-chats')},el('span',{html:ICONS.close}))));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Встреча Лодерфеса и Помы',oninput:e=>state.name=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Тема'),el('input',{class:'input',placeholder:'Торговый договор',oninput:e=>state.topic=e.target.value})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание'),el('textarea',{class:'textarea',style:{minHeight:'60px'},placeholder:'Контекст переговоров...',oninput:e=>state.description=e.target.value})));
+  const usersWithFactions=App.cache.users.filter(u=>{
+    const f=App.cache.factions.find(fa=>fa.userId===u.id);
+    return f&&f.isApproved&&u.id!==App.userProfile.id;
+  });
+  const list=el('div',{class:'flex flex-col gap-1',style:{maxHeight:'240px',overflowY:'auto'}});
+  function renderUsers(){
+    list.innerHTML='';
+    if(usersWithFactions.length===0){
+      list.appendChild(el('p',{class:'text-muted italic text-xs text-center',style:{padding:'12px'}},'Нет утверждённых фракций'));
+      return;
+    }
+    usersWithFactions.forEach(u=>{
+      const faction=App.cache.factions.find(f=>f.userId===u.id);
+      const selected=state.selectedUsers.includes(u.id);
+      const btn=el('button',{type:'button',class:'flex items-center gap-2',style:{width:'100%',padding:'8px',borderRadius:'6px',border:'1px solid '+(selected?'rgba(58,125,116,0.4)':'var(--border)'),background:selected?'rgba(58,125,116,0.15)':'rgba(24,33,31,0.4)',textAlign:'left',cursor:'pointer'},onclick:()=>{
+        if(selected)state.selectedUsers=state.selectedUsers.filter(id=>id!==u.id);
+        else state.selectedUsers.push(u.id);
+        renderUsers();
+      }});
+      btn.appendChild(el('div',{style:{width:'20px',height:'20px',borderRadius:'4px',border:'1px solid '+(selected?'var(--accent)':'var(--border)'),background:selected?'var(--accent)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:'0'}},selected?el('span',{html:ICONS.check,style:{color:'var(--bg)',width:'12px',height:'12px'}}):null));
+      btn.appendChild(el('div',{class:'flex-1 min-w-0'},el('div',{class:'text-sm'},u.name),faction?el('div',{class:'text-accent',style:{fontSize:'10px',opacity:'0.7'}},faction.name):null));
+      list.appendChild(btn);
+    });
+  }
+  renderUsers();
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Участники ('+state.selectedUsers.length+')'),list));
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-chats')},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать чат')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function save(){
+    if(state.name.length<3){toast('Ошибка','Название минимум 3 символа','error');return}
+    if(state.selectedUsers.length<1){toast('Ошибка','Выберите хотя бы одного участника','error');return}
+    try{
+      const ref=await fbDb.ref('chats').push({
+        name:state.name,topic:state.topic,description:state.description,
+        status:'OPEN',summary:null,
+        participants:[...state.selectedUsers.map(userId=>({userId,role:'MEMBER'})),{userId:App.userProfile.id,role:'ADMIN'}],
+        createdAt:new Date().toISOString(),
+      });
+      await fbDb.ref('chats/'+ref.key+'/messages').push({
+        content:'Переговоры «'+state.name+'» начаты.',userId:App.userProfile.id,userName:App.userProfile.name,isSystem:true,
+        createdAt:new Date().toISOString(),
+      });
+      toast('Чат создан','','success');
+      App.setView('admin-chats');
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== BATTLES VIEW ====== */
+function BattlesView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  if(App.selectedId){
+    const battle=App.cache.battles.find(b=>b.id===App.selectedId);
+    if(battle){wrap.appendChild(BattleDetail(battle));return wrap}
+  }
+  wrap.appendChild(PageHeader('Военные дела','Баталии и военные действия в Терском Мире'));
+  const isAdmin=App.userProfile.role==='ADMIN';
+  let battles;
+  if(isAdmin){battles=App.cache.battles}
+  else{
+    const myFaction=App.cache.factions.find(f=>f.userId===App.userProfile.id);
+    battles=App.cache.battles.filter(b=>b.participants&&b.participants.some(p=>p.factionId===(myFaction?myFaction.id:'__none__')));
+  }
+  if(battles.length===0){
+    wrap.appendChild(EmptyState('swords','Баталий нет','Активных военных действий пока не объявлено'));
+  }else{
+    battles.forEach(battle=>{
+      const statusMap={PREPARING:'Подготовка',ACTIVE:'Активна',POSTING:'Сбор постов',RESOLVED:'Завершена'};
+      const posted=battle.participants?battle.participants.filter(p=>p.hasPosted).length:0;
+      const total=battle.participants?battle.participants.length:0;
+      const deadline=battle.postDeadline?new Date(battle.postDeadline):null;
+      const timeLeft=deadline?deadline.getTime()-Date.now():null;
+      wrap.appendChild(el('div',{class:'card card-hover',onclick:()=>App.setView('battles',battle.id)},
+        el('div',{class:'flex items-start gap-4'},
+          el('div',{class:'list-item-icon',style:{background:'rgba(196,77,77,0.15)',borderColor:'rgba(196,77,77,0.3)',color:'#f87171'},html:ICONS.swords}),
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2 mb-1',style:{flexWrap:'wrap'}},
+              el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},battle.name),
+              el('span',{class:'badge'},statusMap[battle.status]||battle.status),
+              battle.turnNumber?el('span',{class:'badge'},'Ход '+battle.turnNumber):null
+            ),
+            battle.location?el('p',{class:'text-muted text-xs flex items-center gap-1'},el('span',{html:ICONS.flag,style:{width:'12px',height:'12px'}}),battle.location):null,
+            battle.description?el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},battle.description):null,
+            el('div',{class:'flex items-center gap-4 mt-2',style:{fontSize:'10px',color:'var(--fg-dim)'}},
+              el('span',{class:'flex items-center gap-1',html:ICONS.shield+' '+(battle.forces?battle.forces.length:0)+' фракций'}),
+              el('span',{class:'flex items-center gap-1',html:ICONS.check+' '+posted+'/'+total+' написали'}),
+              timeLeft!==null&&timeLeft>0?el('span',{class:'flex items-center gap-1 text-warning',html:ICONS.clock+' '+formatTimeLeft(timeLeft)}):null
+            )
+          ),
+          el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0',marginTop:'4px'}})
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+function BattleDetail(battle){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('battles')},el('span',{html:ICONS.back}),'Назад к баталиям'));
+  const statusMap={PREPARING:'Подготовка',ACTIVE:'Активна',POSTING:'Сбор постов',RESOLVED:'Завершена'};
+  const deadline=battle.postDeadline?new Date(battle.postDeadline):null;
+  const timeLeft=deadline?deadline.getTime()-Date.now():null;
+  const card=el('div',{class:'card card-glow p-6'});
+  card.appendChild(el('div',{class:'flex items-start gap-4 mb-4'},
+    el('div',{class:'list-item-icon',style:{background:'rgba(196,77,77,0.15)',borderColor:'rgba(196,77,77,0.3)',color:'#f87171',width:'48px',height:'48px'},html:ICONS.swords}),
+    el('div',{class:'flex-1'},
+      el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap',marginBottom:'4px'}},
+        el('h1',{class:'text-glow',style:{fontSize:'22px'}},battle.name),
+        el('span',{class:'badge'},statusMap[battle.status]||battle.status),
+        battle.turnNumber?el('span',{class:'badge'},'Ход '+battle.turnNumber):null
+      ),
+      battle.location?el('p',{class:'text-muted text-sm flex items-center gap-1'},el('span',{html:ICONS.flag,style:{width:'14px',height:'14px'}}),battle.location):null,
+      battle.description?el('p',{class:'text-sm mt-2',style:{lineHeight:'1.6'}},battle.description):null,
+      timeLeft!==null&&timeLeft>0?el('div',{class:'card mt-3',style:{background:'rgba(212,165,67,0.1)',borderColor:'rgba(212,165,67,0.3)',padding:'10px',display:'flex',alignItems:'center',gap:'8px'}},
+        el('span',{html:ICONS.clock,style:{color:'var(--warning)',width:'16px',height:'16px'}}),
+        el('span',{class:'text-sm text-warning'},'До дедлайна постов: ',el('strong',{},formatTimeLeft(timeLeft)))
+      ):null
+    )
+  ));
+  wrap.appendChild(card);
+  const forcesCard=el('div',{class:'card'});
+  forcesCard.appendChild(el('h2',{class:'flex items-center gap-2 mb-4',style:{fontSize:'16px'}},el('span',{html:ICONS.shield,style:{color:'var(--accent)'}}),'Силы сторон'));
+  if(battle.forces&&battle.forces.length){
+    const grid=el('div',{class:'stat-grid-2'});
+    battle.forces.forEach(force=>{
+      const faction=App.cache.factions.find(f=>f.id===force.factionId);
+      grid.appendChild(el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)'}},
+        el('div',{class:'flex items-center gap-2 mb-3'},el('span',{html:ICONS.flag,style:{color:'var(--accent)',width:'16px',height:'16px'}}),el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},faction?faction.name:'?')),
+        el('p',{class:'text-muted text-xs mb-3'},'Командир: ',el('span',{style:{color:'var(--fg)'}},force.commander||'Не указан')),
+        el('div',{class:'force-grid'},
+          el('div',{class:'force-stat'},el('span',{html:ICONS.sword,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Пехота'),el('div',{class:'force-stat-value'},force.infantry||0))),
+          el('div',{class:'force-stat'},el('span',{html:ICONS.users,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Лучники'),el('div',{class:'force-stat-value'},force.archers||0))),
+          el('div',{class:'force-stat'},el('span',{html:ICONS.horse,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Кавалерия'),el('div',{class:'force-stat-value'},force.cavalry||0))),
+          el('div',{class:'force-stat'},el('span',{html:ICONS.ship,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Флот'),el('div',{class:'force-stat-value'},force.fleet||0)))
+        ),
+        force.special?el('p',{class:'text-muted text-xs mt-2 pt-2',style:{borderTop:'1px solid var(--border)'}},'Особые: '+force.special):null,
+        force.description?el('p',{class:'text-xs italic mt-2'},force.description):null
+      ));
+    });
+    forcesCard.appendChild(grid);
+  }else{
+    forcesCard.appendChild(EmptyState('shield','Силы не указаны',''));
+  }
+  wrap.appendChild(forcesCard);
+  if(battle.participants&&battle.participants.length){
+    const statusCard=el('div',{class:'card'});
+    statusCard.appendChild(el('h2',{class:'flex items-center gap-2 mb-4',style:{fontSize:'16px'}},el('span',{html:ICONS.check,style:{color:'var(--accent)'}}),'Статус постов'));
+    battle.participants.forEach(p=>{
+      const faction=App.cache.factions.find(f=>f.id===p.factionId);
+      statusCard.appendChild(el('div',{class:'flex items-center justify-between',style:{padding:'10px',borderRadius:'6px',background:'rgba(24,33,31,0.4)',border:'1px solid var(--border)',marginBottom:'8px'}},
+        el('div',{class:'flex items-center gap-2'},el('span',{html:ICONS.flag,style:{color:'var(--fg-muted)',width:'14px',height:'14px'}}),el('span',{class:'text-sm'},faction?faction.name:'?')),
+        p.hasPosted?el('span',{class:'badge badge-success',html:ICONS.check+' Написал'}):el('span',{class:'badge badge-warning',html:ICONS.clock+' Ожидает'})
+      ));
+    });
+    wrap.appendChild(statusCard);
+  }
+  return wrap;
+}
+
+/* ====== ADMIN BATTLES VIEW ====== */
+function AdminBattlesView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Управление баталиями','Создание и ведение военных действий',
+    el('button',{class:'btn btn-primary',onclick:()=>App.setView('admin-battles','__new__')},el('span',{html:ICONS.plus}),'Новая баталия')
+  ));
+  if(App.selectedId==='__new__')wrap.appendChild(BattleForm());
+  else if(App.selectedId&&App.selectedId!=='__new__'){
+    const battle=App.cache.battles.find(b=>b.id===App.selectedId);
+    if(battle){wrap.appendChild(BattleEditor(battle));return wrap}
+  }
+  if(App.cache.battles.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('swords','Баталий нет','Создайте первое военное столкновение'));
+  }else{
+    App.cache.battles.forEach(battle=>{
+      const statusMap={PREPARING:'Подготовка',ACTIVE:'Активна',POSTING:'Сбор постов',RESOLVED:'Завершена'};
+      const posted=battle.participants?battle.participants.filter(p=>p.hasPosted).length:0;
+      const total=battle.participants?battle.participants.length:0;
+      wrap.appendChild(el('div',{class:'card'},
+        el('div',{class:'flex items-start gap-4'},
+          el('div',{class:'list-item-icon',style:{background:'rgba(196,77,77,0.15)',borderColor:'rgba(196,77,77,0.3)',color:'#f87171'},html:ICONS.swords}),
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},battle.name),el('span',{class:'badge'},statusMap[battle.status]||battle.status),battle.turnNumber?el('span',{class:'badge'},'Ход '+battle.turnNumber):null),
+            battle.location?el('p',{class:'text-muted text-xs mt-1 flex items-center gap-1'},el('span',{html:ICONS.flag,style:{width:'12px',height:'12px'}}),battle.location):null,
+            el('div',{class:'flex items-center gap-3 mt-2',style:{fontSize:'10px',color:'var(--fg-dim)'}},
+              el('span',{class:'flex items-center gap-1',html:ICONS.shield+' '+(battle.forces?battle.forces.length:0)+' фракций'}),
+              el('span',{class:'flex items-center gap-1',html:ICONS.check+' '+posted+'/'+total+' написали'})
+            )
+          ),
+          el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('admin-battles',battle.id)},'Редактировать ',el('span',{html:ICONS.chevron}))
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+function BattleForm(){
+  const state={name:'',description:'',location:'',turnNumber:'',postDeadline:''};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новая баталия'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('admin-battles')},el('span',{html:ICONS.close}))));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Осада Рифа',oninput:e=>state.name=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Место'),el('input',{class:'input',placeholder:'Гойский остров',oninput:e=>state.location=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',oninput:e=>state.turnNumber=e.target.value}))
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Дедлайн постов'),el('input',{class:'input',type:'datetime-local',oninput:e=>state.postDeadline=e.target.value})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание'),el('textarea',{class:'textarea',style:{minHeight:'100px'},placeholder:'Описание военной ситуации...',oninput:e=>state.description=e.target.value})));
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-battles')},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function save(){
+    if(state.name.length<3){toast('Ошибка','Название минимум 3 символа','error');return}
+    try{
+      await RTDB.push('battles',{
+        name:state.name,description:state.description,location:state.location,
+        turnNumber:state.turnNumber?Number(state.turnNumber):null,
+        status:'PREPARING',postDeadline:state.postDeadline?new Date(state.postDeadline).toISOString():null,
+        forces:[],participants:[],
+      });
+      toast('Баталия создана','','success');
+      App.setView('admin-battles');
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+function BattleEditor(battle){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('admin-battles')},el('span',{html:ICONS.back}),'Назад к баталиям'));
+  const card=el('div',{class:'card'});
+  card.appendChild(el('div',{class:'flex items-center gap-3 mb-4'},
+    el('div',{class:'list-item-icon',style:{background:'rgba(196,77,77,0.15)',borderColor:'rgba(196,77,77,0.3)',color:'#f87171'},html:ICONS.swords}),
+    el('div',{class:'flex-1'},el('h2',{style:{fontSize:'18px'}},battle.name),el('p',{class:'text-muted text-xs'},battle.location||'Место не указано'))
+  ));
+  card.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Статус баталии'),
+    (()=>{const sel=el('select',{class:'select',onchange:async e=>{try{await RTDB.update('battles/'+battle.id,{status:e.target.value})}catch(err){toast('Ошибка',err.message,'error')}}});
+      ['PREPARING','ACTIVE','POSTING','RESOLVED'].forEach(s=>{const opt=el('option',{value:s},{PREPARING:'Подготовка',ACTIVE:'Активна',POSTING:'Сбор постов',RESOLVED:'Завершена'}[s]);if(s===battle.status)opt.selected=true;sel.appendChild(opt)});
+      return sel;
+    })()
+  ));
+  const forcesList=el('div',{class:'flex flex-col gap-3'});
+  function renderForces(){
+    forcesList.innerHTML='';
+    if(!battle.forces||battle.forces.length===0){forcesList.appendChild(el('p',{class:'text-muted italic text-xs'},'Силы не добавлены'))}
+    (battle.forces||[]).forEach((force,index)=>{
+      const faction=App.cache.factions.find(f=>f.id===force.factionId);
+      const item=el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)',padding:'12px'}});
+      item.appendChild(el('div',{class:'flex items-center gap-2 mb-3'},
+        el('span',{html:ICONS.flag,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+        el('span',{class:'text-sm',style:{fontFamily:'Cinzel,serif',flex:'1'}},faction?faction.name:'?'),
+        el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async()=>{
+          battle.forces.splice(index,1);
+          battle.participants=(battle.participants||[]).filter(p=>p.factionId!==force.factionId);
+          try{await RTDB.update('battles/'+battle.id,{forces:battle.forces,participants:battle.participants})}catch(e){toast('Ошибка',e.message,'error')}
+        }},el('span',{html:ICONS.close}))
+      ));
+      item.appendChild(el('input',{class:'input mb-2',style:{fontSize:'12px'},placeholder:'Имя командира',value:force.commander||'',oninput:async e=>{force.commander=e.target.value;try{await RTDB.update('battles/'+battle.id,{forces:battle.forces})}catch(err){}}}));
+      const grid=el('div',{class:'force-grid'});
+      [['infantry','Пехота'],['archers','Лучники'],['cavalry','Кавалерия'],['fleet','Флот']].forEach(([k,label])=>{
+        grid.appendChild(el('div',{class:'field-group',style:{marginBottom:'0'}},
+          el('label',{class:'label',style:{fontSize:'9px'}},label),
+          el('input',{class:'input',type:'number',style:{fontSize:'12px'},value:force[k]||0,oninput:async e=>{force[k]=Number(e.target.value)||0;try{await RTDB.update('battles/'+battle.id,{forces:battle.forces})}catch(err){}}})
+        ));
+      });
+      item.appendChild(grid);
+      forcesList.appendChild(item);
+    });
+    const approvedFactions=App.cache.factions.filter(f=>f.isApproved&&!(battle.forces||[]).some(fo=>fo.factionId===f.id));
+    if(approvedFactions.length>0){
+      const sel=el('select',{class:'select',style:{marginTop:'8px',borderStyle:'dashed'}},el('option',{value:''},'+ Добавить фракцию'));
+      approvedFactions.forEach(f=>sel.appendChild(el('option',{value:f.id},f.name)));
+      sel.onchange=async e=>{
+        if(e.target.value){
+          battle.forces=battle.forces||[];
+          battle.forces.push({factionId:e.target.value,commander:'',infantry:0,archers:0,cavalry:0,fleet:0});
+          battle.participants=battle.participants||[];
+          if(!battle.participants.some(p=>p.factionId===e.target.value)){battle.participants.push({factionId:e.target.value,hasPosted:false})}
+          try{await RTDB.update('battles/'+battle.id,{forces:battle.forces,participants:battle.participants})}catch(err){toast('Ошибка',err.message,'error')}
+        }
+      };
+      forcesList.appendChild(sel);
+    }
+  }
+  renderForces();
+  card.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Силы сторон'),forcesList));
+  wrap.appendChild(card);
+  return wrap;
+}
+
+/* ====== CHRONICLE VIEW ====== */
+function ChronicleView(isAdminView){
+  const isAdmin=App.userProfile.role==='ADMIN';
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  const viewKey=isAdminView?'admin-chronicle':'chronicle';
+  if(App.selectedId&&App.selectedId!=='__new__'){
+    const a=App.cache.chronicle.find(x=>x.id===App.selectedId);
+    if(a){
+      wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView(viewKey)},el('span',{html:ICONS.back}),'Назад к летописи'));
+      const card=el('div',{class:'card card-glow p-6'});
+      card.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},el('span',{class:'badge'},a.category||'Летопись'),a.era?el('span',{class:'badge'},a.era):null));
+      card.appendChild(el('h1',{class:'text-glow',style:{fontSize:'22px',marginBottom:'8px'}},a.title));
+      card.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
+      card.appendChild(el('div',{class:'markdown',html:mdToHtml(a.content)}));
+      card.appendChild(el('div',{class:'mt-4 pt-3',style:{borderTop:'1px solid var(--border)',fontSize:'12px',color:'var(--fg-muted)'}},'Летописец: '+(a.authorName||'')));
+      wrap.appendChild(card);
+      return wrap;
+    }
+  }
+  wrap.appendChild(PageHeader('Хроника','Летопись событий Терского Мира',isAdmin?el('button',{class:'btn btn-primary',onclick:()=>App.setView(viewKey,'__new__')},el('span',{html:ICONS.plus}),'Новая статья'):null));
+  if(App.selectedId==='__new__')wrap.appendChild(ChronicleForm(viewKey));
+  if(App.cache.chronicle.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('book','Летопись пуста','Хроника событий ещё не начата'));
+  }else{
+    App.cache.chronicle.forEach(a=>{
+      wrap.appendChild(el('div',{class:'card card-hover flex items-center gap-4',onclick:()=>App.setView(viewKey,a.id)},
+        el('div',{class:'list-item-icon',html:ICONS.book}),
+        el('div',{class:'flex-1 min-w-0'},
+          el('div',{class:'flex items-center gap-2 mb-1'},a.era?el('span',{class:'badge'},a.era):null,el('span',{class:'badge'},a.category||'Летопись')),
+          el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},a.title),
+          el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'1',WebkitBoxOrient:'vertical',overflow:'hidden'}},a.content.replace(/[#*`]/g,'').slice(0,100)+'...')
+        ),
+        isAdmin?el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async e=>{e.stopPropagation();if(confirm('Удалить?')){try{await RTDB.remove('chronicle/'+a.id);toast('Удалено')}catch(err){toast('Ошибка',err.message,'error')}}},html:ICONS.trash}):null,
+        el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0'}})
+      ));
+    });
+  }
+  return wrap;
+}
+function ChronicleForm(viewKey){
+  const state={title:'',content:'',category:'CHRONICLE',era:''};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новая статья хроники'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView(viewKey)},el('span',{html:ICONS.close}))));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',oninput:e=>state.title=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
+      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+        [['CHRONICLE','Летопись'],['HISTORY','История'],['EVENT','Событие']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
+        return sel;
+      })()
+    ),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Эпоха'),el('input',{class:'input',placeholder:'I эпоха',oninput:e=>state.era=e.target.value}))
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),el('textarea',{class:'textarea',style:{minHeight:'200px'},placeholder:'Markdown поддерживается...',oninput:e=>state.content=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView(viewKey)},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function save(){
+    if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
+    try{
+      await RTDB.push('chronicle',{title:state.title,content:state.content,category:state.category,era:state.era,authorId:App.userProfile.id,authorName:App.userProfile.name});
+      toast('Статья создана','','success');
+      App.setView(viewKey);
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== BESTIARY VIEW ====== */
+function BestiaryView(isAdminView){
+  const isAdmin=App.userProfile.role==='ADMIN';
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  const viewKey=isAdminView?'admin-bestiary':'bestiary';
+  if(App.selectedId&&App.selectedId!=='__new__'){
+    const e=App.cache.bestiary.find(x=>x.id===App.selectedId);
+    if(e){
+      wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView(viewKey)},el('span',{html:ICONS.back}),'Назад к бестиарию'));
+      const card=el('div',{class:'card card-glow p-6'});
+      card.appendChild(el('div',{class:'flex items-start gap-4 mb-4'},
+        el('div',{class:'list-item-icon',style:{width:'80px',height:'80px'},html:ICONS.paw}),
+        el('div',{class:'flex-1'},
+          el('h1',{class:'text-glow',style:{fontSize:'22px'}},e.name),
+          e.title?el('p',{class:'text-muted italic'},e.title):null,
+          el('div',{class:'flex items-center gap-2 mt-2',style:{flexWrap:'wrap'}},
+            el('span',{class:'badge'},{CREATURE:'Существо',FACTION:'Фракция',PERSON:'Персона',PLACE:'Место'}[e.category]||e.category),
+            e.danger?el('span',{class:'badge badge-danger',html:ICONS.alert+' '+e.danger}):null,
+            e.habitat?el('span',{class:'badge',html:ICONS.flag+' '+e.habitat}):null
+          )
+        )
+      ));
+      card.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
+      card.appendChild(el('div',{class:'markdown',html:mdToHtml(e.content)}));
+      card.appendChild(el('div',{class:'mt-4 pt-3',style:{borderTop:'1px solid var(--border)',fontSize:'12px',color:'var(--fg-muted)'}},'Записал: '+(e.authorName||'')));
+      wrap.appendChild(card);
+      return wrap;
+    }
+  }
+  wrap.appendChild(PageHeader('Бестиарий','Существа, фракции и места Терского Мира',isAdmin?el('button',{class:'btn btn-primary',onclick:()=>App.setView(viewKey,'__new__')},el('span',{html:ICONS.plus}),'Новая запись'):null));
+  if(App.selectedId==='__new__')wrap.appendChild(BestiaryForm(viewKey));
+  if(App.cache.bestiary.length===0&&App.selectedId!=='__new__'){
+    wrap.appendChild(EmptyState('paw','Бестиарий пуст','Записи о существах и местах ещё не добавлены'));
+  }else{
+    App.cache.bestiary.forEach(e=>{
+      wrap.appendChild(el('div',{class:'card card-hover flex items-start gap-3',onclick:()=>App.setView(viewKey,e.id)},
+        el('div',{class:'list-item-icon',html:ICONS.paw}),
+        el('div',{class:'flex-1 min-w-0'},
+          el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},e.name),
+          e.title?el('p',{class:'text-muted text-xs italic'},e.title):null,
+          el('div',{class:'flex items-center gap-1.5 mt-1',style:{flexWrap:'wrap'}},
+            el('span',{class:'badge'},{CREATURE:'Существо',FACTION:'Фракция',PERSON:'Персона',PLACE:'Место'}[e.category]||e.category),
+            e.danger?el('span',{class:'badge badge-danger',html:ICONS.alert+' '+e.danger}):null
+          )
+        ),
+        isAdmin?el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async ev=>{ev.stopPropagation();if(confirm('Удалить?')){try{await RTDB.remove('bestiary/'+e.id);toast('Удалено')}catch(err){toast('Ошибка',err.message,'error')}}},html:ICONS.trash}):null
+      ));
+    });
+  }
+  return wrap;
+}
+function BestiaryForm(viewKey){
+  const state={name:'',title:'',content:'',category:'CREATURE',danger:'',habitat:''};
+  const wrap=el('div',{class:'card card-glow'});
+  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новая запись бестиария'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView(viewKey)},el('span',{html:ICONS.close}))));
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',oninput:e=>state.name=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Титул/доп. название'),el('input',{class:'input',oninput:e=>state.title=e.target.value})));
+  form.appendChild(el('div',{class:'stat-grid-3 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
+      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+        [['CREATURE','Существо'],['FACTION','Фракция'],['PERSON','Персона'],['PLACE','Место']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
+        return sel;
+      })()
+    ),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Опасность'),el('input',{class:'input',placeholder:'Высокая',oninput:e=>state.danger=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Среда обитания'),el('input',{class:'input',placeholder:'Леса',oninput:e=>state.habitat=e.target.value}))
+  ));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание *'),el('textarea',{class:'textarea',style:{minHeight:'200px'},placeholder:'Markdown поддерживается...',oninput:e=>state.content=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView(viewKey)},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать')
+  ));
+  wrap.appendChild(form);
+  return wrap;
+  async function save(){
+    if(state.name.length<2||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
+    try{
+      await RTDB.push('bestiary',{name:state.name,title:state.title,content:state.content,category:state.category,danger:state.danger,habitat:state.habitat,authorId:App.userProfile.id,authorName:App.userProfile.name});
+      toast('Запись создана','','success');
+      App.setView(viewKey);
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== ADMIN USERS VIEW ====== */
+function AdminUsersView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Управление игроками','Просмотр и управление пользователями системы'));
+  const usersWrap=el('div',{class:'flex flex-col gap-2'});
+  if(App.cache.users.length===0){
+    usersWrap.appendChild(EmptyState('users','Пользователей нет',''));
+  }else{
+    App.cache.users.forEach(u=>{
+      const faction=App.cache.factions.find(f=>f.userId===u.id);
+      const ts=RTDB.ts(u.createdAt);
+      const lastLogin=u.lastLoginAt?RTDB.ts(u.lastLoginAt):null;
+      usersWrap.appendChild(el('div',{class:'card flex items-center gap-4'},
+        el('div',{class:'header-avatar'},u.name[0]?.toUpperCase()||'?'),
+        el('div',{class:'flex-1 min-w-0'},
+          el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},u.name),u.role==='ADMIN'?el('span',{class:'badge badge-accent',html:ICONS.crown+' Админ'}):null),
+          el('div',{class:'flex items-center gap-3 mt-1',style:{fontSize:'10px',color:'var(--fg-muted)'}},
+            el('span',{class:'flex items-center gap-1',html:ICONS.mail+' '+u.email}),
+            lastLogin?el('span',{class:'flex items-center gap-1',html:ICONS.clock+' '+fmtDateShort(lastLogin)}):null
+          ),
+          faction?el('div',{class:'flex items-center gap-1.5 mt-1',style:{fontSize:'10px'}},
+            el('span',{html:ICONS.shield,style:{color:'var(--accent)',width:'12px',height:'12px'}}),
+            el('span',{class:'text-muted'},faction.name),
+            faction.isApproved?el('span',{class:'badge badge-success',style:{fontSize:'9px'}},'Утверждено'):el('span',{class:'badge badge-warning',style:{fontSize:'9px'}},'На утверждении')
+          ):null
+        ),
+        el('div',{class:'flex items-center gap-1'},
+          el('button',{class:'btn btn-ghost btn-sm',onclick:async()=>{
+            const newRole=u.role==='ADMIN'?'PLAYER':'ADMIN';
+            try{await RTDB.update('users/'+u.id,{role:newRole});toast('Роль обновлена',u.name+' — '+(newRole==='ADMIN'?'Администратор':'Игрок'),'success')}catch(e){toast('Ошибка',e.message,'error')}
+          }},u.role==='ADMIN'?'Снять админа':'Сделать админом')
+        )
+      ));
+    });
+  }
+  wrap.appendChild(usersWrap);
+  return wrap;
+}
+
+/* ====== ADMIN FACTIONS VIEW ====== */
+function AdminFactionsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Управление фракциями','Утверждение и редактирование княжеств игроков'));
+  if(App.cache.factions.length===0){
+    wrap.appendChild(EmptyState('flag','Фракций нет','Игроки ещё не зарегистрировали княжества'));
+  }else{
+    App.cache.factions.forEach(faction=>{
+      const owner=App.cache.users.find(u=>u.id===faction.userId);
+      wrap.appendChild(el('div',{class:'card'},
+        el('div',{class:'flex items-start gap-4'},
+          el('div',{class:'list-item-icon',html:ICONS.shield}),
+          el('div',{class:'flex-1 min-w-0'},
+            el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},
+              el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},faction.name),
+              faction.isApproved?el('span',{class:'badge badge-success',html:ICONS.check+' Утверждено'}):el('span',{class:'badge badge-warning',html:ICONS.clock+' На утверждении'})
+            ),
+            faction.shortName?el('p',{class:'text-xs text-muted mt-1'},'Короткое: '+faction.shortName):null,
+            faction.motto?el('p',{class:'text-xs italic text-accent mt-1'},'«'+faction.motto+'»'):null,
+            el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'4px',opacity:'0.7'}},'Правитель: '+(owner?owner.name:'?')+(owner?' · '+owner.email:''))
+          ),
+          el('div',{class:'flex flex-col gap-1'},
+            !faction.isApproved?el('button',{class:'btn btn-primary btn-sm',onclick:async()=>{
+              try{await RTDB.update('factions/'+faction.id,{isApproved:true});toast('Утверждено',faction.name+' утверждено','success')}catch(e){toast('Ошибка',e.message,'error')}
+            }},'Утвердить'):null,
+            el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('my-faction',faction.id)},'Статистика ',el('span',{html:ICONS.chevron})),
+            el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async()=>{if(confirm('Удалить княжество?')){try{await RTDB.remove('factions/'+faction.id);toast('Княжество удалено')}catch(e){toast('Ошибка',e.message,'error')}}},html:ICONS.trash})
+          )
+        )
+      ));
+    });
+  }
+  return wrap;
+}
+
+document.addEventListener('DOMContentLoaded',()=>App.init());
+</script>
+</body>
+</html>
