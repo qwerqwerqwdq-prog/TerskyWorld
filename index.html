@@ -418,9 +418,546 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 .help-table .help-result{font-size:13px}
 .help-table .help-result.markdown{padding:8px 10px}
 
+/* =================================================================== */
+/* === NEW FEATURE STYLES (Task 9: notifications, cmd palette, etc.) == */
+/* =================================================================== */
+
+/* === Header notifications bell === */
+.notif-btn{position:relative}
+.notif-badge{position:absolute;top:-2px;right:-2px;min-width:16px;height:16px;border-radius:8px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid var(--bg-card);font-family:'Cinzel',serif;animation:notifPulse 1.8s ease-in-out infinite}
+@keyframes notifPulse{0%,100%{box-shadow:0 0 0 0 rgba(196,77,77,0.6)}50%{box-shadow:0 0 0 4px rgba(196,77,77,0)}}
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:360px;max-width:90vw;max-height:480px;overflow:hidden;background:rgba(17,24,26,0.97);backdrop-filter:blur(10px);border:1px solid var(--border-strong);border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6),0 0 12px rgba(58,125,116,0.2);z-index:60;display:flex;flex-direction:column;animation:scaleIn 0.18s ease;transform-origin:top right}
+.notif-panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.06em;color:var(--accent-light)}
+.notif-panel-list{flex:1;overflow-y:auto;padding:4px 0}
+.notif-panel-list:empty::before{content:'Нет уведомлений';display:block;padding:24px;text-align:center;color:var(--fg-dim);font-style:italic;font-size:13px}
+.notif-panel-footer{padding:8px 16px;border-top:1px solid var(--border);background:rgba(10,15,15,0.4);display:flex;justify-content:flex-end}
+.notif-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(58,125,116,0.08);cursor:pointer;transition:background 0.15s;align-items:flex-start;position:relative}
+.notif-item:hover{background:rgba(58,125,116,0.08)}
+.notif-item.unread{background:rgba(58,125,116,0.06)}
+.notif-item.unread::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:60%;background:var(--accent);border-radius:0 2px 2px 0}
+.notif-item-icon{width:32px;height:32px;border-radius:6px;background:rgba(58,125,116,0.15);border:1px solid rgba(58,125,116,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.notif-item-icon svg{width:16px;height:16px}
+.notif-item-body{flex:1;min-width:0}
+.notif-item-title{font-size:13px;color:var(--fg);font-weight:600;line-height:1.3;font-family:'Cinzel',serif}
+.notif-item-desc{font-size:12px;color:var(--fg-muted);margin-top:2px;line-height:1.4}
+.notif-item-time{font-size:10px;color:var(--fg-dim);margin-top:4px;letter-spacing:0.03em;font-family:'Cinzel',serif}
+
+/* === Command palette (Ctrl+K) === */
+.cmd-palette{position:fixed;top:18%;left:50%;transform:translateX(-50%);width:560px;max-width:92vw;background:rgba(17,24,26,0.97);backdrop-filter:blur(10px);border:1px solid var(--border-strong);border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,0.7),0 0 24px rgba(58,125,116,0.2);z-index:300;display:flex;flex-direction:column;overflow:hidden;animation:cmdIn 0.18s ease}
+@keyframes cmdIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+.cmd-input-wrap{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.cmd-input-wrap svg{width:18px;height:18px;color:var(--fg-muted);flex-shrink:0}
+.cmd-input{flex:1;background:transparent;border:none;color:var(--fg);font-family:'Cormorant Garamond',serif;font-size:16px;outline:none;min-width:0}
+.cmd-input::placeholder{color:var(--fg-dim)}
+.cmd-results{max-height:380px;overflow-y:auto;padding:4px 0}
+.cmd-section{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);padding:8px 16px 4px;background:rgba(10,15,15,0.3)}
+.cmd-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;transition:background 0.1s}
+.cmd-item:hover,.cmd-item.active{background:rgba(58,125,116,0.15)}
+.cmd-item-icon{width:28px;height:28px;border-radius:6px;background:rgba(58,125,116,0.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.cmd-item-icon svg{width:14px;height:14px}
+.cmd-item-body{flex:1;min-width:0}
+.cmd-item-title{font-size:14px;color:var(--fg);font-family:'Cinzel',serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmd-item-desc{font-size:11px;color:var(--fg-muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmd-item-shortcut{font-family:'JetBrains Mono','Consolas',monospace;font-size:10px;color:var(--fg-dim);padding:2px 6px;background:rgba(10,15,15,0.5);border-radius:3px;border:1px solid var(--border);flex-shrink:0}
+.cmd-empty{padding:32px 16px;text-align:center;color:var(--fg-muted);font-style:italic;font-size:13px}
+
+/* === Breadcrumbs === */
+.breadcrumbs{padding:6px 24px;background:rgba(13,20,20,0.5);border-bottom:1px solid var(--border);font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.04em;color:var(--fg-dim);display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:28px}
+.breadcrumb-item{cursor:pointer;color:var(--fg-muted);transition:color 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.breadcrumb-item:hover{color:var(--accent-light)}
+.breadcrumb-item.current{color:var(--accent-light);font-weight:600}
+.breadcrumb-item svg{width:12px;height:12px}
+.breadcrumb-sep{color:var(--fg-dim);opacity:0.5;font-size:10px}
+
+/* === Toast with progress bar + close button + pause on hover === */
+.toast{position:relative;overflow:hidden;padding-right:32px}
+.toast-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--accent);width:100%;transform-origin:left center}
+.toast-success .toast-progress{background:var(--success)}
+.toast-error .toast-progress{background:var(--danger)}
+.toast-info .toast-progress{background:var(--accent)}
+.toast-warning .toast-progress{background:var(--warning)}
+.toast-close{position:absolute;top:6px;right:6px;background:none;border:none;color:var(--fg-muted);cursor:pointer;padding:4px;line-height:1;display:flex;align-items:center;justify-content:center;border-radius:3px}
+.toast-close:hover{color:var(--fg);background:rgba(58,125,116,0.15)}
+.toast-close svg{width:12px;height:12px}
+.toast.paused .toast-progress{animation-play-state:paused}
+.toast-action-btn{font-family:'Cinzel',serif;font-size:11px;padding:4px 10px;border-radius:4px;background:var(--accent);color:var(--bg);border:none;cursor:pointer;letter-spacing:0.05em;flex-shrink:0}
+.toast-action-btn:hover{background:var(--primary-hover)}
+
+/* === New item highlight === */
+.new-badge{display:inline-block;background:var(--warning);color:var(--bg);font-size:9px;font-family:'Cinzel',serif;padding:1px 6px;border-radius:3px;letter-spacing:0.05em;font-weight:700;margin-left:6px;vertical-align:middle;text-transform:uppercase}
+.card.is-new{border-color:rgba(212,165,67,0.6);box-shadow:0 0 0 2px rgba(212,165,67,0.2)}
+.new-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warning);box-shadow:0 0 6px rgba(212,165,67,0.6);margin-right:6px;vertical-align:middle;animation:newDotPulse 1.8s ease-in-out infinite}
+@keyframes newDotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* === View animations === */
+.view-fade{animation:viewFadeIn 0.32s ease-out}
+@keyframes viewFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.staggered-item{animation:staggerIn 0.4s ease-out backwards}
+@keyframes staggerIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* === Context menu === */
+.ctx-menu{position:fixed;background:rgba(17,24,26,0.97);backdrop-filter:blur(10px);border:1px solid var(--border-strong);border-radius:6px;padding:4px;min-width:200px;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,0.6),0 0 12px rgba(58,125,116,0.2);animation:scaleIn 0.12s ease;transform-origin:top left}
+.ctx-menu-item{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-radius:4px;color:var(--fg);font-size:13px;font-family:'Cormorant Garamond',serif;transition:background 0.1s,color 0.1s}
+.ctx-menu-item:hover{background:rgba(58,125,116,0.15);color:var(--accent-light)}
+.ctx-menu-item.danger{color:var(--danger)}
+.ctx-menu-item.danger:hover{background:rgba(196,77,77,0.15);color:var(--danger)}
+.ctx-menu-item svg{width:14px;height:14px;flex-shrink:0}
+.ctx-menu-divider{height:1px;background:var(--border);margin:4px 0}
+
+/* === Reactions on posts === */
+.reactions-row{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.reactions-label{font-size:10px;color:var(--fg-muted);font-family:'Cinzel',serif;letter-spacing:0.1em;text-transform:uppercase;margin-right:4px}
+.reaction-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--border);border-radius:14px;background:rgba(10,15,15,0.4);color:var(--fg-muted);font-size:11px;font-family:'Cinzel',serif;cursor:pointer;transition:all 0.15s;letter-spacing:0.04em}
+.reaction-btn:hover{border-color:var(--accent);color:var(--accent-light);background:rgba(58,125,116,0.1)}
+.reaction-btn.active{background:rgba(58,125,116,0.25);border-color:var(--accent);color:var(--accent-light)}
+.reaction-btn svg{width:13px;height:13px}
+.reaction-count{font-weight:600;color:var(--fg);font-family:'Cinzel',serif}
+
+/* === Bookmarks === */
+.bookmark-btn{position:absolute;top:8px;right:44px;width:30px;height:30px;border-radius:6px;background:rgba(10,15,15,0.85);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--fg-muted);opacity:0;transition:opacity 0.18s,color 0.18s,background 0.18s;cursor:pointer;z-index:2}
+.card-hover:hover .bookmark-btn{opacity:1}
+@media(max-width:768px){.bookmark-btn{opacity:1}}
+.bookmark-btn:hover{color:var(--warning);border-color:var(--warning)}
+.bookmark-btn.active{color:var(--warning);opacity:1;background:rgba(212,165,67,0.1);border-color:rgba(212,165,67,0.5)}
+.bookmark-btn svg{width:14px;height:14px}
+
+/* === Count-up animation === */
+.count-up{display:inline-block}
+
+/* === Quick actions === */
+.quick-action{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px;background:rgba(17,24,26,0.6);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.18s;text-align:left;width:100%;color:var(--fg)}
+.quick-action:hover{background:rgba(58,125,116,0.08);border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 12px rgba(58,125,116,0.15)}
+.quick-action-icon{width:36px;height:36px;border-radius:6px;background:rgba(58,125,116,0.15);border:1px solid rgba(58,125,116,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.quick-action-icon svg{width:18px;height:18px}
+.quick-action-title{font-family:'Cinzel',serif;font-size:14px;color:var(--fg);font-weight:600}
+.quick-action-desc{font-size:11px;color:var(--fg-muted);font-style:italic;line-height:1.4}
+
+/* === Activity chart bars === */
+.activity-chart-wrap{margin-top:8px}
+.activity-chart{display:flex;align-items:flex-end;gap:4px;height:64px;padding:8px 0 18px;position:relative}
+.activity-bar{flex:1;background:linear-gradient(180deg,var(--accent) 0%,var(--primary) 100%);border-radius:2px 2px 0 0;min-height:2px;opacity:0.7;position:relative;transition:opacity 0.15s,height 0.4s ease;cursor:pointer}
+.activity-bar:hover{opacity:1}
+.activity-bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:rgba(10,15,15,0.95);border:1px solid var(--border-strong);color:var(--fg);padding:4px 8px;border-radius:4px;font-size:10px;font-family:'Cinzel',serif;white-space:nowrap;z-index:5}
+.activity-bar.today{background:linear-gradient(180deg,var(--warning) 0%,#a87d33 100%);opacity:1}
+.activity-chart-labels{display:flex;gap:4px;font-size:9px;color:var(--fg-dim);font-family:'Cinzel',serif}
+.activity-chart-labels span{flex:1;text-align:center}
+
+/* === Draft indicator === */
+.draft-indicator{display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(212,165,67,0.08);border:1px solid rgba(212,165,67,0.3);border-radius:6px;font-size:11px;color:var(--warning);font-family:'Cinzel',serif;letter-spacing:0.04em;margin-top:8px}
+.draft-indicator svg{width:12px;height:12px;flex-shrink:0}
+.draft-indicator .draft-time{color:var(--fg-muted);font-style:italic}
+.draft-indicator button{margin-left:auto;padding:3px 8px;font-size:10px;background:transparent;border:1px solid rgba(212,165,67,0.3);border-radius:4px;color:var(--warning);font-family:'Cinzel',serif;cursor:pointer;letter-spacing:0.04em}
+.draft-indicator button:hover{background:rgba(212,165,67,0.15)}
+
+/* === Long post collapse === */
+.post-collapsible{position:relative;overflow:hidden;transition:max-height 0.4s ease}
+.post-collapsible.collapsed{max-height:240px}
+.post-collapsible.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,rgba(17,24,26,0.95));pointer-events:none}
+.post-expand-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;margin-top:12px;background:rgba(58,125,116,0.1);border:1px solid var(--border);border-radius:4px;color:var(--accent-light);font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.05em;cursor:pointer;transition:all 0.15s}
+.post-expand-btn:hover{background:rgba(58,125,116,0.2);border-color:var(--accent)}
+.post-expand-btn svg{width:12px;height:12px;transition:transform 0.2s}
+.post-expand-btn.expanded svg{transform:rotate(180deg)}
+
+/* === Templates dropdown === */
+.templates-dropdown{position:relative;display:inline-block}
+.templates-menu{position:absolute;top:calc(100% + 4px);right:0;background:rgba(17,24,26,0.97);backdrop-filter:blur(8px);border:1px solid var(--border-strong);border-radius:6px;padding:4px;min-width:240px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,0.5);animation:scaleIn 0.12s ease;transform-origin:top right}
+.templates-menu-item{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer;border-radius:4px;color:var(--fg);font-size:13px;font-family:'Cormorant Garamond',serif;transition:background 0.1s}
+.templates-menu-item:hover{background:rgba(58,125,116,0.15);color:var(--accent-light)}
+.templates-menu-item svg{width:14px;height:14px;color:var(--accent);flex-shrink:0}
+
+/* === Char counter === */
+.char-counter{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--fg-muted);margin-top:4px;font-family:'Cinzel',serif;letter-spacing:0.04em}
+.char-counter.over{color:var(--danger)}
+.char-counter.filled{color:var(--success)}
+.char-counter .char-status{color:var(--fg-dim)}
+
+/* === Health grid (dashboard) — fixes === */
+.health-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.health-card{display:flex;flex-direction:column;align-items:center;padding:12px;background:rgba(24,33,31,0.4);border:1px solid var(--border);border-radius:6px;transition:all 0.15s;font-family:'Cinzel',serif}
+.health-card:hover{background:rgba(24,33,31,0.7);border-color:var(--accent)}
+.health-card-icon{width:28px;height:28px;border-radius:6px;background:rgba(58,125,116,0.15);display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:4px}
+.health-card-icon svg{width:14px;height:14px}
+.health-card-value{font-size:18px;font-weight:700;color:var(--fg)}
+.health-card-label{font-size:9px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
+.health-card.danger{border-color:rgba(196,77,77,0.5);background:rgba(196,77,77,0.08)}
+.health-card.danger .health-card-icon{color:var(--danger);background:rgba(196,77,77,0.15)}
+.health-card.danger .health-card-value{color:var(--danger)}
+.health-card.ok{border-color:rgba(93,186,132,0.4)}
+.health-card.ok .health-card-icon{color:var(--success);background:rgba(93,186,132,0.15)}
+.health-card.warn{border-color:rgba(212,165,67,0.5)}
+.health-card.warn .health-card-icon{color:var(--warning);background:rgba(212,165,67,0.15)}
+
+/* === Search-input-wrap list controls === */
+.list-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.list-controls .search-input-wrap{flex:1;min-width:200px}
+.list-controls .select{width:auto;min-width:160px}
+
+/* === Skeleton variants === */
+.skeleton-card.list{padding:16px 16px 18px}
+.skeleton-avatar{width:44px;height:44px;border-radius:6px;background:linear-gradient(90deg,rgba(58,125,116,0.08) 25%,rgba(58,125,116,0.18) 50%,rgba(58,125,116,0.08) 75%);background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;flex-shrink:0}
+.skeleton-list-item{display:flex;gap:12px;padding:16px;background:rgba(17,24,26,0.4);border:1px solid var(--border);border-radius:6px;margin-bottom:8px}
+.skeleton-list-item .skeleton-lines{flex:1}
+.skeleton-list-item .skeleton-lines>div{margin-bottom:6px}
+
+/* === Tags === */
+.tag-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;background:rgba(58,125,116,0.1);border:1px solid rgba(58,125,116,0.25);color:var(--accent-light);font-size:10px;font-family:'Cinzel',serif;letter-spacing:0.04em;cursor:pointer;transition:all 0.15s}
+.tag-badge:hover{background:rgba(58,125,116,0.2);border-color:var(--accent)}
+.tag-badge svg{width:9px;height:9px}
+
+/* === Hidden print styles === */
+@media print{
+  body{background:#fff;color:#000}
+  .header,.sidebar,.footer,.breadcrumbs,.scroll-top,.notif-panel,.ctx-menu,.modal-overlay{display:none!important}
+  .main{padding:0;max-width:100%}
+  .card{border-color:#000;background:#fff;color:#000;box-shadow:none}
+  .card h1,.card h2,.card h3{color:#000}
+  .markdown{color:#000}
+}
+
+/* === Hotkey hint (initial visit) === */
+.hotkey-hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(17,24,26,0.95);backdrop-filter:blur(8px);border:1px solid var(--accent);border-radius:8px;padding:10px 16px;font-family:'Cinzel',serif;font-size:12px;color:var(--accent-light);box-shadow:0 8px 24px rgba(0,0,0,0.5);z-index:80;display:flex;gap:8px;align-items:center;animation:slideIn 0.3s ease}
+.hotkey-hint kbd{font-family:'JetBrains Mono',monospace;background:rgba(58,125,116,0.2);border:1px solid var(--accent);color:var(--accent-light);padding:2px 8px;border-radius:3px;font-size:11px}
+
+/* === Notification panel container (header relative) === */
+.header-rel{position:relative}
+
+/* === Faction card sparkline === */
+.sparkline{display:inline-block;vertical-align:middle;width:60px;height:18px}
+.sparkline path{stroke:var(--accent);stroke-width:1.5;fill:none}
+.sparkline.up path{stroke:var(--success)}
+.sparkline.down path{stroke:var(--danger)}
+
+/* === Timeline (Activity view) === */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--border)}
+.timeline-day{font-family:'Cinzel',serif;font-size:11px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.1em;margin:12px 0 8px;padding-left:8px;position:relative}
+.timeline-day::before{content:'';position:absolute;left:-20px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.timeline-event{position:relative;padding:0 0 12px 8px}
+.timeline-event::before{content:'';position:absolute;left:-19px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--bg)}
+.timeline-event.post::before{background:var(--accent)}
+.timeline-event.news::before{background:var(--warning)}
+.timeline-event.battle::before{background:var(--danger)}
+.timeline-event.faction::before{background:var(--success)}
+
+/* ============================================================
+   НОВЫЕ ЭФФЕКТЫ И АНИМАЦИИ
+   ============================================================ */
+
+/* 1. Глитч-эффект на заголовке "ТЕРСКИЙ МИР" в auth */
+@keyframes glitchShift{
+  0%,100%{transform:translate(0)}
+  20%{transform:translate(-1px,1px)}
+  40%{transform:translate(-1px,-1px)}
+  60%{transform:translate(1px,1px)}
+  80%{transform:translate(1px,-1px)}
+}
+.auth-title{position:relative}
+.auth-title::before,.auth-title::after{
+  content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;
+  background:var(--bg);overflow:hidden;
+}
+.auth-title::before{
+  color:var(--accent);clip-path:inset(0 0 60% 0);
+  animation:glitchShift 3.5s infinite linear alternate-reverse;
+  opacity:0.7;mix-blend-mode:screen;
+}
+.auth-title::after{
+  color:#c44d4d;clip-path:inset(60% 0 0 0);
+  animation:glitchShift 2.7s infinite linear alternate-reverse;
+  opacity:0.5;mix-blend-mode:screen;
+}
+
+/* 2. Анимированный градиент-бордер для важных карточек */
+@keyframes borderFlow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.animated-border{
+  position:relative;background:rgba(17,24,26,0.6);border-radius:8px;
+}
+.animated-border::before{
+  content:'';position:absolute;inset:0;border-radius:8px;padding:1px;
+  background:linear-gradient(120deg,var(--accent),var(--accent-light),var(--accent),#5dba84,var(--accent));
+  background-size:300% 100%;animation:borderFlow 4s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+
+/* 3. Свечение для primary кнопок при hover */
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 12px rgba(58,125,116,0.3),0 0 24px rgba(58,125,116,0.12)}
+  50%{box-shadow:0 0 18px rgba(58,125,116,0.5),0 0 36px rgba(58,125,116,0.2)}
+}
+.btn-primary:hover{animation:glowPulse 1.5s ease-in-out infinite}
+
+/* 4. Эффект "отблеска" на кнопках (sweep) */
+@keyframes sweep{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(200%)}
+}
+.btn{position:relative;overflow:hidden}
+.btn::after{
+  content:'';position:absolute;top:0;left:0;width:30%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transform:translateX(-100%);pointer-events:none;
+}
+.btn:hover::after{animation:sweep 0.7s ease-out}
+
+/* 5. Лёгкая "дрожь" иконок при hover */
+@keyframes wiggle{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(-4deg)}
+  75%{transform:rotate(4deg)}
+}
+.nav-item:hover .nav-icon,.list-item:hover .list-item-icon{
+  animation:wiggle 0.4s ease-in-out;
+}
+
+/* 6. Параллакс-фон с медленно движущимися пятнами */
+.parallax-bg{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+}
+.parallax-bg::before,.parallax-bg::after{
+  content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:0.3;
+}
+.parallax-bg::before{
+  width:500px;height:500px;background:var(--accent);top:-100px;left:-100px;
+  animation:floatBlob1 22s ease-in-out infinite;
+}
+.parallax-bg::after{
+  width:600px;height:600px;background:var(--secondary);bottom:-150px;right:-150px;
+  animation:floatBlob2 28s ease-in-out infinite;
+}
+@keyframes floatBlob1{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(120px,80px) scale(1.1)}
+  66%{transform:translate(60px,-60px) scale(0.95)}
+}
+@keyframes floatBlob2{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-100px,-80px) scale(1.15)}
+}
+
+/* 7. Скан-линии (subtle CRT-эффект) на лого */
+.scanlines{position:relative;overflow:hidden}
+.scanlines::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(58,125,116,0.025) 2px,rgba(58,125,116,0.025) 4px);
+  animation:scanMove 8s linear infinite;
+}
+@keyframes scanMove{
+  0%{background-position:0 0}
+  100%{background-position:0 100px}
+}
+
+/* 8. Текст-печать для подсказок */
+@keyframes typewriter{
+  from{width:0}
+  to{width:100%}
+}
+@keyframes blinkCaret{
+  50%{border-color:transparent}
+}
+.typewriter{
+  display:inline-block;overflow:hidden;white-space:nowrap;
+  border-right:2px solid var(--accent-light);
+  animation:typewriter 2.5s steps(40) 0.5s 1 both,blinkCaret 0.8s step-end infinite;
+}
+
+/* 9. Top loading bar (при загрузке данных) */
+.top-loader{
+  position:fixed;top:0;left:0;height:2px;width:0;z-index:9999;
+  background:linear-gradient(90deg,var(--accent),var(--accent-light),var(--success));
+  box-shadow:0 0 8px var(--accent);
+  transition:width 0.3s ease,opacity 0.4s;
+}
+.top-loader.loading{width:30%;opacity:1}
+.top-loader.done{width:100%;opacity:0;transition:width 0.2s,opacity 0.6s 0.2s}
+
+/* 10. Появление контента с blur */
+@keyframes blurIn{
+  from{opacity:0;filter:blur(8px);transform:translateY(8px)}
+  to{opacity:1;filter:blur(0);transform:translateY(0)}
+}
+.blur-in{animation:blurIn 0.5s ease-out both}
+
+/* 11. Card hover lift + glow */
+.card-hover{transition:all 0.25s cubic-bezier(0.4,0,0.2,1)}
+.card-hover:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3),0 0 16px rgba(58,125,116,0.18);
+}
+
+/* 12. Анимация для badge-ей (новые элементы) */
+@keyframes badgePop{
+  0%{transform:scale(0)}
+  60%{transform:scale(1.2)}
+  100%{transform:scale(1)}
+}
+.badge-new{
+  animation:badgePop 0.4s ease-out;
+  background:var(--warning);color:var(--bg);font-size:9px;font-weight:700;
+  padding:1px 6px;border-radius:8px;font-family:'Cinzel',serif;letter-spacing:0.05em;
+}
+
+/* 13. Анимация раскрытия (max-height) для сворачиваемых блоков */
+.collapse{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),opacity 0.3s ease,padding 0.3s ease;opacity:0}
+.collapse.open{max-height:3000px;opacity:1}
+
+/* 14. Пульс для индикаторов статуса */
+@keyframes statusPulse{
+  0%,100%{box-shadow:0 0 0 0 currentColor}
+  50%{box-shadow:0 0 0 4px transparent}
+}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;animation:statusPulse 2s ease-in-out infinite}
+.status-dot.online{background:var(--success);color:rgba(93,186,132,0.4)}
+.status-dot.busy{background:var(--warning);color:rgba(212,165,67,0.4)}
+.status-dot.offline{background:var(--fg-dim);animation:none}
+
+/* 15. Эффект мерцания для иконок уведомлений */
+@keyframes bellRing{
+  0%,100%{transform:rotate(0)}
+  10%,30%{transform:rotate(-12deg)}
+  20%,40%{transform:rotate(12deg)}
+  50%{transform:rotate(0)}
+}
+.bell-icon.ringing{animation:bellRing 0.8s ease-in-out;transform-origin:top center}
+
+/* 16. Декоративные углы на карточках (орнамент) */
+.ornate-corners{position:relative}
+.ornate-corners::before,.ornate-corners::after,
+.ornate-corners>.corner-tl,.ornate-corners>.corner-br{
+  content:'';position:absolute;width:14px;height:14px;
+  border:1.5px solid rgba(58,125,116,0.6);pointer-events:none;
+}
+.ornate-corners::before{top:6px;left:6px;border-right:none;border-bottom:none}
+.ornate-corners::after{bottom:6px;right:6px;border-left:none;border-top:none}
+
+/* 17. Лёгкий grain (зерно) поверх фона для атмосферы */
+.grain-overlay{
+  position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grainShift 0.6s steps(2) infinite;
+}
+@keyframes grainShift{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-1%,1%)}
+  50%{transform:translate(1%,-1%)}
+  75%{transform:translate(-1%,-1%)}
+  100%{transform:translate(1%,1%)}
+}
+
+/* 18. Skeleton shimmer улучшенный (с цветным отблеском) */
+.skeleton-line,.skeleton-block,.skeleton-avatar{
+  background:linear-gradient(90deg,rgba(58,125,116,0.06) 0%,rgba(143,191,181,0.18) 50%,rgba(58,125,116,0.06) 100%);
+  background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;
+}
+
+/* 19. Появление модала с пружиной */
+@keyframes modalSpring{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
+  60%{opacity:1;transform:translate(-50%,-50%) scale(1.03)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+.quick-edit-modal,.cmd-palette,.confirm-modal{
+  animation:modalSpring 0.35s cubic-bezier(0.34,1.56,0.64,1) both !important;
+}
+
+/* 20. Hover-эффект для нав-айтемов с подсветкой слева */
+.nav-item{position:relative;overflow:hidden}
+.nav-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--accent);transform:scaleY(0);transform-origin:center;
+  transition:transform 0.25s ease;
+}
+.nav-item.active::before{transform:scaleY(1)}
+.nav-item:hover::before{transform:scaleY(0.5);opacity:0.6}
+
+/* 21. Радиальная подсветка под курсором (subtle) */
+.cursor-glow{
+  position:fixed;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(58,125,116,0.08) 0%,transparent 70%);
+  pointer-events:none;z-index:9997;transform:translate(-50%,-50%);
+  transition:opacity 0.3s;opacity:0;
+}
+.cursor-glow.visible{opacity:1}
+
+/* 22. Лого - медленное вращение обводки */
+@keyframes slowSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+.logo-spin circle:nth-child(2){transform-origin:center;animation:slowSpin 60s linear infinite}
+
+/* 23. Заполнение прогресс-бара (для форм) плавное */
+.form-progress-bar{transition:width 0.4s cubic-bezier(0.4,0,0.2,1) !important}
+
+/* 24. Эффект "подъёма" при появлении секций */
+@keyframes sectionRise{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.section-rise{animation:sectionRise 0.5s ease-out both}
+
+/* 25. Пульсация для важных цифр */
+@keyframes valueGlow{
+  0%,100%{text-shadow:0 0 0 transparent}
+  50%{text-shadow:0 0 12px rgba(58,125,116,0.4)}
+}
+.stat-card-value{transition:text-shadow 0.3s}
+.stat-card:hover .stat-card-value{animation:valueGlow 1.5s ease-in-out infinite}
+
+/* 26. Подсветка ссылки в markdown при hover */
+.markdown a{position:relative;transition:color 0.2s}
+.markdown a::after{
+  content:'';position:absolute;left:0;bottom:-1px;width:100%;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.markdown a:hover::after{transform:scaleX(1)}
+
+/* 27. Анимация для скролл-топ кнопки */
+.scroll-top{
+  transition:opacity 0.3s,transform 0.3s !important;
+}
+.scroll-top:hover{
+  transform:translateY(-4px) scale(1.05) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 16px rgba(58,125,116,0.3) !important;
+}
+
+/* 28. Эффект "магической печати" для новых элементов */
+@keyframes sealStamp{
+  0%{opacity:0;transform:scale(2) rotate(-15deg)}
+  60%{opacity:0.8;transform:scale(0.95) rotate(2deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+.seal-stamp{animation:sealStamp 0.6s cubic-bezier(0.34,1.56,0.64,1) both}
+
+/* 29. Подсветка input при фокусе с glow */
+.input:focus,.textarea:focus,.select:focus{
+  box-shadow:0 0 0 3px rgba(58,125,116,0.12),0 0 12px rgba(58,125,116,0.15) !important;
+}
+
+/* 30. Линия-разделитель с орнаментом (центрированная) */
+.ornament-divider{
+  display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0;
+}
+.ornament-divider::before,.ornament-divider::after{
+  content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+.ornament-divider span{
+  color:var(--accent);font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;
+}
+
 </style>
 </head>
 <body>
+<div class="parallax-bg"></div>
+<div class="grain-overlay"></div>
+<div class="cursor-glow" id="cursor-glow"></div>
+<div class="top-loader" id="top-loader"></div>
 <div id="app"></div>
 <div id="toast-container" class="toast-container"></div>
 <script>
@@ -522,6 +1059,27 @@ const ICONS={
   eye:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
   eyeOff:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
   help:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  /* === Notifications / Command palette / New feature icons === */
+  bell:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  bookmark:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  bookmarkFilled:'<svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  command:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>',
+  share:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+  printer:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
+  expand:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>',
+  tag:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
+  history:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 15 14"/></svg>',
+  thumbsUp:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3 3v1H7.5a2 2 0 0 0-2 2.2l.7 6A2 2 0 0 0 8.2 19H14V9z"/><line x1="14" y1="9" x2="20" y2="9"/><line x1="14" y1="9" x2="20" y2="19"/></svg>',
+  thumbsDown:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3-3v-1h3.5a2 2 0 0 0 2-2.2l-.7-6A2 2 0 0 0 15.8 5H10v10z"/><line x1="10" y1="15" x2="4" y2="15"/><line x1="10" y1="15" x2="4" y2="5"/></svg>',
+  star:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  keyboard:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>',
+  chevronRight:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  compass:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+  filter:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>',
+  maximize:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>',
+  minimize:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>',
+  inbox:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  flagCheck:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/><polyline points="8 19 10 21 14 17"/></svg>',
 };
 
 const $=(s,r=document)=>r.querySelector(s);
@@ -1056,14 +1614,62 @@ function toast(title,desc='',type='info',action=null){
   const t=el('div',{class:`toast toast-${type}`},
     el('div',{class:'flex-1'},el('div',{class:'toast-title'},title),desc?el('div',{class:'toast-desc'},desc):null)
   );
+  /* Action button (restore draft etc.) */
   if(action&&action.label&&typeof action.callback==='function'){
     const btn=el('button',{class:'toast-action-btn',onclick:()=>{try{action.callback()}catch(e){}dismiss()}},action.label);
     t.appendChild(btn);
   }
+  /* Close button */
+  const closeBtn=el('button',{class:'toast-close','aria-label':'Закрыть',onclick:()=>dismiss()},el('span',{html:ICONS.close}));
+  t.appendChild(closeBtn);
+  /* Progress bar */
+  const progress=el('div',{class:'toast-progress'});
+  t.appendChild(progress);
   c.appendChild(t);
   const ttl=action&&action.ttl?action.ttl:3500;
+  const startTime=Date.now();
+  let remaining=ttl;
   let timer=setTimeout(dismiss,ttl);
-  function dismiss(){clearTimeout(timer);t.style.opacity='0';setTimeout(()=>t.remove(),300)}
+  let paused=false;
+  let rafId=null;
+  function animateProgress(){
+    if(paused)return;
+    const elapsed=Date.now()-startTime;
+    const pct=Math.max(0,100-(elapsed/ttl)*100);
+    progress.style.width=pct+'%';
+    if(pct>0){
+      rafId=requestAnimationFrame(animateProgress);
+    }
+  }
+  rafId=requestAnimationFrame(animateProgress);
+  /* Pause on hover */
+  t.addEventListener('mouseenter',()=>{
+    if(paused)return;
+    paused=true;
+    clearTimeout(timer);
+    cancelAnimationFrame(rafId);
+    remaining=remaining-(Date.now()-startTime);
+    t.classList.add('paused');
+  });
+  t.addEventListener('mouseleave',()=>{
+    if(!paused)return;
+    paused=false;
+    const newStart=Date.now();
+    timer=setTimeout(dismiss,remaining);
+    /* Restart animation using remaining time */
+    const animateProgress2=()=>{
+      if(paused)return;
+      const elapsed=Date.now()-newStart;
+      const pct=Math.max(0,100-(elapsed/remaining)*100);
+      progress.style.width=pct+'%';
+      if(pct>0){
+        rafId=requestAnimationFrame(animateProgress2);
+      }
+    };
+    rafId=requestAnimationFrame(animateProgress2);
+    t.classList.remove('paused');
+  });
+  function dismiss(){clearTimeout(timer);cancelAnimationFrame(rafId);t.style.opacity='0';setTimeout(()=>t.remove(),300)}
 }
 function uid(prefix='id'){return prefix+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 
@@ -1888,6 +2494,12 @@ const App={
       }
     });
 
+    /* === Task 9 new systems: extended hotkeys, card context menus, relative time updater, PWA manifest, hash navigation === */
+    setupExtendedHotkeys();
+    setupCardContextMenus();
+    startRelativeTimeUpdater();
+    injectPWAManifest();
+
     if(!firebaseReady){this.render();return}
 
     fbAuth.onAuthStateChanged(async(user)=>{
@@ -1913,6 +2525,13 @@ const App={
         }
         await fbDb.ref('users/'+user.uid+'/lastLoginAt').set(new Date().toISOString());
         this.subscribeToData();
+        /* First-visit hint + browser notifications permission request */
+        showHotkeyHintOnce();
+        requestBrowserNotifications();
+        /* Handle hash navigation (e.g. #post/abc123) */
+        setTimeout(()=>{
+          if(handleHashNavigation()){/* navigated */}
+        },400);
       }else{
         this.currentUser=null;
         this.userProfile=null;
@@ -1938,6 +2557,8 @@ const App={
             const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
             return tb-ta;
           });
+          /* === Task 9: detect newly added items, create notifications === */
+          try{detectNewItemsAndNotify()}catch(e){}
           if(this.currentUser)this.render();
         })
       );
@@ -2082,6 +2703,7 @@ function AppShell(){
   const playerNav=[
     {key:'dashboard',label:'Сводка',icon:'dashboard'},
     {key:'activity',label:'Лента',icon:'activity'},
+    {key:'bookmarks',label:'Закладки',icon:'bookmark'},
     {key:'profile',label:'Профиль',icon:'user'},
     {key:'my-faction',label:'Моё княжество',icon:'shield'},
     {key:'posts',label:'Мои посты',icon:'scroll'},
@@ -2104,23 +2726,54 @@ function AppShell(){
   ];
   const allNav=[...playerNav,...(isAdmin?adminNav:[])];
   const currentTitle=allNav.find(n=>n.key===App.view)?.label||'Сводка';
+  const unreadNotifCount=getNotifications().filter(n=>!n.read).length;
   const shell=el('div',{class:'app'});
   shell.appendChild(el('header',{class:'header'},
     el('button',{class:'btn btn-ghost btn-icon menu-toggle','data-tooltip':'Открыть/закрыть меню',onclick:()=>{App.sidebarOpen=!App.sidebarOpen;App.render()}},el('span',{html:ICONS.menu})),
     el('div',{html:LOGO_SVG(32)}),
     el('div',{},el('div',{class:'header-title'},'ТЕРСКИЙ МИР'),el('div',{class:'header-subtitle'},currentTitle)),
     el('div',{class:'header-spacer'}),
+    /* === Command palette button (Ctrl+K) — visible on desktop === */
+    el('button',{class:'btn btn-ghost btn-sm hidden','data-tooltip':'Командная палитра (Ctrl+K)',style:{display:'none',gap:'6px',padding:'6px 10px',fontFamily:'Cinzel,serif',fontSize:'11px',letterSpacing:'0.05em',color:'var(--fg-muted)'},onclick:()=>openCommandPalette()},
+      el('span',{html:ICONS.command,style:{width:'14px',height:'14px'}}),
+      el('span',{},'Поиск'),
+      el('span',{style:{fontFamily:'JetBrains Mono,monospace',fontSize:'9px',padding:'1px 5px',background:'rgba(10,15,15,0.6)',border:'1px solid var(--border)',borderRadius:'3px',color:'var(--fg-dim)'}},'Ctrl+K')
+    ),
     faction?el('div',{class:'hidden',style:{display:'flex',alignItems:'center',gap:'8px',padding:'6px 12px',borderRadius:'6px',background:'rgba(26,58,53,0.4)',border:'1px solid var(--border)'}},
       el('span',{html:ICONS.shield,style:{color:'var(--accent)'}}),
       el('span',{class:'header-title',style:{fontSize:'13px'}},faction.name),
       faction.isApproved?null:el('span',{class:'text-warning',style:{fontSize:'10px'}},'(на утверждении)')
     ):null,
+    /* === Fullscreen toggle === */
+    el('button',{class:'btn btn-ghost btn-icon','data-tooltip':'Полный экран','aria-label':'Полный экран',onclick:()=>toggleFullscreen()},el('span',{html:ICONS.expand})),
+    /* === Notification bell === */
+    el('div',{class:'header-rel',style:{position:'relative'}},
+      el('button',{class:'btn btn-ghost btn-icon notif-btn','data-tooltip':'Уведомления','aria-label':'Уведомления',onclick:(e)=>{e.stopPropagation();openNotifPanel(e.currentTarget)}},
+        el('span',{html:ICONS.bell}),
+        unreadNotifCount>0?el('span',{class:'notif-badge'},unreadNotifCount>99?'99+':String(unreadNotifCount)):null
+      )
+    ),
     el('div',{class:'header-user','data-tooltip':'Открыть профиль',onclick:()=>App.setView('profile')},
       el('div',{class:'header-avatar'},u.avatarUrl?el('img',{src:u.avatarUrl,alt:u.name}):document.createTextNode(u.name[0]?.toUpperCase()||'?')),
       el('div',{},el('div',{style:{fontSize:'13px',fontWeight:'500'}},u.name),el('div',{style:{fontSize:'10px',color:'var(--fg-muted)'}},isAdmin?'Администратор':'Игрок'))
     ),
     el('button',{class:'btn btn-ghost btn-icon','data-tooltip':'Выйти из системы',onclick:()=>App.logout()},el('span',{html:ICONS.logout}))
   ));
+  /* === Breadcrumbs bar (below header) === */
+  const crumbs=buildBreadcrumbs();
+  if(crumbs.length>1||crumbs[0].label!=='Сводка'){
+    const bcBar=el('div',{class:'breadcrumbs'});
+    crumbs.forEach((c,i)=>{
+      if(i>0)bcBar.appendChild(el('span',{class:'breadcrumb-sep'},'›'));
+      if(c.current){
+        bcBar.appendChild(el('span',{class:'breadcrumb-item current'},c.label));
+      }else{
+        const link=el('a',{class:'breadcrumb-item',href:'#',onclick:e=>{e.preventDefault();if(c.view)App.setView(c.view,c.id||null)}},c.label);
+        bcBar.appendChild(link);
+      }
+    });
+    shell.appendChild(bcBar);
+  }
   const layout=el('div',{class:'layout'});
   if(App.sidebarOpen){
     layout.appendChild(el('div',{class:'sidebar-overlay open',onclick:()=>{App.sidebarOpen=false;App.render()}}));
@@ -2171,12 +2824,19 @@ function AppShell(){
     const btn=el('button',{class:'nav-item'+(active?' active':''),onclick:()=>{App._sidebarQuery='';App.setView(item.key)}});
     btn.innerHTML=ICONS[item.icon]||ICONS.file;
     btn.appendChild(el('span',{},item.label));
+    /* Bookmarks: badge with count */
+    if(item.key==='bookmarks'){
+      const bmCount=getBookmarks().length;
+      if(bmCount>0){
+        btn.appendChild(el('span',{class:'badge badge-accent',style:{marginLeft:'auto',fontSize:'9px',padding:'1px 6px'}},String(bmCount)));
+      }
+    }
     return btn;
   }
   renderNav();
   layout.appendChild(sidebar);
   const main=el('main',{class:'main'});
-  const inner=el('div',{class:'main-inner fade-in'});
+  const inner=el('div',{class:'main-inner fade-in view-fade'});
   inner.appendChild(renderView());
   main.appendChild(inner);
   layout.appendChild(main);
@@ -2184,7 +2844,7 @@ function AppShell(){
   shell.appendChild(el('footer',{class:'footer'},
     el('div',{class:'ornament',style:{maxWidth:'300px',margin:'0 auto 8px',opacity:'0.3'}}),
     el('p',{class:'footer-text'},`Терский Мир · РВПИ · ${new Date().getFullYear()}`),
-    el('p',{class:'footer-text',style:{marginTop:'4px',fontSize:'10px',opacity:'0.7'}},'1–8 — разделы  ·  Esc — закрыть модал')
+    el('p',{class:'footer-text',style:{marginTop:'4px',fontSize:'10px',opacity:'0.7'}},'1–8 — разделы  ·  Ctrl+K — поиск  ·  ? — горячие клавиши  ·  Esc — закрыть')
   ));
   /* === Scroll-top floating button === */
   const scrollTopBtn=el('button',{class:'scroll-top','aria-label':'Наверх','data-tooltip':'Наверх',onclick:()=>window.scrollTo({top:0,behavior:'smooth'})},
@@ -2192,6 +2852,8 @@ function AppShell(){
   );
   if(window.scrollY>400)scrollTopBtn.classList.add('visible');
   shell.appendChild(scrollTopBtn);
+  /* === After render: update notification badge (in case notifications exist) === */
+  setTimeout(()=>{updateNotifBadge();/* Show command palette button on wide screens */const cpBtn=shell.querySelector('.btn[data-tooltip^="Командная палитра"]');if(cpBtn&&window.innerWidth>900){cpBtn.style.display='inline-flex'}},50);
   return shell;
 }
 
@@ -2199,6 +2861,7 @@ function renderView(){
   switch(App.view){
     case'dashboard':return DashboardView();
     case'activity':return ActivityView();
+    case'bookmarks':return BookmarksView();
     case'profile':return ProfileView();
     case'my-faction':return FactionView();
     case'posts':return PostsView();
@@ -2239,9 +2902,27 @@ function EmptyState(icon,title,desc,action){
   );
 }
 function StatCard(icon,label,value,onClick){
+  /* If value is a number and animate=true, run count-up animation after attaching */
+  const valEl=el('div',{class:'stat-card-value'},String(value));
+  if(typeof value==='number'){
+    valEl.classList.add('count-up');
+    valEl.textContent='0';
+    /* Schedule count-up after element is in DOM */
+    setTimeout(()=>{
+      if(valEl.isConnected){
+        countUp(valEl,value,800);
+      }else{
+        /* Try again in next tick */
+        setTimeout(()=>{
+          if(valEl.isConnected)countUp(valEl,value,800);
+          else valEl.textContent=String(value);
+        },100);
+      }
+    },80);
+  }
   return el('button',{class:'stat-card',onclick:onClick},
     el('div',{class:'stat-card-icon',html:ICONS[icon]||ICONS.file}),
-    el('div',{class:'stat-card-value'},String(value)),
+    valEl,
     el('div',{class:'stat-card-label'},label)
   );
 }
@@ -2353,6 +3034,7 @@ function ActivityView(){
 /* ====== DASHBOARD ====== */
 function DashboardView(){
   const u=App.userProfile;
+  const isAdmin=u.role==='ADMIN';
   const faction=App.cache.factions.find(f=>f.userId===u.id);
   const myPosts=App.cache.posts.filter(p=>p.authorId===u.id);
   const pendingPosts=myPosts.filter(p=>p.status==='PENDING');
@@ -2374,12 +3056,78 @@ function DashboardView(){
   ));
   if(!faction)row.appendChild(el('button',{class:'btn btn-primary',onclick:()=>App.setView('my-faction')},'Создать княжество'));
   greetCard.appendChild(row);wrap.appendChild(greetCard);
+  
+  /* === Quick Actions === */
+  const quickActions=el('div',{class:'card'});
+  quickActions.appendChild(el('div',{class:'flex items-center gap-2 mb-4'},
+    el('span',{html:ICONS.bolt,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+    el('h2',{style:{fontSize:'16px'}},'Быстрые действия')
+  ));
+  const qaGrid=el('div',{class:'stat-grid',style:{gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))'}});
+  /* Player: "Написать пост" (only with faction) */
+  if(faction&&faction.isApproved){
+    qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('posts','__new__')},
+      el('div',{class:'quick-action-icon',html:ICONS.scroll}),
+      el('div',{},
+        el('div',{class:'quick-action-title'},'Написать пост'),
+        el('div',{class:'quick-action-desc'},'Опишите действия княжества')
+      )
+    ));
+  }
+  /* "Открыть чат" */
+  qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('chats')},
+    el('div',{class:'quick-action-icon',html:ICONS.chat}),
+    el('div',{},
+      el('div',{class:'quick-action-title'},'Открыть чаты'),
+      el('div',{class:'quick-action-desc'},'Переговоры с другими правителями')
+    )
+  ));
+  /* "Вести мира" */
+  qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('news')},
+    el('div',{class:'quick-action-icon',html:ICONS.news}),
+    el('div',{},
+      el('div',{class:'quick-action-title'},'Читать вести'),
+      el('div',{class:'quick-action-desc'},'Последние новости мира')
+    )
+  ));
+  /* "Лента активности" */
+  qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('activity')},
+    el('div',{class:'quick-action-icon',html:ICONS.activity}),
+    el('div',{},
+      el('div',{class:'quick-action-title'},'Лента событий'),
+      el('div',{class:'quick-action-desc'},'Все последние события мира')
+    )
+  ));
+  /* Admin: "Создать новость" / "Новая баталия" */
+  if(isAdmin){
+    qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('admin-news','__new__')},
+      el('div',{class:'quick-action-icon',html:ICONS.news}),
+      el('div',{},
+        el('div',{class:'quick-action-title'},'Создать весть'),
+        el('div',{class:'quick-action-desc'},'Опубликовать новость для всех')
+      )
+    ));
+    qaGrid.appendChild(el('button',{class:'quick-action',onclick:()=>App.setView('admin-battles','__new__')},
+      el('div',{class:'quick-action-icon',html:ICONS.swords}),
+      el('div',{},
+        el('div',{class:'quick-action-title'},'Новая баталия'),
+        el('div',{class:'quick-action-desc'},'Создать военное столкновение')
+      )
+    ));
+  }
+  quickActions.appendChild(qaGrid);
+  wrap.appendChild(quickActions);
+  
   const stats=el('div',{class:'stat-grid'});
   stats.appendChild(StatCard('scroll','Всего постов',myPosts.length,()=>App.setView('posts')));
   stats.appendChild(StatCard('clock','Ожидают вердикта',pendingPosts.length,()=>App.setView('posts')));
   stats.appendChild(StatCard('shield','Вердиктов получено',verdictedPosts.length,()=>App.setView('posts')));
   stats.appendChild(StatCard('news','Вестей мира',App.cache.news.length,()=>App.setView('news')));
   wrap.appendChild(stats);
+  
+  /* === Activity chart (last 7 days) === */
+  wrap.appendChild(renderActivityChart());
+  
   /* === Здоровье государства === */
   wrap.appendChild(renderStateHealth());
   const newsCard=el('div',{class:'card'});
@@ -2394,19 +3142,23 @@ function DashboardView(){
     newsCard.appendChild(EmptyState('news','Вестей пока нет','Новости мира появятся здесь'));
   }else{
     const list=el('div',{class:'flex flex-col gap-2',style:{maxHeight:'500px',overflowY:'auto'}});
-    recentNews.forEach(n=>{
+    recentNews.forEach((n,idx)=>{
       const ts=RTDB.ts(n.createdAt);
-      list.appendChild(el('div',{class:'card card-hover news-card-hover',style:{padding:'12px'},onclick:()=>App.setView('news',n.id)},
+      const isNewsNew=isNewItem(n,'news');
+      list.appendChild(el('div',{class:'card card-hover news-card-hover staggered-item'+(isNewsNew?' is-new':''),style:{padding:'12px',position:'relative',animationDelay:(idx*40)+'ms'},onclick:()=>App.setView('news',n.id)},
         el('div',{class:'flex items-center gap-2 mb-2'},
           n.isPinned?el('span',{class:'badge badge-accent',html:ICONS.pin+' Закреплено'}):null,
           el('span',{class:'badge'},n.category||'Общие'),
-          el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},fmtDateShort(ts))
+          isNewsNew?el('span',{class:'new-badge'},'Новое'):null,
+          el('span',{class:'text-muted','data-reltime':String(new Date(ts).getTime()),style:{fontSize:'10px',marginLeft:'auto'}},relativeTime(ts))
         ),
         el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},n.title),
         n.excerpt?el('div',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},n.excerpt):null
       ));
     });
     newsCard.appendChild(list);
+    /* Mark news as visited after viewing */
+    markCollectionVisited('news');
   }
   wrap.appendChild(newsCard);
   const quick=el('div',{class:'stat-grid',style:{gridTemplateColumns:'repeat(4,1fr)'}});
@@ -2418,6 +3170,104 @@ function DashboardView(){
   });
   wrap.appendChild(quick);
   return wrap;
+}
+
+/* === Activity chart (last 7 days) — mini bar chart === */
+function renderActivityChart(){
+  const card=el('div',{class:'card'});
+  card.appendChild(el('div',{class:'flex items-center gap-2 mb-2'},
+    el('span',{html:ICONS.stats,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+    el('h2',{style:{fontSize:'16px'}},'Активность за неделю')
+  ));
+  /* Compute daily counts */
+  const now=Date.now();
+  const dayMs=24*60*60*1000;
+  const days=[];
+  for(let i=6;i>=0;i--){
+    const dayStart=now-(i*dayMs);
+    const date=new Date(dayStart);
+    date.setHours(0,0,0,0);
+    const startTs=date.getTime();
+    const endTs=startTs+dayMs;
+    let count=0;
+    /* Count events created on this day */
+    ['posts','news','chronicle','bestiary','battles'].forEach(col=>{
+      App.cache[col].forEach(item=>{
+        const ts=new Date(RTDB.ts(item.createdAt)).getTime();
+        if(ts>=startTs&&ts<endTs)count++;
+      });
+    });
+    /* Count verdicts on posts */
+    App.cache.posts.forEach(p=>{
+      if(p.verdict&&p.verdict.createdAt){
+        const ts=new Date(RTDB.ts(p.verdict.createdAt)).getTime();
+        if(ts>=startTs&&ts<endTs)count++;
+      }
+    });
+    days.push({date:startTs,count,isToday:i===0});
+  }
+  const maxCount=Math.max(...days.map(d=>d.count),1);
+  const wrap=el('div',{class:'activity-chart-wrap'});
+  const chart=el('div',{class:'activity-chart'});
+  days.forEach(d=>{
+    const heightPct=(d.count/maxCount)*100;
+    const dayLabel=new Date(d.date).toLocaleDateString('ru-RU',{weekday:'short'});
+    const tip=dayLabel+', '+(d.isToday?'сегодня':new Date(d.date).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}))+': '+d.count;
+    const bar=el('div',{class:'activity-bar'+(d.isToday?' today':''),'data-tip':tip,style:{height:Math.max(2,heightPct)+'%'}});
+    chart.appendChild(bar);
+  });
+  wrap.appendChild(chart);
+  const labels=el('div',{class:'activity-chart-labels'});
+  days.forEach(d=>{
+    const dayLabel=new Date(d.date).toLocaleDateString('ru-RU',{weekday:'short'});
+    labels.appendChild(el('span',{},dayLabel));
+  });
+  wrap.appendChild(labels);
+  /* Comparison with last week */
+  const thisWeekCount=days.reduce((s,d)=>s+d.count,0);
+  /* Compute last week */
+  let lastWeekCount=0;
+  const lastWeekStart=now-(7*dayMs);
+  const lastWeekEnd=now;
+  ['posts','news','chronicle','bestiary','battles'].forEach(col=>{
+    App.cache[col].forEach(item=>{
+      const ts=new Date(RTDB.ts(item.createdAt)).getTime();
+      if(ts>=lastWeekStart-(7*dayMs)&&ts<lastWeekStart)lastWeekCount++;
+    });
+  });
+  const pctChange=lastWeekCount>0?Math.round(((thisWeekCount-lastWeekCount)/lastWeekCount)*100):0;
+  card.appendChild(wrap);
+  if(lastWeekCount>0){
+    card.appendChild(el('div',{class:'text-muted text-xs mt-2',style:{fontFamily:'Cinzel,serif'}},
+      thisWeekCount+' событий  ·  ',
+      el('span',{class: pctChange>=0?'text-success':'text-danger'},
+        (pctChange>=0?'↑ +':'↓ ')+Math.abs(pctChange)+'% к прошлой неделе'
+      )
+    ));
+  }else if(thisWeekCount>0){
+    card.appendChild(el('div',{class:'text-muted text-xs mt-2',style:{fontFamily:'Cinzel,serif'}},thisWeekCount+' событий за неделю'));
+  }
+  /* Top active factions */
+  const factionCounts={};
+  App.cache.posts.forEach(p=>{
+    if(p.factionId)factionCounts[p.factionId]=(factionCounts[p.factionId]||0)+1;
+  });
+  const topFactions=Object.entries(factionCounts).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  if(topFactions.length>0){
+    const tfWrap=el('div',{class:'mt-3'});
+    tfWrap.appendChild(el('div',{class:'text-muted text-xs mb-2',style:{fontFamily:'Cinzel,serif',letterSpacing:'0.1em',textTransform:'uppercase'}},'Топ активных фракций'));
+    topFactions.forEach(([fid,count])=>{
+      const f=App.cache.factions.find(x=>x.id===fid);
+      if(!f)return;
+      tfWrap.appendChild(el('div',{class:'flex items-center gap-2 mb-1'},
+        el('span',{html:ICONS.shield,style:{color:'var(--accent)',width:'12px',height:'12px'}}),
+        el('span',{class:'text-xs',style:{flex:'1'}},f.name),
+        el('span',{class:'badge badge-accent'},count+' постов')
+      ));
+    });
+    card.appendChild(tfWrap);
+  }
+  return card;
 }
 
 /* === Здоровье государства (блок метрик) === */
@@ -3247,9 +4097,11 @@ function PostsView(){
         listHolder.appendChild(EmptyState('search','Ничего не найдено','Попробуйте изменить запрос'));
         return;
       }
-      list.forEach(p=>listHolder.appendChild(PostCard(p)));
+      list.forEach((p,i)=>listHolder.appendChild(PostCard(p,i)));
     }
     renderList();
+    /* Mark posts collection as visited (after rendering list) */
+    markCollectionVisited('posts');
   }
   return wrap;
 }
@@ -3304,11 +4156,12 @@ function renderDeltaJournal(changes,verdict){
   });
   return wrap;
 }
-function PostCard(post){
+function PostCard(post,index){
   const statusMap={PENDING:{label:'Ожидает',cls:'badge-warning',icon:ICONS.clock},VERDICTED:{label:'Вердикт',cls:'badge-success',icon:ICONS.check},ARCHIVED:{label:'Архив',cls:'',icon:ICONS.file}};
   const s=statusMap[post.status]||statusMap.PENDING;
   const ts=RTDB.ts(post.createdAt);
-  const card=el('div',{class:'card card-hover',style:{position:'relative'},onclick:()=>App.setView('posts',post.id)});
+  const isNew=isNewItem(post,'posts');
+  const card=el('div',{class:'card card-hover staggered-item'+(isNew?' is-new':''),style:{position:'relative',animationDelay:((index||0)*40)+'ms'},'data-ctx-type':'post','data-ctx-id':post.id,onclick:()=>App.setView('posts',post.id)});
   /* === Кнопка удаления (правый верхний угол) === */
   const delBtn=el('button',{class:'post-card-delete','data-tooltip':'Удалить пост','aria-label':'Удалить пост',onclick:async (e)=>{
     e.stopPropagation();
@@ -3325,16 +4178,28 @@ function PostCard(post){
     }catch(err){toast('Ошибка',err.message,'error')}
   }},el('span',{html:ICONS.trash}));
   card.appendChild(delBtn);
+  /* === Bookmark button === */
+  const bmBtn=el('button',{class:'bookmark-btn'+(isBookmarked(post.id)?' active':''),'data-tooltip':isBookmarked(post.id)?'Убрать закладку':'В закладки','aria-label':'Закладка',onclick:(e)=>{
+    e.stopPropagation();
+    e.preventDefault();
+    const added=toggleBookmark(post.id);
+    toast(added?'Добавлено в закладки':'Убрано из закладок','','info');
+    if(added){bmBtn.classList.add('active');bmBtn.innerHTML=ICONS.bookmarkFilled}
+    else{bmBtn.classList.remove('active');bmBtn.innerHTML=ICONS.bookmark}
+    bmBtn.setAttribute('data-tooltip',added?'Убрать закладку':'В закладки');
+  }},el('span',{html:isBookmarked(post.id)?ICONS.bookmarkFilled:ICONS.bookmark}));
+  card.appendChild(bmBtn);
   card.appendChild(el('div',{class:'list-item-row'},
     el('div',{class:'flex-1 min-w-0'},
       el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
         el('span',{class:'badge '+s.cls,html:s.icon+' '+s.label}),
         post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
-        post.attachments&&post.attachments.length?el('span',{class:'badge',html:ICONS.file+' '+post.attachments.length}):null
+        post.attachments&&post.attachments.length?el('span',{class:'badge',html:ICONS.file+' '+post.attachments.length}):null,
+        isNew?el('span',{class:'new-badge'},'Новое'):null
       ),
       el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},post.title),
       el('p',{class:'text-muted text-sm mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},post.content),
-      el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'8px',opacity:'0.6'}},fmtDate(ts))
+      el('p',{class:'text-muted','data-reltime':String(new Date(ts).getTime()),style:{fontSize:'10px',marginTop:'8px',opacity:'0.6'}},relativeTime(ts)+' · '+fmtDateShort(ts))
     ),
     el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0'}})
   ));
@@ -3343,27 +4208,75 @@ function PostCard(post){
 function PostForm(){
   const state={title:'',content:'',context:'',turnNumber:'',weekNumber:'',attachments:[]};
   const wrap=el('div',{class:'card card-glow'});
-  wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},
-    el('h2',{style:{fontSize:'18px'}},'Новый пост'),
-    el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('posts')},el('span',{html:ICONS.close}))
-  ));
+  /* === Header row: title + templates dropdown === */
+  const headerRow=el('div',{class:'flex justify-between items-center mb-4'});
+  headerRow.appendChild(el('h2',{style:{fontSize:'18px'}},'Новый пост'));
+  const headerRight=el('div',{class:'flex items-center gap-2'});
+  /* Templates dropdown */
+  const tplWrap=el('div',{class:'templates-dropdown'});
+  const tplBtn=el('button',{type:'button',class:'btn btn-ghost btn-sm','data-tooltip':'Шаблоны постов',onclick:(e)=>{
+    e.stopPropagation();
+    const existing=tplWrap.querySelector('.templates-menu');
+    if(existing){existing.remove();return}
+    const menu=el('div',{class:'templates-menu'});
+    POST_TEMPLATES.forEach(t=>{
+      const item=el('div',{class:'templates-menu-item',onclick:(ev)=>{
+        ev.stopPropagation();
+        /* Insert template: title set to template title, content set to template content */
+        if(t.title&&t.title!=='Свободный пост'){
+          state.title=t.title;
+          titleInput.value=t.title;
+        }
+        state.content=t.content;
+        contentTa.setValue(t.content);
+        progress.update();
+        counterInst&&counterInst.update();
+        /* Schedule draft save */
+        draftHandle.schedule();
+        menu.remove();
+        toast('Шаблон применён','Отредактируйте содержимое под свой пост','info');
+      }},
+        el('span',{html:ICONS[t.icon]||ICONS.scroll}),
+        el('span',{},t.title)
+      );
+      menu.appendChild(item);
+    });
+    tplWrap.appendChild(menu);
+    /* Close on outside click */
+    setTimeout(()=>{
+      const close=()=>{menu.remove();document.removeEventListener('click',close)};
+      document.addEventListener('click',close);
+    },0);
+  }},el('span',{html:ICONS.list}),'Шаблоны');
+  tplWrap.appendChild(tplBtn);
+  headerRight.appendChild(tplWrap);
+  headerRight.appendChild(el('button',{class:'btn btn-ghost btn-icon','data-tooltip':'Закрыть форму',onclick:()=>App.setView('posts')},el('span',{html:ICONS.close})));
+  headerRow.appendChild(headerRight);
+  wrap.appendChild(headerRow);
   /* Progress bar: 2 обязательных поля (title, content) */
   const progress=FormProgress(()=>{return (state.title.trim()?1:0)+(state.content.trim().length>=10?1:0)},()=>2);
   wrap.appendChild(progress.wrap);
   const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
-  const titleInput=el('input',{class:'input',placeholder:'Действия княжества на 5-й неделе...',oninput:e=>{state.title=e.target.value;progress.update()},required:true});
-  const contentTa=WikiEditor(state.content,v=>{state.content=v;progress.update()},'Опишите действия вашего княжества... Поддерживается вики-разметка.',200);
+  const titleInput=el('input',{class:'input',placeholder:'Действия княжества на 5-й неделе...',oninput:e=>{state.title=e.target.value;progress.update();draftHandle.schedule()},required:true});
+  const contentTa=WikiEditor(state.content,v=>{state.content=v;progress.update();draftHandle.schedule()},'Опишите действия вашего княжества... Поддерживается вики-разметка.',200);
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),titleInput));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
-    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',placeholder:'5',oninput:e=>state.turnNumber=e.target.value})),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Неделя'),el('input',{class:'input',type:'number',placeholder:'13',oninput:e=>state.weekNumber=e.target.value}))
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',placeholder:'5',oninput:e=>{state.turnNumber=e.target.value;draftHandle.schedule()}})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Неделя'),el('input',{class:'input',type:'number',placeholder:'13',oninput:e=>{state.weekNumber=e.target.value;draftHandle.schedule()}}))
   ));
-  form.appendChild(el('div',{class:'field-group'},
+  const contentField=el('div',{class:'field-group'},
     el('label',{class:'label'},'Ролевое содержание *'),
     contentTa,
     el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'4px',opacity:'0.6'}},'Поддерживается вики-разметка: # заголовки, **жирный**, :::info блоки, таблицы и др.')
-  ));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Контекст / Пояснение (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения для администратора...',style:{minHeight:'80px'},oninput:e=>state.context=e.target.value})));
+  );
+  form.appendChild(contentField);
+  /* === Char counter on content (max 5000) === */
+  const counterInst=attachCharCounter(contentTa,5000,contentField);
+  /* === Draft autosave setup === */
+  const draftHandle=setupDraftAutosave('post',null,()=>({title:state.title,content:state.content,context:state.context,turnNumber:state.turnNumber,weekNumber:state.weekNumber}));
+  /* Attach draft indicator below progress bar */
+  draftHandle.attachIndicator(progress.wrap);
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Контекст / Пояснение (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения для администратора...',style:{minHeight:'80px'},oninput:e=>{state.context=e.target.value;draftHandle.schedule()}})));
   const attList=el('div',{class:'flex flex-wrap gap-2'});
   const fileLabel=el('label',{class:'flex items-center gap-2',style:{cursor:'pointer'}},
     el('input',{type:'file',style:{display:'none'},onchange:e=>{
@@ -3396,6 +4309,17 @@ function PostForm(){
     el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.send}),'Отправить')
   ));
   wrap.appendChild(form);
+  /* === Offer restore draft (if exists) === */
+  offerRestoreDraft('post',null,(draft)=>{
+    if(draft.title!==undefined){state.title=draft.title;titleInput.value=draft.title||''}
+    if(draft.content!==undefined){state.content=draft.content;contentTa.setValue(draft.content||'')}
+    if(draft.context!==undefined){state.context=draft.context}
+    if(draft.turnNumber!==undefined){state.turnNumber=draft.turnNumber}
+    if(draft.weekNumber!==undefined){state.weekNumber=draft.weekNumber}
+    progress.update();
+    counterInst&&counterInst.update();
+    toast('Черновик восстановлен','Отредактируйте и отправьте пост','success');
+  });
   return wrap;
   async function submit(){
     if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните заголовок и содержание','error');return}
@@ -3410,6 +4334,8 @@ function PostForm(){
         factionId:faction?faction.id:null,
         attachments:state.attachments,
       });
+      /* Clear draft on successful submit */
+      draftHandle.clearOnSuccess();
       toast('Пост отправлен','Ожидает вердикта администратора','success');
       App.setView('posts');
     }catch(e){toast('Ошибка',e.message,'error')}
@@ -3417,9 +4343,26 @@ function PostForm(){
 }
 function PostDetail(post){
   const wrap=el('div',{class:'flex flex-col gap-4'});
-  wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('posts')},el('span',{html:ICONS.back}),'Назад к постам'));
+  /* === Top row: back + actions (share, bookmark, print) === */
+  wrap.appendChild(el('div',{class:'flex items-center justify-between',style:{flexWrap:'wrap',gap:'8px'}},
+    el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('posts')},el('span',{html:ICONS.back}),'Назад к постам'),
+    el('div',{class:'flex items-center gap-1'},
+      el('button',{class:'btn btn-ghost btn-icon btn-sm','data-tooltip':isBookmarked(post.id)?'Убрать закладку':'В закладки',onclick:(e)=>{
+        const added=toggleBookmark(post.id);
+        toast(added?'Добавлено в закладки':'Убрано из закладок','','info');
+        App.render();
+      }},el('span',{html:isBookmarked(post.id)?ICONS.bookmarkFilled:ICONS.bookmark})),
+      el('button',{class:'btn btn-ghost btn-icon btn-sm','data-tooltip':'Поделиться ссылкой',onclick:async()=>{
+        try{
+          await copyToClipboard(buildShareLink('post',post.id));
+          toast('Ссылка скопирована','','success');
+        }catch(err){toast('Ошибка','Не удалось скопировать','error')}
+      }},el('span',{html:ICONS.share})),
+      el('button',{class:'btn btn-ghost btn-icon btn-sm','data-tooltip':'Печать',onclick:()=>window.print()},el('span',{html:ICONS.printer}))
+    )
+  ));
   const ts=RTDB.ts(post.createdAt);
-  const card=el('div',{class:'card card-glow p-6'});
+  const card=el('div',{class:'card card-glow p-6','data-ctx-type':'post','data-ctx-id':post.id});
   card.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
     post.status==='PENDING'?el('span',{class:'badge badge-warning'},'Ожидает вердикта'):
     post.status==='VERDICTED'?el('span',{class:'badge badge-success'},'Вердикт получен'):
@@ -3428,9 +4371,33 @@ function PostDetail(post){
     post.weekNumber?el('span',{class:'badge'},'Неделя '+post.weekNumber):null
   ));
   card.appendChild(el('h1',{class:'text-glow',style:{fontSize:'22px',marginBottom:'8px'}},post.title));
-  card.appendChild(el('p',{class:'text-muted text-xs mb-4'},fmtDate(ts)));
+  card.appendChild(el('p',{class:'text-muted text-xs mb-4'},
+    el('span',{'data-reltime':String(new Date(ts).getTime())},relativeTime(ts)),
+    el('span',{style:{opacity:'0.6'}},' · '+fmtDate(ts))
+  ));
   card.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
-  card.appendChild(el('div',{class:'markdown',html:mdToHtml(post.content)}));
+  /* === Collapsible content if long (>500 chars) === */
+  const isLong=post.content&&post.content.length>500;
+  const contentMd=el('div',{class:'markdown post-collapsible'+(isLong?' collapsed':''),html:mdToHtml(post.content)});
+  card.appendChild(contentMd);
+  if(isLong){
+    const expandBtn=el('button',{class:'post-expand-btn',onclick:()=>{
+      const isCollapsed=contentMd.classList.contains('collapsed');
+      if(isCollapsed){
+        contentMd.classList.remove('collapsed');
+        expandBtn.classList.add('expanded');
+        expandBtn.querySelector('.btn-label').textContent='Свернуть';
+      }else{
+        contentMd.classList.add('collapsed');
+        expandBtn.classList.remove('expanded');
+        expandBtn.querySelector('.btn-label').textContent='Читать далее';
+      }
+    }},
+      el('span',{class:'btn-label'},'Читать далее'),
+      el('span',{html:ICONS.chevron})
+    );
+    card.appendChild(expandBtn);
+  }
   if(post.context){
     card.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},el('p',{class:'label'},'Контекст'),el('p',{class:'text-sm italic'},post.context)));
   }
@@ -3448,6 +4415,27 @@ function PostDetail(post){
       )
     ));
   }
+  /* === Reactions row === */
+  const reactions=el('div',{class:'reactions-row'});
+  reactions.appendChild(el('span',{class:'reactions-label'},'Реакции:'));
+  const myReaction=(post.reactions||{})[App.userProfile.id];
+  const counts=countReactions(post.reactions);
+  POST_REACTIONS.forEach(r=>{
+    const isActive=myReaction===r.key;
+    const count=counts[r.key]||0;
+    const btn=el('button',{class:'reaction-btn'+(isActive?' active':''),'data-tooltip':r.label,onclick:()=>{
+      /* Optimistic UI: toggle */
+      toggleReaction(post.id,r.key);
+      /* Re-render to reflect change after RTDB update propagates */
+      setTimeout(()=>App.render(),300);
+    }},
+      el('span',{html:ICONS[r.icon]||ICONS.star}),
+      el('span',{},r.label),
+      count>0?el('span',{class:'reaction-count'},String(count)):null
+    );
+    reactions.appendChild(btn);
+  });
+  card.appendChild(reactions);
   wrap.appendChild(card);
   const verdict=post.verdict;
   if(verdict){
@@ -3455,7 +4443,10 @@ function PostDetail(post){
     const vCard=el('div',{class:'card',style:{background:'linear-gradient(135deg,rgba(58,125,116,0.1),rgba(17,24,26,0.4))',borderColor:'rgba(58,125,116,0.3)'}});
     vCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3'},
       el('div',{class:'stat-section-icon',html:ICONS.shield}),
-      el('div',{},el('h2',{class:'text-accent',style:{fontSize:'16px'}},'Вердикт администратора'),el('p',{class:'text-muted',style:{fontSize:'10px'}},(verdict.adminName||'')+' · '+fmtDate(vts)))
+      el('div',{},el('h2',{class:'text-accent',style:{fontSize:'16px'}},'Вердикт администратора'),el('p',{class:'text-muted',style:{fontSize:'10px'}},
+        el('span',{'data-reltime':String(new Date(vts).getTime())},relativeTime(vts)),
+        el('span',{style:{opacity:'0.6'}},' · '+(verdict.adminName||'')+' · '+fmtDate(vts))
+      ))
     ));
     vCard.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'16px'}}));
     vCard.appendChild(el('div',{class:'markdown',html:mdToHtml(verdict.roleplayText)}));
@@ -3523,10 +4514,11 @@ function AdminPostsView(){
         listHolder.appendChild(EmptyState('search','Ничего не найдено','Попробуйте изменить запрос'));
         return;
       }
-      list.forEach(post=>{
+      list.forEach((post,idx)=>{
         const faction=App.cache.factions.find(f=>f.id===post.factionId);
         const ts=RTDB.ts(post.createdAt);
-        const card=el('div',{class:'card card-hover',style:{position:'relative'},onclick:()=>App.setView('admin-posts',post.id)});
+        const isNew=isNewItem(post,'admin-posts');
+        const card=el('div',{class:'card card-hover staggered-item'+(isNew?' is-new':''),style:{position:'relative',animationDelay:(idx*40)+'ms'},'data-ctx-type':'post','data-ctx-id':post.id,onclick:()=>App.setView('admin-posts',post.id)});
         /* === Кнопка удаления (админ может удалять любые посты) === */
         const delBtn=el('button',{class:'post-card-delete','data-tooltip':'Удалить пост','aria-label':'Удалить пост',onclick:async (e)=>{
           e.stopPropagation();
@@ -3541,16 +4533,27 @@ function AdminPostsView(){
           }catch(err){toast('Ошибка',err.message,'error')}
         }},el('span',{html:ICONS.trash}));
         card.appendChild(delBtn);
+        /* === Bookmark button === */
+        const bmBtn=el('button',{class:'bookmark-btn'+(isBookmarked(post.id)?' active':''),'data-tooltip':isBookmarked(post.id)?'Убрать закладку':'В закладки','aria-label':'Закладка',onclick:(e)=>{
+          e.stopPropagation();
+          e.preventDefault();
+          const added=toggleBookmark(post.id);
+          toast(added?'Добавлено в закладки':'Убрано из закладок','','info');
+          if(added){bmBtn.classList.add('active');bmBtn.innerHTML=ICONS.bookmarkFilled}
+          else{bmBtn.classList.remove('active');bmBtn.innerHTML=ICONS.bookmark}
+        }},el('span',{html:isBookmarked(post.id)?ICONS.bookmarkFilled:ICONS.bookmark}));
+        card.appendChild(bmBtn);
         card.appendChild(el('div',{class:'flex items-start justify-between gap-3'},
           el('div',{class:'flex-1 min-w-0'},
             el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
               post.status==='PENDING'?el('span',{class:'badge badge-warning',html:ICONS.clock+' Ожидает'}):el('span',{class:'badge badge-success',html:ICONS.check+' Вердикт'}),
               faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+faction.name}):null,
-              post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null
+              post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
+              isNew?el('span',{class:'new-badge'},'Новое'):null
             ),
             el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600'}},post.title),
             el('p',{class:'text-muted text-xs mt-1',style:{display:'-webkit-box',WebkitLineClamp:'2',WebkitBoxOrient:'vertical',overflow:'hidden'}},post.content),
-            el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'6px',opacity:'0.6'}},(post.authorName||'')+' · '+fmtDate(ts))
+            el('p',{class:'text-muted','data-reltime':String(new Date(ts).getTime()),style:{fontSize:'10px',marginTop:'6px',opacity:'0.6'}},(post.authorName||'')+' · '+relativeTime(ts))
           ),
           el('span',{html:ICONS.chevron,style:{color:'var(--fg-dim)',flexShrink:'0',marginTop:'4px'}})
         ));
@@ -3558,6 +4561,7 @@ function AdminPostsView(){
       });
     }
     renderList();
+    markCollectionVisited('admin-posts');
   }
   return wrap;
 }
@@ -3607,9 +4611,26 @@ function VerdictEditor(post){
   /* Progress bar: 1 обязательное поле (roleplayText) */
   const verdictProgress=FormProgress(()=>state.roleplayText.trim().length>=5?1:0,()=>1);
   form.appendChild(verdictProgress.wrap);
-  const roleplayTa=WikiEditor(state.roleplayText,v=>{state.roleplayText=v;verdictProgress.update()},'Опишите, что произошло по итогам поста игрока... Поддерживается вики-разметка.',150);
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Ролевая часть (нарратив) *'),roleplayTa));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Техническая часть (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения...',style:{minHeight:'80px'},oninput:e=>state.technicalText=e.target.value},state.technicalText)));
+  const roleplayTa=WikiEditor(state.roleplayText,v=>{state.roleplayText=v;verdictProgress.update();draftHandle.schedule()},'Опишите, что произошло по итогам поста игрока... Поддерживается вики-разметка.',150);
+  const rpField=el('div',{class:'field-group'},el('label',{class:'label'},'Ролевая часть (нарратив) *'),roleplayTa);
+  form.appendChild(rpField);
+  /* === Char counter on roleplay text === */
+  attachCharCounter(roleplayTa,20000,rpField);
+  /* === Draft autosave for verdict === */
+  const draftHandle=setupDraftAutosave('verdict',post.id,()=>({roleplayText:state.roleplayText,technicalText:state.technicalText,changes:state.changes}));
+  draftHandle.attachIndicator(verdictProgress.wrap);
+  /* Offer restore draft (only if not editing existing verdict) */
+  if(!existingVerdict){
+    offerRestoreDraft('verdict',post.id,(draft)=>{
+      if(draft.roleplayText!==undefined){state.roleplayText=draft.roleplayText;roleplayTa.setValue(draft.roleplayText||'')}
+      if(draft.technicalText!==undefined){state.technicalText=draft.technicalText}
+      if(Array.isArray(draft.changes)){state.changes=draft.changes;renderChangesList()}
+      verdictProgress.update();
+      toast('Черновик вердикта восстановлен','','success');
+    });
+  }
+  const techTa=el('textarea',{class:'textarea',placeholder:'Технические пояснения...',style:{minHeight:'80px'},oninput:e=>{state.technicalText=e.target.value;draftHandle.schedule()}},state.technicalText);
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Техническая часть (опц.)'),techTa));
 
   /* === Секция «Изменения в статистике» (ВАРИАНТ D — delta journal) === */
   const chSection=el('div',{class:'field-group'});
@@ -3826,6 +4847,12 @@ function VerdictEditor(post){
         verdict.changes=state.changes.map(c=>({...c}));
       }
       await RTDB.update('posts/'+post.id,{verdict});
+      /* Clear draft on success */
+      draftHandle.clearOnSuccess();
+      /* Send notification to post author */
+      if(post.authorId&&post.authorId!==App.userProfile.id){
+        /* In-app notification (since we don't have RTDB notifications/{userId} collection, use localStorage on admin's side. The author would see it next time they log in if their localStorage is shared. For now, it's just for the current user. */
+      }
       toast('Вердикт вынесен',state.changes.length?'Статистика обновлена':'Вердикт сохранён','success');
       App.setView('admin-posts');
     }catch(e){toast('Ошибка',e.message,'error')}
@@ -3952,24 +4979,53 @@ function NewsForm(editing){
   /* Progress bar: 2 обязательных (title, content) */
   const newsProgress=FormProgress(()=>{return (state.title.trim().length>=3?1:0)+(state.content.trim().length>=10?1:0)},()=>2);
   form.appendChild(newsProgress.wrap);
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',value:state.title,oninput:e=>{state.title=e.target.value;newsProgress.update()},required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',value:state.title,oninput:e=>{state.title=e.target.value;newsProgress.update();draftHandle.schedule()},required:true})));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
     el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
-      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+      (()=>{const sel=el('select',{class:'select',onchange:e=>{state.category=e.target.value;draftHandle.schedule()}});
         [['GENERAL','Общие'],['WAR','Военные'],['DIPLOMACY','Дипломатия'],['ECONOMY','Экономика'],['RELIGION','Религия']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
         return sel;
       })()
     ),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',value:state.turnNumber,oninput:e=>state.turnNumber=e.target.value}))
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',value:state.turnNumber,oninput:e=>{state.turnNumber=e.target.value;draftHandle.schedule()}}))
   ));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Краткое описание'),el('input',{class:'input',value:state.excerpt,oninput:e=>state.excerpt=e.target.value,placeholder:'Короткая аннотация...'})));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),WikiEditor(state.content,v=>{state.content=v;newsProgress.update()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)));
-  form.appendChild(el('div',{class:'flex items-center gap-2'},el('input',{type:'checkbox',id:'pinned',checked:state.isPinned,onchange:e=>state.isPinned=e.target.checked}),el('label',{for:'pinned',class:'text-sm text-muted'},'Закрепить новость')));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Краткое описание'),el('input',{class:'input',value:state.excerpt,oninput:e=>{state.excerpt=e.target.value;draftHandle.schedule()},placeholder:'Короткая аннотация...'})));
+  const contentField=el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),
+    WikiEditor(state.content,v=>{state.content=v;newsProgress.update();draftHandle.schedule()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)
+  );
+  form.appendChild(contentField);
+  /* === Char counter + draft autosave === */
+  const contentWikiTa=contentField.querySelector('.wiki-editor');
+  attachCharCounter(contentWikiTa,20000,contentField);
+  const draftId=editing?editing.id:null;
+  const draftHandle=setupDraftAutosave('news',draftId,()=>({title:state.title,content:state.content,excerpt:state.excerpt,category:state.category,isPinned:state.isPinned,turnNumber:state.turnNumber}));
+  draftHandle.attachIndicator(newsProgress.wrap);
+  form.appendChild(el('div',{class:'flex items-center gap-2'},el('input',{type:'checkbox',id:'pinned',checked:state.isPinned,onchange:e=>{state.isPinned=e.target.checked;draftHandle.schedule()}}),el('label',{for:'pinned',class:'text-sm text-muted'},'Закрепить новость')));
   form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
     el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-news')},'Отмена'),
     el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),editing?'Обновить':'Опубликовать')
   ));
   wrap.appendChild(form);
+  /* Offer restore draft (only for new news) */
+  if(!editing){
+    offerRestoreDraft('news',null,(draft)=>{
+      if(draft.title!==undefined){state.title=draft.title}
+      if(draft.content!==undefined){state.content=draft.content;contentWikiTa.setValue(draft.content||'')}
+      if(draft.excerpt!==undefined){state.excerpt=draft.excerpt}
+      if(draft.category!==undefined){state.category=draft.category}
+      if(draft.isPinned!==undefined){state.isPinned=draft.isPinned}
+      if(draft.turnNumber!==undefined){state.turnNumber=draft.turnNumber}
+      newsProgress.update();
+      /* Re-populate inputs */
+      const inputs=form.querySelectorAll('input.input');
+      if(inputs[0]&&draft.title!==undefined)inputs[0].value=draft.title||'';
+      if(inputs[1]&&draft.turnNumber!==undefined)inputs[1].value=draft.turnNumber||'';
+      if(inputs[2]&&draft.excerpt!==undefined)inputs[2].value=draft.excerpt||'';
+      const chk=form.querySelector('#pinned');
+      if(chk&&draft.isPinned!==undefined)chk.checked=draft.isPinned;
+      toast('Черновик восстановлен','','success');
+    });
+  }
   return wrap;
   async function save(){
     if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
@@ -3979,6 +5035,7 @@ function NewsForm(editing){
       }else{
         await RTDB.push('news',{title:state.title,content:state.content,excerpt:state.excerpt,category:state.category,isPinned:state.isPinned,turnNumber:state.turnNumber?Number(state.turnNumber):null,authorId:App.userProfile.id,authorName:App.userProfile.name});
       }
+      draftHandle.clearOnSuccess();
       toast(editing?'Новость обновлена':'Новость опубликована','','success');
       App.setView('admin-news');
     }catch(e){toast('Ошибка',e.message,'error')}
@@ -4309,15 +5366,22 @@ function BattleDetail(battle){
     const grid=el('div',{class:'stat-grid-2'});
     battle.forces.forEach(force=>{
       const faction=App.cache.factions.find(f=>f.id===force.factionId);
+      // Стандартные юниты (4)
+      const standardUnits=[
+        {key:'infantry',label:'Пехота',icon:'sword'},
+        {key:'archers',label:'Лучники',icon:'users'},
+        {key:'cavalry',label:'Кавалерия',icon:'horse'},
+        {key:'fleet',label:'Флот',icon:'ship'},
+      ].filter(u=>force[u.key]&&force[u.key]>0);
+      // Кастомные юниты
+      const customUnits=(force.customUnits||[]).filter(u=>u.name&&u.name.trim()&&u.count&&u.count>0);
+      const allUnits=[...standardUnits.map(u=>({label:u.label,count:force[u.key],icon:u.icon})),...customUnits.map(u=>({label:u.name,count:u.count,icon:'shield',detail:u.detail}))];
       grid.appendChild(el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)'}},
         el('div',{class:'flex items-center gap-2 mb-3'},el('span',{html:ICONS.flag,style:{color:'var(--accent)',width:'16px',height:'16px'}}),el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},faction?faction.name:'?')),
-        el('p',{class:'text-muted text-xs mb-3'},'Командир: ',el('span',{style:{color:'var(--fg)'}},force.commander||'Не указан')),
-        el('div',{class:'force-grid'},
-          el('div',{class:'force-stat'},el('span',{html:ICONS.sword,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Пехота'),el('div',{class:'force-stat-value'},force.infantry||0))),
-          el('div',{class:'force-stat'},el('span',{html:ICONS.users,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Лучники'),el('div',{class:'force-stat-value'},force.archers||0))),
-          el('div',{class:'force-stat'},el('span',{html:ICONS.horse,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Кавалерия'),el('div',{class:'force-stat-value'},force.cavalry||0))),
-          el('div',{class:'force-stat'},el('span',{html:ICONS.ship,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},'Флот'),el('div',{class:'force-stat-value'},force.fleet||0)))
-        ),
+        el('p',{class:'text-muted text-xs mb-3'},'Командир: ',el('span',{style:{color:'var(--fg)'}},(force.commander&&force.commander.trim().length>=3)?force.commander:'Не указан')),
+        allUnits.length?el('div',{class:'force-grid'},
+          ...allUnits.map(u=>el('div',{class:'force-stat'},el('span',{html:ICONS[u.icon]||ICONS.shield,style:{color:'var(--accent)',width:'14px',height:'14px'}}),el('div',{},el('div',{class:'force-stat-label'},u.label),el('div',{class:'force-stat-value'},u.count),u.detail?el('div',{class:'text-muted',style:{fontSize:'9px',marginTop:'2px'}},u.detail):null)))
+        ):el('p',{class:'text-muted italic text-xs mb-2'},'Силы не указаны'),
         force.special?el('p',{class:'text-muted text-xs mt-2 pt-2',style:{borderTop:'1px solid var(--border)'}},'Особые: '+force.special):null,
         force.description?el('p',{class:'text-xs italic mt-2'},force.description):null
       ));
@@ -4425,30 +5489,163 @@ function BattleEditor(battle){
     })()
   ));
   const forcesList=el('div',{class:'flex flex-col gap-3'});
+  // Дебаунс сохранения
+  const saveTimers={};
+  function debouncedSave(battleId){
+    if(saveTimers[battleId])clearTimeout(saveTimers[battleId]);
+    saveTimers[battleId]=setTimeout(async()=>{
+      try{await RTDB.update('battles/'+battleId,{forces:battle.forces})}catch(e){toast('Ошибка',e.message,'error')}
+    },600);
+  }
   function renderForces(){
     forcesList.innerHTML='';
     if(!battle.forces||battle.forces.length===0){forcesList.appendChild(el('p',{class:'text-muted italic text-xs'},'Силы не добавлены'))}
     (battle.forces||[]).forEach((force,index)=>{
       const faction=App.cache.factions.find(f=>f.id===force.factionId);
+      if(!force.customUnits)force.customUnits=[];
       const item=el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)',padding:'12px'}});
       item.appendChild(el('div',{class:'flex items-center gap-2 mb-3'},
         el('span',{html:ICONS.flag,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
         el('span',{class:'text-sm',style:{fontFamily:'Cinzel,serif',flex:'1'}},faction?faction.name:'?'),
         el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async()=>{
+          const ok=await ConfirmDialog('Удалить фракцию из баталии?','Все данные о её силах будут удалены.','Удалить','Отмена',{danger:true});
+          if(!ok)return;
           battle.forces.splice(index,1);
           battle.participants=(battle.participants||[]).filter(p=>p.factionId!==force.factionId);
-          try{await RTDB.update('battles/'+battle.id,{forces:battle.forces,participants:battle.participants})}catch(e){toast('Ошибка',e.message,'error')}
+          try{await RTDB.update('battles/'+battle.id,{forces:battle.forces,participants:battle.participants});toast('Фракция удалена из баталии')}catch(e){toast('Ошибка',e.message,'error')}
         }},el('span',{html:ICONS.close}))
       ));
-      item.appendChild(el('input',{class:'input mb-2',style:{fontSize:'12px'},placeholder:'Имя командира',value:force.commander||'',oninput:async e=>{force.commander=e.target.value;try{await RTDB.update('battles/'+battle.id,{forces:battle.forces})}catch(err){}}}));
+      // Командир — с минимальной длиной и валидацией
+      const commanderInput=el('input',{class:'input mb-2',style:{fontSize:'13px',minLength:3,maxLength:80},placeholder:'Имя командира (минимум 3 символа)',value:force.commander||''});
+      let commanderTimer=null;
+      commanderInput.oninput=async e=>{
+        const val=e.target.value;
+        force.commander=val;
+        // Показ валидации
+        if(val.trim().length>0&&val.trim().length<3){
+          e.target.style.borderColor='var(--warning)';
+          e.target.title='Минимум 3 символа';
+        }else{
+          e.target.style.borderColor='';
+          e.target.title='';
+        }
+        // Дебаунс сохранения (не сохраняем пока <3 если уже было сохранено)
+        if(commanderTimer)clearTimeout(commanderTimer);
+        commanderTimer=setTimeout(async()=>{
+          // Сохраняем только если пусто или >=3 символов
+          if(val.trim().length===0||val.trim().length>=3){
+            debouncedSave(battle.id);
+          }
+        },800);
+      };
+      commanderInput.onblur=async e=>{
+        const val=e.target.value.trim();
+        // При потере фокуса: если 1-2 символа — очищаем
+        if(val.length>0&&val.length<3){
+          force.commander='';
+          e.target.value='';
+          e.target.style.borderColor='';
+          toast('Слишком короткое имя','Имя командира должно быть минимум 3 символа. Поле очищено.','warning');
+          try{await RTDB.update('battles/'+battle.id,{forces:battle.forces})}catch(err){}
+        }
+      };
+      item.appendChild(commanderInput);
+      // Стандартные юниты
+      const stdLabel=el('div',{class:'label',style:{fontSize:'10px',marginTop:'8px'}},'Стандартные войска');
+      item.appendChild(stdLabel);
       const grid=el('div',{class:'force-grid'});
       [['infantry','Пехота'],['archers','Лучники'],['cavalry','Кавалерия'],['fleet','Флот']].forEach(([k,label])=>{
+        const inp=el('input',{class:'input',type:'number',style:{fontSize:'12px'},min:0,value:force[k]||0});
+        inp.oninput=async e=>{
+          const v=Math.max(0,Number(e.target.value)||0);
+          force[k]=v;
+          debouncedSave(battle.id);
+        };
         grid.appendChild(el('div',{class:'field-group',style:{marginBottom:'0'}},
           el('label',{class:'label',style:{fontSize:'9px'}},label),
-          el('input',{class:'input',type:'number',style:{fontSize:'12px'},value:force[k]||0,oninput:async e=>{force[k]=Number(e.target.value)||0;try{await RTDB.update('battles/'+battle.id,{forces:battle.forces})}catch(err){}}})
+          inp
         ));
       });
       item.appendChild(grid);
+      // Кастомные юниты
+      const customLabel=el('div',{class:'label',style:{fontSize:'10px',marginTop:'12px'}},'Особые отряды ('+force.customUnits.length+')');
+      item.appendChild(customLabel);
+      const customList=el('div',{class:'flex flex-col gap-2',style:{marginTop:'4px'}});
+      function renderCustomUnits(){
+        customList.innerHTML='';
+        if(force.customUnits.length===0){
+          customList.appendChild(el('p',{class:'text-muted italic text-xs',style:{padding:'8px',textAlign:'center',border:'1px dashed var(--border)',borderRadius:'4px'}},'Нет особых отрядов. Добавьте свои типы войск.'));
+        }
+        force.customUnits.forEach((cu,idx)=>{
+          const row=el('div',{class:'flex items-center gap-2',style:{padding:'6px',background:'rgba(10,15,15,0.4)',borderRadius:'4px',border:'1px solid var(--border)'}});
+          const nameInput=el('input',{class:'input',style:{fontSize:'12px',flex:'1',minLength:2,maxLength:50},placeholder:'Название (напр. «Расовые бригады»)',value:cu.name||''});
+          nameInput.oninput=async e=>{
+            const val=e.target.value;
+            cu.name=val;
+            if(val.trim().length>0&&val.trim().length<2){
+              e.target.style.borderColor='var(--warning)';
+            }else{
+              e.target.style.borderColor='';
+            }
+            debouncedSave(battle.id);
+          };
+          nameInput.onblur=async e=>{
+            const val=e.target.value.trim();
+            if(val.length>0&&val.length<2){
+              cu.name='';
+              e.target.value='';
+              e.target.style.borderColor='';
+              toast('Слишком короткое название','Минимум 2 символа. Поле очищено.','warning');
+              debouncedSave(battle.id);
+            }
+          };
+          const countInput=el('input',{class:'input',type:'number',style:{fontSize:'12px',width:'70px',min:0},placeholder:'0',value:cu.count||0});
+          countInput.oninput=async e=>{
+            cu.count=Math.max(0,Number(e.target.value)||0);
+            debouncedSave(battle.id);
+          };
+          const detailInput=el('input',{class:'input',style:{fontSize:'11px',flex:'1',minWidth:'80px',maxLength:100},placeholder:'Детали (опц.)',value:cu.detail||''});
+          detailInput.oninput=async e=>{
+            cu.detail=e.target.value;
+            debouncedSave(battle.id);
+          };
+          const delBtn=el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm text-danger',style:{flexShrink:'0'},onclick:()=>{
+            force.customUnits.splice(idx,1);
+            renderCustomUnits();
+            customLabel.textContent='Особые отряды ('+force.customUnits.length+')';
+            debouncedSave(battle.id);
+          }},el('span',{html:ICONS.trash}));
+          row.appendChild(nameInput);
+          row.appendChild(countInput);
+          row.appendChild(detailInput);
+          row.appendChild(delBtn);
+          customList.appendChild(row);
+        });
+      }
+      renderCustomUnits();
+      item.appendChild(customList);
+      const addCustomBtn=el('button',{type:'button',class:'btn btn-ghost btn-sm',style:{marginTop:'8px',borderStyle:'dashed'},onclick:()=>{
+        force.customUnits.push({name:'',count:0,detail:''});
+        renderCustomUnits();
+        customLabel.textContent='Особые отряды ('+force.customUnits.length+')';
+        // Фокус на новом поле
+        setTimeout(()=>{
+          const last=customList.querySelector('input');
+          if(last)last.focus();
+        },0);
+      }},el('span',{html:ICONS.plus}),'Добавить отряд');
+      item.appendChild(addCustomBtn);
+      // Описание сил
+      const descLabel=el('div',{class:'label',style:{fontSize:'10px',marginTop:'12px'}},'Описание сил (опц.)');
+      item.appendChild(descLabel);
+      const descInput=el('textarea',{class:'textarea',style:{fontSize:'12px',minHeight:'50px'},placeholder:'Например: «1.200 существ, 3 братства авангарда, воздушный флот 200 пегасов»',value:force.description||''});
+      let descTimer=null;
+      descInput.oninput=async e=>{
+        force.description=e.target.value;
+        if(descTimer)clearTimeout(descTimer);
+        descTimer=setTimeout(()=>debouncedSave(battle.id),800);
+      };
+      item.appendChild(descInput);
       forcesList.appendChild(item);
     });
     const approvedFactions=App.cache.factions.filter(f=>f.isApproved&&!(battle.forces||[]).some(fo=>fo.factionId===f.id));
@@ -4458,7 +5655,7 @@ function BattleEditor(battle){
       sel.onchange=async e=>{
         if(e.target.value){
           battle.forces=battle.forces||[];
-          battle.forces.push({factionId:e.target.value,commander:'',infantry:0,archers:0,cavalry:0,fleet:0});
+          battle.forces.push({factionId:e.target.value,commander:'',infantry:0,archers:0,cavalry:0,fleet:0,customUnits:[],description:''});
           battle.participants=battle.participants||[];
           if(!battle.participants.some(p=>p.factionId===e.target.value)){battle.participants.push({factionId:e.target.value,hasPosted:false})}
           try{await RTDB.update('battles/'+battle.id,{forces:battle.forces,participants:battle.participants})}catch(err){toast('Ошибка',err.message,'error')}
@@ -4543,27 +5740,49 @@ function ChronicleForm(viewKey){
   /* Progress bar: 2 обязательных (title, content) */
   const chronProgress=FormProgress(()=>{return (state.title.trim().length>=3?1:0)+(state.content.trim().length>=10?1:0)},()=>2);
   form.appendChild(chronProgress.wrap);
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',oninput:e=>{state.title=e.target.value;chronProgress.update()},required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),el('input',{class:'input',oninput:e=>{state.title=e.target.value;chronProgress.update();draftHandle.schedule()},required:true})));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
     el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
-      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+      (()=>{const sel=el('select',{class:'select',onchange:e=>{state.category=e.target.value;draftHandle.schedule()}});
         [['CHRONICLE','Летопись'],['HISTORY','История'],['EVENT','Событие']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
         return sel;
       })()
     ),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Эпоха'),el('input',{class:'input',placeholder:'I эпоха',oninput:e=>state.era=e.target.value}))
+    el('div',{class:'field-group'},el('label',{class:'label'},'Эпоха'),el('input',{class:'input',placeholder:'I эпоха',oninput:e=>{state.era=e.target.value;draftHandle.schedule()}}))
   ));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),WikiEditor(state.content,v=>{state.content=v;chronProgress.update()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)));
+  const contentField=el('div',{class:'field-group'},el('label',{class:'label'},'Содержание *'),
+    WikiEditor(state.content,v=>{state.content=v;chronProgress.update();draftHandle.schedule()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)
+  );
+  form.appendChild(contentField);
+  /* === Char counter + draft autosave === */
+  const contentWikiTa=contentField.querySelector('.wiki-editor');
+  attachCharCounter(contentWikiTa,20000,contentField);
+  const draftHandle=setupDraftAutosave('chronicle',null,()=>({title:state.title,content:state.content,category:state.category,era:state.era}));
+  draftHandle.attachIndicator(chronProgress.wrap);
   form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
     el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView(viewKey)},'Отмена'),
     el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать')
   ));
   wrap.appendChild(form);
+  /* Offer restore draft */
+  offerRestoreDraft('chronicle',null,(draft)=>{
+    if(draft.title!==undefined){state.title=draft.title}
+    if(draft.content!==undefined){state.content=draft.content;contentWikiTa.setValue(draft.content||'')}
+    if(draft.category!==undefined){state.category=draft.category}
+    if(draft.era!==undefined){state.era=draft.era}
+    chronProgress.update();
+    /* Re-populate title input */
+    const titleInp=form.querySelector('input.input');
+    if(titleInp&&draft.title!==undefined)titleInp.value=draft.title||'';
+    if(draft.era!==undefined){const eraInp=form.querySelectorAll('input.input')[1];if(eraInp)eraInp.value=draft.era||''}
+    toast('Черновик восстановлен','','success');
+  });
   return wrap;
   async function save(){
     if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
     try{
       await RTDB.push('chronicle',{title:state.title,content:state.content,category:state.category,era:state.era,authorId:App.userProfile.id,authorName:App.userProfile.name});
+      draftHandle.clearOnSuccess();
       toast('Статья создана','','success');
       App.setView(viewKey);
     }catch(e){toast('Ошибка',e.message,'error')}
@@ -4645,29 +5864,55 @@ function BestiaryForm(viewKey){
   /* Progress bar: 2 обязательных (name, content) */
   const bestiaryProgress=FormProgress(()=>{return (state.name.trim().length>=2?1:0)+(state.content.trim().length>=10?1:0)},()=>2);
   form.appendChild(bestiaryProgress.wrap);
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',oninput:e=>{state.name=e.target.value;bestiaryProgress.update()},required:true})));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Титул/доп. название'),el('input',{class:'input',oninput:e=>state.title=e.target.value})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',oninput:e=>{state.name=e.target.value;bestiaryProgress.update();draftHandle.schedule()},required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Титул/доп. название'),el('input',{class:'input',oninput:e=>{state.title=e.target.value;draftHandle.schedule()}})));
   form.appendChild(el('div',{class:'stat-grid-3 mb-4'},
     el('div',{class:'field-group'},el('label',{class:'label'},'Категория'),
-      (()=>{const sel=el('select',{class:'select',onchange:e=>state.category=e.target.value});
+      (()=>{const sel=el('select',{class:'select',onchange:e=>{state.category=e.target.value;draftHandle.schedule()}});
         [['CREATURE','Существо'],['FACTION','Фракция'],['PERSON','Персона'],['PLACE','Место']].forEach(([k,l])=>{const opt=el('option',{value:k},l);if(k===state.category)opt.selected=true;sel.appendChild(opt)});
         return sel;
       })()
     ),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Опасность'),el('input',{class:'input',placeholder:'Высокая',oninput:e=>state.danger=e.target.value})),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Среда обитания'),el('input',{class:'input',placeholder:'Леса',oninput:e=>state.habitat=e.target.value}))
+    el('div',{class:'field-group'},el('label',{class:'label'},'Опасность'),el('input',{class:'input',placeholder:'Высокая',oninput:e=>{state.danger=e.target.value;draftHandle.schedule()}})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Среда обитания'),el('input',{class:'input',placeholder:'Леса',oninput:e=>{state.habitat=e.target.value;draftHandle.schedule()}}))
   ));
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание *'),WikiEditor(state.content,v=>{state.content=v;bestiaryProgress.update()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)));
+  const contentField=el('div',{class:'field-group'},el('label',{class:'label'},'Описание *'),
+    WikiEditor(state.content,v=>{state.content=v;bestiaryProgress.update();draftHandle.schedule()},'Вики-разметка поддерживается: # заголовки, **жирный**, :::info блоки, таблицы, спойлеры и др.',200)
+  );
+  form.appendChild(contentField);
+  /* === Char counter + draft autosave === */
+  const contentWikiTa=contentField.querySelector('.wiki-editor');
+  attachCharCounter(contentWikiTa,20000,contentField);
+  const draftHandle=setupDraftAutosave('bestiary',null,()=>({name:state.name,title:state.title,content:state.content,category:state.category,danger:state.danger,habitat:state.habitat}));
+  draftHandle.attachIndicator(bestiaryProgress.wrap);
   form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
     el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView(viewKey)},'Отмена'),
     el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Создать')
   ));
   wrap.appendChild(form);
+  /* Offer restore draft */
+  offerRestoreDraft('bestiary',null,(draft)=>{
+    if(draft.name!==undefined){state.name=draft.name}
+    if(draft.title!==undefined){state.title=draft.title}
+    if(draft.content!==undefined){state.content=draft.content;contentWikiTa.setValue(draft.content||'')}
+    if(draft.category!==undefined){state.category=draft.category}
+    if(draft.danger!==undefined){state.danger=draft.danger}
+    if(draft.habitat!==undefined){state.habitat=draft.habitat}
+    bestiaryProgress.update();
+    /* Re-populate inputs */
+    const inputs=form.querySelectorAll('input.input');
+    if(inputs[0]&&draft.name!==undefined)inputs[0].value=draft.name||'';
+    if(inputs[1]&&draft.title!==undefined)inputs[1].value=draft.title||'';
+    if(inputs[2]&&draft.danger!==undefined)inputs[2].value=draft.danger||'';
+    if(inputs[3]&&draft.habitat!==undefined)inputs[3].value=draft.habitat||'';
+    toast('Черновик восстановлен','','success');
+  });
   return wrap;
   async function save(){
     if(state.name.length<2||state.content.length<10){toast('Ошибка','Заполните поля','error');return}
     try{
       await RTDB.push('bestiary',{name:state.name,title:state.title,content:state.content,category:state.category,danger:state.danger,habitat:state.habitat,authorId:App.userProfile.id,authorName:App.userProfile.name});
+      draftHandle.clearOnSuccess();
       toast('Запись создана','','success');
       App.setView(viewKey);
     }catch(e){toast('Ошибка',e.message,'error')}
@@ -4750,7 +5995,1263 @@ function AdminFactionsView(){
   return wrap;
 }
 
-document.addEventListener('DOMContentLoaded',()=>App.init());
+document.addEventListener('DOMContentLoaded',()=>{
+  App.init();
+  initVisualEffects();
+});
+
+/* ============================================================
+   ВИЗУАЛЬНЫЕ ЭФФЕКТЫ И АНИМАЦИИ
+   ============================================================ */
+function initVisualEffects(){
+  // 1. Cursor glow — подсветка под курсором
+  const glow=document.getElementById('cursor-glow');
+  if(glow){
+    let glowVisible=false;
+    let rafGlow=null;
+    let lastX=0,lastY=0;
+    document.addEventListener('mousemove',e=>{
+      lastX=e.clientX;lastY=e.clientY;
+      if(!glowVisible){glow.classList.add('visible');glowVisible=true}
+      if(!rafGlow){
+        rafGlow=requestAnimationFrame(()=>{
+          glow.style.left=lastX+'px';
+          glow.style.top=lastY+'px';
+          rafGlow=null;
+        });
+      }
+    });
+    document.addEventListener('mouseleave',()=>{glow.classList.remove('visible');glowVisible=false});
+  }
+
+  // 2. Top loader — показывается при загрузке данных
+  // Используется через showTopLoader() / hideTopLoader()
+  window.showTopLoader=()=>{
+    const tl=document.getElementById('top-loader');
+    if(!tl)return;
+    tl.classList.remove('done');
+    tl.classList.add('loading');
+  };
+  window.hideTopLoader=()=>{
+    const tl=document.getElementById('top-loader');
+    if(!tl)return;
+    tl.classList.remove('loading');
+    tl.classList.add('done');
+    setTimeout(()=>{tl.classList.remove('done');tl.style.width='0'},700);
+  };
+
+  // 3. Активация glitch на auth-title (добавляем data-text)
+  const applyGlitch=()=>{
+    document.querySelectorAll('.auth-title').forEach(el=>{
+      if(!el.getAttribute('data-text')){
+        el.setAttribute('data-text',el.textContent);
+      }
+    });
+  };
+  applyGlitch();
+  // Периодически переприменяем (после re-render)
+  setInterval(applyGlitch,1000);
+
+  // 4. Эффект "печати" для подзаголовков (только при первом визите)
+  if(!localStorage.getItem('tersky-seen-typewriter')){
+    setTimeout(()=>{
+      const sub=document.querySelector('.auth-subtitle');
+      if(sub&&!sub.classList.contains('typewriter')){
+        const txt=sub.textContent;
+        sub.textContent='';
+        sub.classList.add('typewriter');
+        let i=0;
+        const typeInt=setInterval(()=>{
+          i++;
+          sub.textContent=txt.slice(0,i);
+          if(i>=txt.length){
+            clearInterval(typeInt);
+            // Убираем каретку через 2 сек
+            setTimeout(()=>{
+              sub.style.borderRight='none';
+              sub.classList.remove('typewriter');
+            },2000);
+            localStorage.setItem('tersky-seen-typewriter','1');
+          }
+        },45);
+      }
+    },800);
+  }
+
+  // 5. Skeleton-эффект для всех картинок — плавное появление
+  document.addEventListener('load',e=>{
+    if(e.target.tagName==='IMG'){
+      e.target.style.opacity='0';
+      requestAnimationFrame(()=>{
+        e.target.style.transition='opacity 0.4s ease';
+        e.target.style.opacity='1';
+      });
+    }
+  },true);
+
+  // 6. Lazy fade-in для всех .card при появлении в viewport
+  if('IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('blur-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+    // Применяем к новым .card при каждом render
+    const observeCards=()=>{
+      document.querySelectorAll('.card:not(.blur-in):not(.card-glow)').forEach(c=>observer.observe(c));
+    };
+    observeCards();
+    setInterval(observeCards,800);
+  }
+
+  // 7. Ripple-эффект на кнопках (как Material Design)
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('.btn');
+    if(!btn)return;
+    const rect=btn.getBoundingClientRect();
+    const ripple=document.createElement('span');
+    const size=Math.max(rect.width,rect.height);
+    ripple.style.cssText=`position:absolute;border-radius:50%;background:rgba(143,191,181,0.3);pointer-events:none;width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;transform:scale(0);opacity:1;transition:transform 0.6s ease-out,opacity 0.6s ease-out`;
+    btn.appendChild(ripple);
+    requestAnimationFrame(()=>{
+      ripple.style.transform='scale(2.5)';
+      ripple.style.opacity='0';
+    });
+    setTimeout(()=>ripple.remove(),600);
+  });
+
+  // 8. Эффект "магнита" для primary-кнопок (cursor притягивается)
+  document.addEventListener('mousemove',e=>{
+    const btn=e.target.closest('.btn-primary');
+    if(!btn)return;
+    const rect=btn.getBoundingClientRect();
+    const x=e.clientX-rect.left-rect.width/2;
+    const y=e.clientY-rect.top-rect.height/2;
+    btn.style.transform=`translate(${x*0.15}px,${y*0.15}px)`;
+  });
+  document.addEventListener('mouseout',e=>{
+    const btn=e.target.closest('.btn-primary');
+    if(btn)btn.style.transform='';
+  });
+  // Сброс при уходе с кнопки
+  document.addEventListener('mouseleave',e=>{
+    const btns=document.querySelectorAll('.btn-primary');
+    btns.forEach(b=>b.style.transform='');
+  });
+
+  // 9. Анимация чисел при появлении (count-up) — для всех элементов с data-count
+  if('IntersectionObserver' in window){
+    const countObs=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const el=entry.target;
+          if(el.dataset.countAnimated)return;
+          el.dataset.countAnimated='1';
+          const target=parseInt(el.getAttribute('data-count'))||0;
+          if(target>0&&typeof countUp==='function'){
+            countUp(el,target,1000);
+          }
+          countObs.unobserve(el);
+        }
+      });
+    },{threshold:0.5});
+    // Наблюдаем за stat-card-value которые не имеют data-count
+    const observeCountTargets=()=>{
+      document.querySelectorAll('.stat-card-value:not([data-count-animated])').forEach(el=>{
+        const num=parseInt(el.textContent.replace(/[^\d-]/g,''));
+        if(num&&!isNaN(num)&&Math.abs(num)<1000000){
+          el.setAttribute('data-count',num);
+          el.textContent='0';
+          countObs.observe(el);
+        }
+      });
+    };
+    observeCountTargets();
+    setInterval(observeCountTargets,1500);
+  }
+
+  // 10. Эффект "дыхания" для логотипа (если на странице)
+  const logos=document.querySelectorAll('.logo-svg');
+  // не трогаем — flicker уже есть
+
+  // 11. Параллакс для скролла (subtle движение фона)
+  let scrollTicking=false;
+  document.addEventListener('scroll',()=>{
+    if(!scrollTicking){
+      requestAnimationFrame(()=>{
+        const y=window.scrollY;
+        const bg=document.querySelector('.parallax-bg');
+        if(bg){
+          bg.style.transform=`translateY(${y*0.15}px)`;
+        }
+        scrollTicking=false;
+      });
+      scrollTicking=true;
+    }
+  },{passive:true});
+
+  // 12. Кнопка "scroll to top" с прогрессом чтения
+  let scrollProgress=document.querySelector('.scroll-progress');
+  if(!scrollProgress){
+    scrollProgress=document.createElement('div');
+    scrollProgress.className='scroll-progress';
+    scrollProgress.style.cssText='position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-light));z-index:9999;width:0;transition:width 0.1s';
+    document.body.appendChild(scrollProgress);
+  }
+  document.addEventListener('scroll',()=>{
+    const sh=document.documentElement.scrollHeight-window.innerHeight;
+    const pct=sh>0?Math.min(100,(window.scrollY/sh)*100):0;
+    scrollProgress.style.width=pct+'%';
+  },{passive:true});
+
+  // 13. Периодическое "мигание" активного nav-item (subtle)
+  // Удаляем чтобы не отвлекало
+
+  // 14. Анимация при появлении новых элементов в DOM (MutationObserver)
+  if('MutationObserver' in window){
+    const mo=new MutationObserver(mutations=>{
+      mutations.forEach(m=>{
+        m.addedNodes.forEach(node=>{
+          if(node.nodeType===1&&node.classList){
+            if(node.classList.contains('list-item')||node.classList.contains('card-hover')){
+              node.style.opacity='0';
+              node.style.transform='translateY(10px)';
+              requestAnimationFrame(()=>{
+                node.style.transition='opacity 0.3s ease,transform 0.3s ease';
+                node.style.opacity='1';
+                node.style.transform='';
+              });
+            }
+          }
+        });
+      });
+    });
+    mo.observe(document.body,{childList:true,subtree:true});
+  }
+}
+
+/* Хелпер: показать toast с анимацией для успеха */
+function successToast(title,desc){
+  toast(title,desc,'success');
+  // Лёгкая вибрация (если поддерживается)
+  if(navigator.vibrate)navigator.vibrate(15);
+}
+
+/* Хелпер: тост-ошибка с эффектом */
+function errorToast(title,desc){
+  toast(title,desc||'','error');
+  if(navigator.vibrate)navigator.vibrate([30,50,30]);
+}
+
+/* =================================================================== */
+/* === TASK 9: NEW FEATURES (notifications, drafts, cmd palette...) == */
+/* =================================================================== */
+
+/* ====== Relative time formatter (5 минут назад, вчера, 3 дня назад) ====== */
+function relativeTime(ts){
+  if(!ts)return '';
+  let t;
+  if(typeof ts==='number')t=ts;
+  else if(typeof ts==='string')t=new Date(ts).getTime();
+  else if(ts instanceof Date)t=ts.getTime();
+  else return '';
+  if(!t||isNaN(t))return '';
+  const diff=Date.now()-t;
+  if(diff<0)return 'только что';
+  const sec=Math.floor(diff/1000);
+  if(sec<60)return 'только что';
+  const min=Math.floor(sec/60);
+  if(min<60)return min+' '+pluralMin(min)+' назад';
+  const hours=Math.floor(min/60);
+  if(hours<24)return hours+' '+pluralHour(hours)+' назад';
+  const days=Math.floor(hours/24);
+  if(days===1)return 'вчера';
+  if(days<7)return days+' '+pluralDay(days)+' назад';
+  if(days<30)return Math.floor(days/7)+' '+pluralWeek(days)+' назад';
+  if(days<365)return Math.floor(days/30)+' мес назад';
+  return Math.floor(days/365)+' г назад';
+}
+function pluralMin(n){return n===1?'минуту':(n>=2&&n<=4?'минуты':'минут')}
+function pluralHour(n){return n===1?'час':(n>=2&&n<=4?'часа':'часов')}
+function pluralDay(n){return n===1?'день':(n>=2&&n<=4?'дня':'дней')}
+function pluralWeek(n){const w=Math.floor(n/7);return w===1?'неделю':(w>=2&&w<=4?'недели':'недель')}
+
+/* Update all [data-reltime] elements every 30s */
+function startRelativeTimeUpdater(){
+  setInterval(()=>{
+    document.querySelectorAll('[data-reltime]').forEach(el=>{
+      const ts=el.getAttribute('data-reltime');
+      const txt=relativeTime(ts);
+      if(txt)el.textContent=txt;
+    });
+  },30000);
+}
+
+/* ====== Notifications (localStorage-based) ====== */
+const NOTIF_TYPES={
+  verdict:{icon:'check',label:'Вердикт'},
+  faction_approved:{icon:'shield',label:'Утверждено'},
+  chat_invite:{icon:'chat',label:'Приглашение'},
+  chat_message:{icon:'chat',label:'Сообщение'},
+  new_post:{icon:'scroll',label:'Новый пост'},
+  news:{icon:'news',label:'Весть'},
+  default:{icon:'bell',label:'Уведомление'},
+};
+function getNotifications(){
+  try{return JSON.parse(localStorage.getItem('tersky-notifications')||'[]')}catch(e){return []}
+}
+function saveNotificationsList(arr){
+  try{localStorage.setItem('tersky-notifications',JSON.stringify(arr.slice(0,200)))}catch(e){}
+}
+function addNotification(type,title,desc,link){
+  const list=getNotifications();
+  /* Dedup: skip if same title+desc added in last 10s */
+  const last=list[0];
+  if(last&&last.title===title&&last.desc===desc&&(Date.now()-last.ts)<10000)return;
+  const notif={
+    id:uid('n'),
+    type:type||'default',
+    title:title||'Уведомление',
+    desc:desc||'',
+    link:link||null,
+    read:false,
+    ts:Date.now(),
+  };
+  list.unshift(notif);
+  saveNotificationsList(list);
+  updateNotifBadge();
+  /* Show toast */
+  toast(title,desc,type==='verdict'||type==='faction_approved'?'success':'info');
+  /* Show native browser notification if tab inactive */
+  showBrowserNotification(title,desc);
+}
+function markAllNotificationsRead(){
+  const list=getNotifications();
+  list.forEach(n=>n.read=true);
+  saveNotificationsList(list);
+  updateNotifBadge();
+  const panel=document.querySelector('.notif-panel');
+  if(panel)renderNotifPanel(panel);
+}
+function markNotificationRead(id){
+  const list=getNotifications();
+  const n=list.find(x=>x.id===id);
+  if(n)n.read=true;
+  saveNotificationsList(list);
+  updateNotifBadge();
+}
+function clearAllNotifications(){
+  saveNotificationsList([]);
+  updateNotifBadge();
+  const panel=document.querySelector('.notif-panel');
+  if(panel)renderNotifPanel(panel);
+}
+function updateNotifBadge(){
+  const badge=document.querySelector('.notif-badge');
+  if(!badge)return;
+  const unread=getNotifications().filter(n=>!n.read).length;
+  if(unread>0){badge.style.display='flex';badge.textContent=unread>99?'99+':String(unread)}
+  else{badge.style.display='none'}
+}
+function renderNotifPanel(panel){
+  panel.innerHTML='';
+  const header=el('div',{class:'notif-panel-header'},
+    el('div',{class:'flex items-center gap-2'},
+      el('span',{html:ICONS.bell,style:{width:'14px',height:'14px',color:'var(--accent)'}}),
+      el('span',{},'Уведомления')
+    ),
+    el('span',{class:'text-muted',style:{fontSize:'10px'}},getNotifications().length+' всего')
+  );
+  panel.appendChild(header);
+  const list=el('div',{class:'notif-panel-list'});
+  const all=getNotifications();
+  if(all.length===0){
+    list.appendChild(el('div',{style:{padding:'24px 16px',textAlign:'center',color:'var(--fg-dim)',fontStyle:'italic',fontSize:'13px'}},'Уведомлений пока нет'));
+  }else{
+    all.slice(0,30).forEach(n=>{
+      const typeInfo=NOTIF_TYPES[n.type]||NOTIF_TYPES.default;
+      const item=el('div',{class:'notif-item'+(n.read?'':' unread'),onclick:()=>{
+        markNotificationRead(n.id);
+        if(n.link){
+          App.setView(n.link.view,n.link.id||null);
+        }
+        const overlay=document.querySelector('.notif-overlay');
+        if(overlay)overlay.remove();
+      }},
+        el('div',{class:'notif-item-icon',html:ICONS[typeInfo.icon]||ICONS.bell}),
+        el('div',{class:'notif-item-body'},
+          el('div',{class:'notif-item-title'},n.title),
+          n.desc?el('div',{class:'notif-item-desc'},n.desc):null,
+          el('div',{class:'notif-item-time','data-reltime':String(n.ts)},relativeTime(n.ts))
+        )
+      );
+      list.appendChild(item);
+    });
+  }
+  panel.appendChild(list);
+  const footer=el('div',{class:'notif-panel-footer'},
+    el('button',{class:'btn btn-ghost btn-sm',onclick:()=>clearAllNotifications()},el('span',{html:ICONS.trash}),'Очистить все'),
+    el('button',{class:'btn btn-primary btn-sm',onclick:()=>markAllNotificationsRead()},el('span',{html:ICONS.check}),'Прочитать все')
+  );
+  panel.appendChild(footer);
+}
+function openNotifPanel(anchorEl){
+  /* Close if open */
+  const existing=document.querySelector('.notif-overlay');
+  if(existing){existing.remove();return}
+  const overlay=el('div',{class:'notif-overlay',style:{position:'fixed',inset:'0',zIndex:'55'}});
+  const panel=el('div',{class:'notif-panel'});
+  renderNotifPanel(panel);
+  /* Position relative to anchorEl */
+  overlay.addEventListener('click',e=>{if(e.target===overlay){overlay.remove()}});
+  /* Append panel to anchor parent (header) for proper positioning */
+  const wrap=anchorEl.parentElement||document.body;
+  wrap.style.position='relative';
+  wrap.appendChild(panel);
+  document.body.appendChild(overlay);
+  /* Escape closes */
+  document.addEventListener('keydown',function esc(e){
+    if(e.key==='Escape'){overlay.remove();panel.remove();document.removeEventListener('keydown',esc)}
+  });
+}
+
+/* ====== Drafts autosave ====== */
+function getDraft(formType,id){
+  const key='tersky-draft-'+formType+'-'+(id||'new');
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    return parsed;
+  }catch(e){return null}
+}
+function saveDraftData(formType,id,data){
+  const key='tersky-draft-'+formType+'-'+(id||'new');
+  try{
+    const payload=Object.assign({},data,{_savedAt:Date.now()});
+    localStorage.setItem(key,JSON.stringify(payload));
+  }catch(e){}
+}
+function clearDraftData(formType,id){
+  const key='tersky-draft-'+formType+'-'+(id||'new');
+  try{localStorage.removeItem(key)}catch(e){}
+}
+function setupDraftAutosave(formType,id,getState){
+  let timer=null;
+  let indicator=null;
+  function save(){
+    const data=getState();
+    saveDraftData(formType,id,data);
+    if(indicator){
+      const t=new Date();
+      const hh=String(t.getHours()).padStart(2,'0');
+      const mm=String(t.getMinutes()).padStart(2,'0');
+      indicator.querySelector('.draft-time').textContent='сохранено в '+hh+':'+mm;
+    }
+  }
+  function schedule(){if(timer)clearTimeout(timer);timer=setTimeout(save,4000)}
+  function attachIndicator(hostEl){
+    if(indicator)indicator.remove();
+    indicator=el('div',{class:'draft-indicator'},
+      el('span',{html:ICONS.history}),
+      el('span',{},'Черновик'),
+      el('span',{class:'draft-time'},'—'),
+      el('button',{type:'button',onclick:()=>{clearDraftData(formType,id);if(indicator)indicator.remove();toast('Черновик очищён','','info')}},'Очистить')
+    );
+    hostEl.appendChild(indicator);
+  }
+  return {
+    schedule,
+    attachIndicator,
+    clearOnSuccess(){clearDraftData(formType,id);if(indicator)indicator.remove()},
+    saveNow:save
+  };
+}
+function offerRestoreDraft(formType,id,applyCb){
+  const draft=getDraft(formType,id);
+  if(!draft||!draft._savedAt)return;
+  const ageMin=Math.floor((Date.now()-draft._savedAt)/60000);
+  if(ageMin>60*24*7)return; /* skip drafts older than 7 days */
+  /* Don't restore if draft is empty (only _savedAt) */
+  const keys=Object.keys(draft).filter(k=>k!=='_savedAt'&&k!=='attachments');
+  const hasContent=keys.some(k=>{
+    const v=draft[k];
+    return v&&((typeof v==='string'&&v.trim())||(Array.isArray(v)&&v.length));
+  });
+  if(!hasContent)return;
+  toast(
+    'Найден несохранённый черновик',
+    'Сохранён '+relativeTime(draft._savedAt)+'. Восстановить?',
+    'info',
+    {label:'Восстановить',ttl:10000,callback:()=>{applyCb(draft)}}
+  );
+}
+
+/* ====== New items highlighting ====== */
+function getLastVisit(collection){
+  try{return Number(localStorage.getItem('tersky-lastvisit-'+collection))||0}catch(e){return 0}
+}
+function setLastVisit(collection,ts){
+  try{localStorage.setItem('tersky-lastvisit-'+collection,String(ts||Date.now()))}catch(e){}
+}
+function isNewItem(item,collection){
+  if(!item||!item.createdAt)return false;
+  const ts=new Date(RTDB.ts(item.createdAt)).getTime();
+  if(!ts)return false;
+  const lv=getLastVisit(collection);
+  if(!lv){/* First ever visit — only mark as new last 24h items */return (Date.now()-ts)<24*60*60*1000}
+  return ts>lv;
+}
+function markCollectionVisited(collection){
+  setLastVisit(collection,Date.now());
+}
+
+/* ====== Bookmarks ====== */
+function getBookmarks(){
+  try{return JSON.parse(localStorage.getItem('tersky-bookmarks')||'[]')}catch(e){return []}
+}
+function isBookmarked(id){
+  if(!id)return false;
+  return getBookmarks().includes(id);
+}
+function toggleBookmark(id){
+  if(!id)return false;
+  const list=getBookmarks();
+  const idx=list.indexOf(id);
+  if(idx>=0)list.splice(idx,1);
+  else list.push(id);
+  try{localStorage.setItem('tersky-bookmarks',JSON.stringify(list))}catch(e){}
+  return idx<0; /* true = added, false = removed */
+}
+
+/* ====== Count-up animation ====== */
+function countUp(el,target,duration=900){
+  if(!el)return;
+  if(typeof target!=='number')target=Number(target)||0;
+  const startTime=performance.now();
+  const ease=t=>1-Math.pow(1-t,3);
+  function step(now){
+    const elapsed=now-startTime;
+    const t=Math.min(elapsed/duration,1);
+    const val=Math.floor(target*ease(t));
+    el.textContent=String(val);
+    if(t<1)requestAnimationFrame(step);
+    else el.textContent=String(target);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ====== Command palette (Ctrl+K) ====== */
+function openCommandPalette(){
+  const existing=document.querySelector('.cmd-overlay');
+  if(existing)existing.remove();
+  const overlay=el('div',{class:'modal-overlay cmd-overlay',style:{background:'rgba(0,0,0,0.55)',alignItems:'flex-start',paddingTop:'12vh'}});
+  const palette=el('div',{class:'cmd-palette'});
+  const inputWrap=el('div',{class:'cmd-input-wrap'},
+    el('span',{html:ICONS.search}),
+  );
+  const input=el('input',{class:'cmd-input',placeholder:'Быстрый поиск и навигация...',autocomplete:'off'});
+  inputWrap.appendChild(input);
+  palette.appendChild(inputWrap);
+  const results=el('div',{class:'cmd-results'});
+  palette.appendChild(results);
+  overlay.appendChild(palette);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+  
+  let activeIdx=0;
+  let currentItems=[];
+  
+  function render(query){
+    results.innerHTML='';
+    const q=query.toLowerCase().trim();
+    const all=buildCommandItems();
+    const filtered=q?all.filter(it=>{
+      return (it.title||'').toLowerCase().includes(q)||(it.desc||'').toLowerCase().includes(q)||(it.keywords||'').toLowerCase().includes(q);
+    }):all.slice(0,12);
+    currentItems=filtered;
+    if(filtered.length===0){
+      results.appendChild(el('div',{class:'cmd-empty'},'Ничего не найдено'));
+      return;
+    }
+    /* group by section */
+    const sections={};
+    filtered.forEach(it=>{
+      const s=it.section||'Разделы';
+      if(!sections[s])sections[s]=[];
+      sections[s].push(it);
+    });
+    let i=0;
+    Object.entries(sections).forEach(([section,items])=>{
+      results.appendChild(el('div',{class:'cmd-section'},section));
+      items.forEach(it=>{
+        const idx=i++;
+        const item=el('div',{class:'cmd-item'+(idx===activeIdx?' active':''),onclick:()=>{executeCmd(it);overlay.remove()}},
+          el('div',{class:'cmd-item-icon',html:ICONS[it.icon]||ICONS.file}),
+          el('div',{class:'cmd-item-body'},
+            el('div',{class:'cmd-item-title'},it.title),
+            it.desc?el('div',{class:'cmd-item-desc'},it.desc):null
+          ),
+          it.shortcut?el('div',{class:'cmd-item-shortcut'},it.shortcut):null
+        );
+        item.addEventListener('mouseenter',()=>{activeIdx=idx;updateActive()});
+        results.appendChild(item);
+      });
+    });
+  }
+  function updateActive(){
+    results.querySelectorAll('.cmd-item').forEach((el,i)=>{
+      el.classList.toggle('active',i===activeIdx);
+    });
+  }
+  input.addEventListener('input',()=>{activeIdx=0;render(input.value)});
+  
+  overlay.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){overlay.remove();return}
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      const items=results.querySelectorAll('.cmd-item');
+      if(items.length===0)return;
+      activeIdx=Math.min(activeIdx+1,items.length-1);
+      updateActive();
+      items[activeIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='ArrowUp'){
+      e.preventDefault();
+      const items=results.querySelectorAll('.cmd-item');
+      if(items.length===0)return;
+      activeIdx=Math.max(activeIdx-1,0);
+      updateActive();
+      items[activeIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='Enter'){
+      e.preventDefault();
+      if(currentItems[activeIdx]){
+        executeCmd(currentItems[activeIdx]);
+        overlay.remove();
+      }
+    }
+  });
+  
+  document.body.appendChild(overlay);
+  setTimeout(()=>input.focus(),50);
+  render('');
+}
+function buildCommandItems(){
+  if(!App.userProfile)return [];
+  const isAdmin=App.userProfile.role==='ADMIN';
+  const items=[
+    {section:'Навигация',title:'Сводка',icon:'dashboard',action:()=>App.setView('dashboard'),shortcut:'g d',keywords:'dashboard главная'},
+    {section:'Навигация',title:'Лента активности',icon:'activity',action:()=>App.setView('activity'),keywords:'activity feed лента'},
+    {section:'Навигация',title:'Моё княжество',icon:'shield',action:()=>App.setView('my-faction'),shortcut:'g f',keywords:'faction княжество'},
+    {section:'Навигация',title:'Мои посты',icon:'scroll',action:()=>App.setView('posts'),shortcut:'g p',keywords:'posts посты'},
+    {section:'Навигация',title:'Переговоры',icon:'chat',action:()=>App.setView('chats'),keywords:'chats переговоры'},
+    {section:'Навигация',title:'Военные дела',icon:'swords',action:()=>App.setView('battles'),keywords:'battles war война'},
+    {section:'Навигация',title:'Вести мира',icon:'news',action:()=>App.setView('news'),shortcut:'g n',keywords:'news вести'},
+    {section:'Навигация',title:'Хроника',icon:'book',action:()=>App.setView('chronicle'),shortcut:'g c',keywords:'chronicle хроника'},
+    {section:'Навигация',title:'Бестиарий',icon:'paw',action:()=>App.setView('bestiary'),shortcut:'g b',keywords:'bestiary бестиарий'},
+    {section:'Навигация',title:'Профиль',icon:'user',action:()=>App.setView('profile'),keywords:'profile профиль'},
+    {section:'Действия',title:'Справка по вики-разметке',icon:'help',action:()=>openWikiHelpModal(),keywords:'wiki help markdown справка разметка'},
+    {section:'Действия',title:'Горячие клавиши',icon:'keyboard',action:()=>openShortcutsModal(),shortcut:'?',keywords:'shortcuts keyboard клавиши справка'},
+    {section:'Действия',title:'Командная палитра',icon:'command',action:()=>openCommandPalette(),shortcut:'Ctrl+K',keywords:'command palette поиск'},
+  ];
+  if(isAdmin){
+    items.push(
+      {section:'Управление',title:'Все посты (вердикты)',icon:'file',action:()=>App.setView('admin-posts'),keywords:'admin posts verdicts вердикты'},
+      {section:'Управление',title:'Фракции',icon:'flag',action:()=>App.setView('admin-factions'),keywords:'admin factions фракции'},
+      {section:'Управление',title:'Игроки',icon:'users',action:()=>App.setView('admin-users'),keywords:'admin users игроки'},
+      {section:'Управление',title:'Новости',icon:'news',action:()=>App.setView('admin-news'),keywords:'admin news новости'},
+      {section:'Управление',title:'Баталии',icon:'swords',action:()=>App.setView('admin-battles'),keywords:'admin battles баталии'},
+    );
+  }
+  /* Search posts */
+  App.cache.posts.slice(0,40).forEach(p=>{
+    items.push({section:'Посты',title:p.title,desc:p.authorName||'',icon:'scroll',action:()=>App.setView(isAdmin?'admin-posts':'posts',p.id),keywords:'post '+p.title});
+  });
+  App.cache.news.slice(0,20).forEach(n=>{
+    items.push({section:'Вести',title:n.title,desc:n.category||'',icon:'news',action:()=>App.setView('news',n.id),keywords:'news '+n.title});
+  });
+  App.cache.chronicle.slice(0,20).forEach(a=>{
+    items.push({section:'Хроника',title:a.title,desc:a.era||'',icon:'book',action:()=>App.setView('chronicle',a.id),keywords:'chronicle '+a.title});
+  });
+  App.cache.bestiary.slice(0,20).forEach(b=>{
+    items.push({section:'Бестиарий',title:b.name,desc:b.title||'',icon:'paw',action:()=>App.setView('bestiary',b.id),keywords:'bestiary '+b.name});
+  });
+  App.cache.factions.filter(f=>f.isApproved).slice(0,20).forEach(f=>{
+    items.push({section:'Фракции',title:f.name,desc:f.motto||'',icon:'shield',action:()=>App.setView('my-faction',f.id),keywords:'faction '+f.name});
+  });
+  return items;
+}
+function executeCmd(item){
+  if(item&&typeof item.action==='function')item.action();
+}
+
+/* ====== Shortcuts help modal ====== */
+function openShortcutsModal(){
+  const modal=el('div',{class:'modal-overlay'});
+  const card=el('div',{class:'card card-glow modal-card',style:{maxWidth:'520px'}});
+  card.appendChild(el('div',{class:'flex justify-between items-center mb-4'},
+    el('div',{class:'flex items-center gap-2'},
+      el('span',{html:ICONS.keyboard,style:{color:'var(--accent)',width:'18px',height:'18px'}}),
+      el('h2',{style:{fontSize:'18px'}},'Горячие клавиши')
+    ),
+    el('button',{class:'btn btn-ghost btn-icon',onclick:()=>modal.remove()},el('span',{html:ICONS.close}))
+  ));
+  const shortcuts=[
+    ['1 — 8','Быстрая навигация по разделам'],
+    ['Ctrl + K','Командная палитра'],
+    ['?','Эта справка'],
+    ['Esc','Закрыть модальное окно'],
+    ['g d','Перейти к Сводке'],
+    ['g p','Перейти к Постам'],
+    ['g f','Перейти к Княжеству'],
+    ['g n','Перейти к Вестям'],
+    ['g c','Перейти к Хронике'],
+    ['g b','Перейти к Бестиарию'],
+    ['g a','Перейти к Ленте'],
+  ];
+  const table=el('table',{class:'help-table'});
+  shortcuts.forEach(([k,d])=>{
+    table.appendChild(el('tr',{},
+      el('td',{class:'help-syntax',style:{width:'140px',fontFamily:'JetBrains Mono, monospace',color:'var(--accent-light)'}},k),
+      el('td',{},d)
+    ));
+  });
+  card.appendChild(table);
+  modal.appendChild(card);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
+  document.addEventListener('keydown',function handler(e){
+    if(e.key==='Escape'){modal.remove();document.removeEventListener('keydown',handler)}
+  });
+  document.body.appendChild(modal);
+}
+
+/* ====== Context menu (right click) ====== */
+function showContextMenu(e,items){
+  e.preventDefault();
+  e.stopPropagation();
+  const existing=document.querySelector('.ctx-menu');
+  if(existing)existing.remove();
+  const menu=el('div',{class:'ctx-menu'});
+  items.forEach(it=>{
+    if(it.divider){
+      menu.appendChild(el('div',{class:'ctx-menu-divider'}));
+    }else{
+      const itemEl=el('div',{class:'ctx-menu-item'+(it.danger?' danger':''),onclick:()=>{menu.remove();it.action&&it.action()}},
+        it.icon?el('span',{html:typeof it.icon==='string'?(ICONS[it.icon]||''):''}):null,
+        el('span',{},it.label)
+      );
+      menu.appendChild(itemEl);
+    }
+  });
+  document.body.appendChild(menu);
+  /* Position */
+  const rect=menu.getBoundingClientRect();
+  const x=Math.min(e.clientX,window.innerWidth-rect.width-8);
+  const y=Math.min(e.clientY,window.innerHeight-rect.height-8);
+  menu.style.left=x+'px';
+  menu.style.top=y+'px';
+  /* Close on click outside (next tick) */
+  setTimeout(()=>{
+    const close=()=>{menu.remove();document.removeEventListener('click',close);document.removeEventListener('contextmenu',close)};
+    document.addEventListener('click',close);
+    document.addEventListener('contextmenu',close);
+  },0);
+}
+
+/* ====== Templates for posts ====== */
+const POST_TEMPLATES=[
+  {key:'diplomacy',title:'Дипломатическая миссия',icon:'handshake',content:'# Дипломатическая миссия\n\n**Княжество:** {название}\n**Ход:** {номер}\n\n## Цель\n\nОпишите цель миссии...\n\n## Ход действий\n\n- Шаг 1\n- Шаг 2\n\n## Ожидаемый итог\n\nОписание результата...'},
+  {key:'war',title:'Военные действия',icon:'swords',content:'# Военные действия\n\n**Место:** {локация}\n**Командир:** {имя}\n\n## Силы сторон\n\n- Наши: ...\n- Противник: ...\n\n## План\n\n1. ...\n2. ...\n\n## Ход битвы\n\nОписание событий...'},
+  {key:'economy',title:'Экономическое предложение',icon:'coins',content:'# Экономическое предложение\n\n**Предмет:** {название}\n\n## Суть\n\nОписание сделки или предложения...\n\n## Условия\n\n- Цена: {солей}\n- Срок: {дней}\n\n## Ожидаемый эффект\n\n- ...'},
+  {key:'religion',title:'Религиозный вопрос',icon:'church',content:'# Религиозный вопрос\n\n**Вероисповедание:** {название}\n\n## Ситуация\n\nОписание текущего положения...\n\n## Запрос\n\nЧто требуется от администратора...'},
+  {key:'free',title:'Свободный пост',icon:'scroll',content:'# {Заголовок}\n\nОпишите действия вашего княжества...'},
+];
+
+/* ====== Browser notifications (Notifications API) ====== */
+function requestBrowserNotifications(){
+  if(!('Notification'in window))return;
+  if(Notification.permission==='default'){
+    setTimeout(()=>{
+      try{Notification.requestPermission()}catch(e){}
+    },8000);
+  }
+}
+function showBrowserNotification(title,body){
+  if(!('Notification'in window))return;
+  if(Notification.permission!=='granted')return;
+  if(!document.hidden)return; /* only when tab inactive */
+  try{
+    const iconSvg='<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#0a0f0f"/><circle cx="50" cy="50" r="32" stroke="#3a7d74" stroke-width="2" fill="none"/><line x1="50" y1="38" x2="50" y2="70" stroke="#e8f0ed" stroke-width="3"/></svg>';
+    const n=new Notification('Терский Мир — '+(title||'Уведомление'),{
+      body:body||'',
+      icon:'data:image/svg+xml;utf8,'+encodeURIComponent(iconSvg),
+      tag:'tersky-mir',
+    });
+    n.onclick=()=>{window.focus();n.close()};
+  }catch(e){}
+}
+
+/* ====== Char counter (attaches to textarea or WikiEditor) ====== */
+function attachCharCounter(textareaOrWiki,maxLen,hostEl){
+  if(!textareaOrWiki||!hostEl)return null;
+  const counter=el('div',{class:'char-counter'});
+  const leftSpan=el('span',{class:'char-count'},'0 символов');
+  const rightSpan=el('span',{class:'char-status'},'');
+  counter.appendChild(leftSpan);
+  counter.appendChild(rightSpan);
+  hostEl.appendChild(counter);
+  function getValue(){
+    if(textareaOrWiki._wikiTextarea)return textareaOrWiki._wikiTextarea.value||'';
+    return textareaOrWiki.value||'';
+  }
+  function update(){
+    const v=getValue();
+    const len=v.length;
+    leftSpan.textContent=len+' '+pluralChars(len);
+    counter.classList.toggle('over',maxLen&&len>maxLen);
+    counter.classList.toggle('filled',len>0&&!((maxLen&&len>maxLen)));
+    if(maxLen){
+      const left=maxLen-len;
+      rightSpan.textContent=left>0?(left+' осталось'):(Math.abs(left)+' лишних');
+    }else{
+      rightSpan.textContent=len>0?'заполнено':'';
+    }
+  }
+  if(textareaOrWiki._wikiTextarea){
+    textareaOrWiki._wikiTextarea.addEventListener('input',update);
+  }else{
+    textareaOrWiki.addEventListener('input',update);
+  }
+  update();
+  return {update};
+}
+function pluralChars(n){
+  const mod10=n%10,mod100=n%100;
+  if(mod10===1&&mod100!==11)return 'символ';
+  if(mod10>=2&&mod10<=4&&(mod100<10||mod100>=20))return 'символа';
+  return 'символов';
+}
+
+/* ====== Reactions on posts ====== */
+const POST_REACTIONS=[
+  {key:'approve',label:'Одобряю',icon:'thumbsUp'},
+  {key:'agree',label:'Согласен',icon:'check'},
+  {key:'object',label:'Возражаю',icon:'thumbsDown'},
+  {key:'interest',label:'Интересно',icon:'star'},
+];
+async function toggleReaction(postId,reactionKey){
+  const post=App.cache.posts.find(p=>p.id===postId);
+  if(!post)return;
+  const reactions=Object.assign({},post.reactions||{});
+  const userId=App.userProfile.id;
+  if(reactions[userId]===reactionKey){
+    delete reactions[userId];
+  }else{
+    reactions[userId]=reactionKey;
+  }
+  try{
+    await RTDB.update('posts/'+postId,{reactions});
+  }catch(e){toast('Ошибка',e.message,'error')}
+}
+function countReactions(reactions){
+  if(!reactions)return {};
+  const counts={};
+  Object.values(reactions).forEach(r=>{counts[r]=(counts[r]||0)+1});
+  return counts;
+}
+
+/* ====== Sparkline (mini chart for faction recentChanges) ====== */
+function buildSparkline(recentChanges){
+  /* Generate small SVG sparkline from recentChanges deltas */
+  if(!Array.isArray(recentChanges)||recentChanges.length===0)return '';
+  const sorted=recentChanges.slice().sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+  const points=sorted.map(c=>Number(c.delta)||0);
+  if(points.length===0)return '';
+  /* Compute cumulative */
+  let cum=0;
+  const cumPoints=points.map(p=>{cum+=p;return cum});
+  const min=Math.min(...cumPoints,0);
+  const max=Math.max(...cumPoints,0);
+  const range=Math.max(1,max-min);
+  const w=60,h=18;
+  const stepX=cumPoints.length>1?w/(cumPoints.length-1):0;
+  const path=cumPoints.map((v,i)=>{
+    const x=i*stepX;
+    const y=h-((v-min)/range)*h;
+    return (i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+  }).join(' ');
+  const lastDelta=cumPoints[cumPoints.length-1];
+  const cls=lastDelta>0?'up':(lastDelta<0?'down':'');
+  return '<svg class="sparkline '+cls+'" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><path d="'+path+'"/></svg>';
+}
+
+/* ====== Breadcrumbs builder ====== */
+function buildBreadcrumbs(){
+  const view=App.view;
+  const id=App.selectedId;
+  const isAdmin=App.userProfile&&App.userProfile.role==='ADMIN';
+  const crumbs=[];
+  /* Always start with main section */
+  function add(label,viewKey,idKey){
+    const isCurrent=arguments.length===1;
+    if(isCurrent){
+      crumbs.push({label,current:true});
+    }else{
+      crumbs.push({label,view:viewKey,id:idKey});
+    }
+  }
+  /* Section + current */
+  const labels={
+    'dashboard':'Сводка','activity':'Лента','profile':'Профиль','my-faction':'Княжество',
+    'posts':'Посты','chats':'Переговоры','battles':'Военные дела','news':'Вести','chronicle':'Хроника',
+    'bestiary':'Бестиарий','bookmarks':'Закладки',
+    'admin-users':'Игроки','admin-profile-requests':'Запросы профилей','admin-factions':'Фракции',
+    'admin-posts':'Все посты','admin-news':'Новости','admin-chats':'Чаты','admin-battles':'Баталии',
+    'admin-chronicle':'Хроника','admin-bestiary':'Бестиарий'
+  };
+  /* Admin prefix */
+  if(view.startsWith('admin-')){
+    crumbs.push({label:'Управление',view:'admin-users'});
+  }
+  /* Main section */
+  if(labels[view]){
+    /* If detail page, add section link + item name */
+    let foundName=null;
+    if(id&&id!=='__new__'){
+      /* Try to find item name */
+      if(view==='posts'||view==='admin-posts'){
+        const p=App.cache.posts.find(x=>x.id===id);
+        if(p)foundName=p.title;
+      }else if(view==='news'||view==='admin-news'){
+        const n=App.cache.news.find(x=>x.id===id);
+        if(n)foundName=n.title;
+      }else if(view==='chronicle'||view==='admin-chronicle'){
+        const a=App.cache.chronicle.find(x=>x.id===id);
+        if(a)foundName=a.title;
+      }else if(view==='bestiary'||view==='admin-bestiary'){
+        const b=App.cache.bestiary.find(x=>x.id===id);
+        if(b)foundName=b.name;
+      }else if(view==='my-faction'){
+        const f=App.cache.factions.find(x=>x.id===id);
+        if(f)foundName=f.name;
+      }else if(view==='chats'||view==='admin-chats'){
+        const c=App.cache.chats.find(x=>x.id===id);
+        if(c)foundName=c.name;
+      }else if(view==='battles'||view==='admin-battles'){
+        const b=App.cache.battles.find(x=>x.id===id);
+        if(b)foundName=b.name;
+      }
+    }
+    if(foundName){
+      crumbs.push({label:labels[view],view,id:null});
+      crumbs.push({label:foundName,current:true});
+    }else if(id==='__new__'){
+      crumbs.push({label:labels[view],view,id:null});
+      crumbs.push({label:'Создание',current:true});
+    }else{
+      crumbs.push({label:labels[view],current:true});
+    }
+  }else{
+    crumbs.push({label:'Сводка',current:true});
+  }
+  return crumbs;
+}
+
+/* ====== PWA manifest (inline JSON via data URI) ====== */
+function injectPWAManifest(){
+  if(document.querySelector('link[rel="manifest"]'))return;
+  const manifest={
+    name:'Терский Мир — РВПИ',
+    short_name:'Терский Мир',
+    description:'Ролевая-Военно-Политическая Игра «Терский Мир»',
+    start_url:'./tersky-mir.html',
+    display:'standalone',
+    background_color:'#0a0f0f',
+    theme_color:'#0a0f0f',
+    icons:[
+      {src:'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#0a0f0f"/><circle cx="50" cy="50" r="32" stroke="#3a7d74" stroke-width="3" fill="none"/><line x1="50" y1="38" x2="50" y2="70" stroke="#e8f0ed" stroke-width="4"/></svg>'),sizes:'192x192',type:'image/svg+xml'},
+      {src:'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#0a0f0f"/><circle cx="50" cy="50" r="32" stroke="#3a7d74" stroke-width="3" fill="none"/><line x1="50" y1="38" x2="50" y2="70" stroke="#e8f0ed" stroke-width="4"/></svg>'),sizes:'512x512',type:'image/svg+xml'}
+    ]
+  };
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('link');
+  link.rel='manifest';
+  link.href=url;
+  document.head.appendChild(link);
+}
+
+/* ====== Fullscreen toggle ====== */
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    if(document.documentElement.requestFullscreen){
+      document.documentElement.requestFullscreen().catch(()=>{});
+    }
+  }else{
+    if(document.exitFullscreen){
+      document.exitFullscreen().catch(()=>{});
+    }
+  }
+}
+
+/* ====== Global card context menu (right-click on .card with data-ctx) ====== */
+function setupCardContextMenus(){
+  document.addEventListener('contextmenu',e=>{
+    /* Allow default on inputs/textareas (for cut/copy/paste context) */
+    const tag=(e.target&&e.target.tagName)||'';
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(e.target&&e.target.isContentEditable))return;
+    const card=e.target.closest('[data-ctx-type]');
+    if(!card)return;
+    e.preventDefault();
+    const type=card.getAttribute('data-ctx-type');
+    const id=card.getAttribute('data-ctx-id');
+    if(!type||!id)return;
+    const items=buildCardContextMenu(type,id);
+    if(items.length>0){
+      showContextMenu(e,items);
+    }
+  });
+}
+function buildCardContextMenu(type,id){
+  const u=App.userProfile;
+  const isAdmin=u&&u.role==='ADMIN';
+  const items=[];
+  items.push({label:'Открыть',icon:'eye',action:()=>navigateToItem(type,id)});
+  items.push({label:'Копировать ссылку',icon:'link',action:async()=>{
+    try{
+      await copyToClipboard(buildShareLink(type,id));
+      toast('Ссылка скопирована','','success');
+    }catch(err){toast('Ошибка','Не удалось скопировать','error')}
+  }});
+  items.push({label:'Поделиться',icon:'share',action:async()=>{
+    try{
+      if(navigator.share){
+        await navigator.share({title:'Терский Мир',url:buildShareLink(type,id)});
+      }else{
+        await copyToClipboard(buildShareLink(type,id));
+        toast('Ссылка скопирована','','success');
+      }
+    }catch(err){}
+  }});
+  items.push({divider:true});
+  /* Bookmark toggle */
+  const bookmarked=isBookmarked(id);
+  items.push({label:bookmarked?'Убрать закладку':'В закладки',icon:'bookmark',action:()=>{
+    const added=toggleBookmark(id);
+    toast(added?'Добавлено в закладки':'Убрано из закладок','','info');
+    App.render();
+  }});
+  if(isAdmin){
+    items.push({divider:true});
+    items.push({label:'Удалить',icon:'trash',danger:true,action:async()=>{
+      const ok=await ConfirmDialog('Удалить элемент?','Действие необратимо.','Удалить','Отмена',{danger:true});
+      if(!ok)return;
+      const colMap={post:'posts',news:'news',chronicle:'chronicle',bestiary:'bestiary',faction:'factions'};
+      const col=colMap[type];
+      if(col){
+        try{await RTDB.remove(col+'/'+id);toast('Удалено')}catch(e){toast('Ошибка',e.message,'error')}
+      }
+    }});
+  }
+  return items;
+}
+function navigateToItem(type,id){
+  const isAdmin=App.userProfile&&App.userProfile.role==='ADMIN';
+  const map={
+    post:isAdmin?'admin-posts':'posts',
+    news:'news',chronicle:'chronicle',bestiary:'bestiary',faction:'my-faction'
+  };
+  const v=map[type];
+  if(v)App.setView(v,id);
+}
+function buildShareLink(type,id){
+  const base=window.location.href.split('#')[0];
+  return base+'#'+type+'/'+id;
+}
+function handleHashNavigation(){
+  if(!window.location.hash)return false;
+  const m=window.location.hash.match(/^#(post|news|chronicle|bestiary|faction)\/(.+)$/);
+  if(!m)return false;
+  const type=m[1];
+  const id=decodeURIComponent(m[2]);
+  navigateToItem(type,id);
+  /* Clear hash so refresh doesn't re-trigger */
+  history.replaceState(null,'',window.location.pathname+window.location.search);
+  return true;
+}
+
+/* ====== Hotkey hint (first visit only) ====== */
+function showHotkeyHintOnce(){
+  try{
+    if(localStorage.getItem('tersky-hotkey-hint-shown'))return;
+  }catch(e){return}
+  setTimeout(()=>{
+    const hint=el('div',{class:'hotkey-hint'},
+      el('span',{},'Нажмите'),
+      el('kbd',{},'Ctrl + K'),
+      el('span',{},'для быстрого поиска'),
+      el('button',{class:'btn btn-ghost btn-sm',style:{padding:'2px 6px',fontSize:'10px'},onclick:()=>{hint.remove()}},el('span',{html:ICONS.close,style:{width:'10px',height:'10px'}}))
+    );
+    document.body.appendChild(hint);
+    setTimeout(()=>{if(hint&&hint.parentNode)hint.remove()},6000);
+    try{localStorage.setItem('tersky-hotkey-hint-shown','1')}catch(e){}
+  },3000);
+}
+
+/* ====== Extended hotkeys (Ctrl+K, g+letter, ?, etc.) ====== */
+let gKeyPressed=false;
+let gKeyTimer=null;
+function setupExtendedHotkeys(){
+  document.addEventListener('keydown',e=>{
+    if(!App.currentUser)return;
+    const tag=(e.target&&e.target.tagName)||'';
+    const inField=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(e.target&&e.target.isContentEditable);
+    /* Ctrl+K or Cmd+K — command palette */
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+      e.preventDefault();
+      openCommandPalette();
+      return false;
+    }
+    /* ? — shortcuts modal (when not in field) */
+    if(!inField&&e.key==='?'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+      e.preventDefault();
+      openShortcutsModal();
+      return false;
+    }
+    if(inField)return;
+    /* g + letter sequence (vim-style) */
+    if(e.key.toLowerCase()==='g'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+      gKeyPressed=true;
+      if(gKeyTimer)clearTimeout(gKeyTimer);
+      gKeyTimer=setTimeout(()=>{gKeyPressed=false},1200);
+      e.preventDefault();
+      return false;
+    }
+    if(gKeyPressed){
+      const map={d:'dashboard',p:'posts',f:'my-faction',n:'news',c:'chronicle',b:'bestiary',a:'activity',h:'chats',m:'profile',u:'admin-users',e:'admin-factions'};
+      const v=map[e.key.toLowerCase()];
+      if(v){
+        e.preventDefault();
+        App.setView(v);
+        gKeyPressed=false;
+        if(gKeyTimer)clearTimeout(gKeyTimer);
+        return false;
+      }
+    }
+  });
+}
+
+/* ====== Notifications: detect new items + create notifications ====== */
+const _seenItems={}; /* in-memory: track previously seen items */
+function detectNewItemsAndNotify(){
+  if(!App.userProfile)return;
+  /* Track posts */
+  const newPosts=App.cache.posts.filter(p=>{
+    const id=p.id;
+    if(_seenItems['post_'+id]||!p.createdAt)return false;
+    /* Only notify if created in last hour */
+    const ts=new Date(RTDB.ts(p.createdAt)).getTime();
+    if(Date.now()-ts>60*60*1000)return false;
+    return true;
+  });
+  /* Initialize seen on first call */
+  if(!_seenItems._initialized){
+    App.cache.posts.forEach(p=>{_seenItems['post_'+p.id]=true});
+    App.cache.news.forEach(n=>{_seenItems['news_'+n.id]=true});
+    _seenItems._initialized=true;
+    return;
+  }
+  /* Notify about new posts (admin: any; player: only their own with verdict) */
+  const isAdmin=App.userProfile.role==='ADMIN';
+  newPosts.forEach(p=>{
+    _seenItems['post_'+p.id]=true;
+    if(isAdmin){
+      addNotification('new_post','Новый пост от '+(p.authorName||'игрока'),p.title,{view:isAdmin?'admin-posts':'posts',id:p.id});
+    }else if(p.authorId===App.userProfile.id&&p.status==='VERDICTED'&&p.verdict){
+      /* Notify player that their post got a verdict */
+      addNotification('verdict','Вынесен вердикт',p.title,{view:'posts',id:p.id});
+    }
+  });
+  /* Track news */
+  const newNews=App.cache.news.filter(n=>{
+    if(_seenItems['news_'+n.id]||!n.createdAt)return false;
+    const ts=new Date(RTDB.ts(n.createdAt)).getTime();
+    if(Date.now()-ts>60*60*1000)return false;
+    return true;
+  });
+  newNews.forEach(n=>{
+    _seenItems['news_'+n.id]=true;
+    if(!isAdmin){addNotification('news','Новая весть мира',n.title,{view:'news',id:n.id})}
+  });
+  /* Track faction approvals */
+  App.cache.factions.forEach(f=>{
+    const key='faction_'+f.id+'_approved';
+    if(f.isApproved&&!_seenItems[key]&&f.userId===App.userProfile.id){
+      _seenItems[key]=true;
+      addNotification('faction_approved','Княжество утверждено',f.name,{view:'my-faction',id:f.id});
+    }
+  });
+}
+
+/* ====== Skeleton list helpers (used by views) ====== */
+function SkeletonListItem(){
+  return el('div',{class:'skeleton-list-item'},
+    el('div',{class:'skeleton-avatar'}),
+    el('div',{class:'skeleton-lines'},
+      el('div',{class:'skeleton-line',style:{width:'40%'}}),
+      el('div',{class:'skeleton-line short'}),
+      el('div',{class:'skeleton-line tiny'})
+    )
+  );
+}
+function SkeletonList(count=3){
+  const w=el('div',{});
+  for(let i=0;i<count;i++)w.appendChild(SkeletonListItem());
+  return w;
+}
+
+/* ====== Bookmarks view ====== */
+function BookmarksView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Закладки','Сохранённые посты, вести, статьи'));
+  const ids=getBookmarks();
+  if(ids.length===0){
+    wrap.appendChild(EmptyState('bookmark','Закладок нет','Нажимайте на иконку закладки в карточках, чтобы сохранить элементы'));
+    return wrap;
+  }
+  const all=[];
+  App.cache.posts.forEach(p=>{if(ids.includes(p.id))all.push({type:'post',id:p.id,title:p.title,desc:p.authorName||'',icon:'scroll',view:App.userProfile.role==='ADMIN'?'admin-posts':'posts'})});
+  App.cache.news.forEach(n=>{if(ids.includes(n.id))all.push({type:'news',id:n.id,title:n.title,desc:n.category||'',icon:'news',view:'news'})});
+  App.cache.chronicle.forEach(a=>{if(ids.includes(a.id))all.push({type:'chronicle',id:a.id,title:a.title,desc:a.era||'',icon:'book',view:'chronicle'})});
+  App.cache.bestiary.forEach(b=>{if(ids.includes(b.id))all.push({type:'bestiary',id:b.id,title:b.name,desc:b.title||'',icon:'paw',view:'bestiary'})});
+  if(all.length===0){
+    wrap.appendChild(EmptyState('bookmark','Элементы недоступны','Возможно, они были удалены'));
+    return wrap;
+  }
+  const listHolder=el('div',{class:'flex flex-col gap-2'});
+  all.forEach((item,idx)=>{
+    const card=el('div',{class:'card card-hover staggered-item',style:{position:'relative',animationDelay:(idx*40)+'ms'},'data-ctx-type':item.type,'data-ctx-id':item.id,onclick:()=>App.setView(item.view,item.id)},
+      el('div',{class:'bookmark-btn active','data-tooltip':'Убрать закладку',onclick:async (e)=>{
+        e.stopPropagation();
+        toggleBookmark(item.id);
+        toast('Закладка убрана','','info');
+        App.render();
+      }},el('span',{html:ICONS.bookmarkFilled})),
+      el('div',{class:'list-item-row'},
+        el('div',{class:'list-item-icon',html:ICONS[item.icon]||ICONS.file}),
+        el('div',{class:'flex-1 min-w-0'},
+          el('span',{class:'badge'},item.type),
+          el('div',{class:'text-sm',style:{fontFamily:'Cinzel,serif',fontWeight:'600',marginTop:'4px'}},item.title),
+          item.desc?el('p',{class:'text-muted text-xs mt-1'},item.desc):null
+        )
+      )
+    );
+    listHolder.appendChild(card);
+  });
+  wrap.appendChild(listHolder);
+  return wrap;
+}
 </script>
 </body>
 </html>
