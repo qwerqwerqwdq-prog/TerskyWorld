@@ -11,6 +11,9 @@
 <meta name="distribution" content="private">
 <meta name="theme-color" content="#0a0f0f">
 <meta name="description" content="Ролевая-Военно-Политическая Игра «Терский Мир»">
+<!-- === Task 12 enhancement: inline SVG favicon (герб сайта) === -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%233a7d74' stop-opacity='0.8'/%3E%3Cstop offset='100%25' stop-color='%230a0f0f' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='%230a0f0f'/%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23g)'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%233a7d74' stroke-width='1.5' fill='none' opacity='0.7'/%3E%3Cg stroke='%23e8f0ed' stroke-width='2.5' stroke-linecap='round' fill='none'%3E%3Cline x1='35' y1='38' x2='65' y2='38'/%3E%3Cline x1='50' y1='38' x2='50' y2='70'/%3E%3Cline x1='40' y1='44' x2='50' y2='44'/%3E%3Cline x1='60' y1='44' x2='50' y2='44'/%3E%3Cline x1='46' y1='70' x2='54' y2='70'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0f0f'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%233a7d74' stroke-width='2' fill='none'/%3E%3Cg stroke='%23e8f0ed' stroke-width='3' stroke-linecap='round' fill='none'%3E%3Cline x1='35' y1='38' x2='65' y2='38'/%3E%3Cline x1='50' y1='38' x2='50' y2='70'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -172,7 +175,7 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 @media(max-width:560px){.stat-grid-2,.stat-grid-3,.stat-grid-4,.force-grid{grid-template-columns:1fr!important}}
 .menu-toggle{display:none}
 .flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.p-4{padding:16px}.p-6{padding:24px}.text-sm{font-size:14px}.text-xs{font-size:12px}.text-muted{color:var(--fg-muted)}.text-accent{color:var(--accent-light)}.text-danger{color:var(--danger)}.text-warning{color:var(--warning)}.text-success{color:var(--success)}.text-center{text-align:center}.italic{font-style:italic}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.05em}.flex-1{flex:1}.min-w-0{min-width:0}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flex-wrap{flex-wrap:wrap}.hidden{display:none!important}.w-full{width:100%}.text-glow{text-shadow:0 0 8px rgba(58,125,116,0.4)}
-.markdown h1{font-size:22px;margin:16px 0 8px}.markdown h2{font-size:18px;margin:16px 0 8px}.markdown h3{font-size:16px;margin:12px 0 6px}.markdown p{margin-bottom:12px;line-height:1.6}.markdown ul,.markdown ol{margin:8px 0 12px 20px}.markdown li{margin-bottom:4px}.markdown blockquote{border-left:2px solid var(--accent);padding-left:16px;font-style:italic;color:var(--fg-muted);margin:12px 0}.markdown code{background:rgba(24,33,31,0.6);padding:2px 6px;border-radius:3px;color:var(--accent-light);font-family:monospace}.markdown strong{color:var(--accent-light)}.markdown em{color:var(--accent-light);opacity:0.8}.markdown hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.markdown h1{font-size:18px;margin:14px 0 6px;letter-spacing:0.02em;opacity:0.95}.markdown h2{font-size:16px;margin:12px 0 6px;letter-spacing:0.02em;opacity:0.92}.markdown h3{font-size:15px;margin:10px 0 4px;letter-spacing:0.02em;opacity:0.9}.markdown h4{font-size:14px;margin:10px 0 4px;opacity:0.88}.markdown p{margin-bottom:12px;line-height:1.6}.markdown ul,.markdown ol{margin:8px 0 12px 20px}.markdown li{margin-bottom:4px}.markdown blockquote{border-left:2px solid var(--accent);padding-left:16px;font-style:italic;color:var(--fg-muted);margin:12px 0}.markdown code{background:rgba(24,33,31,0.6);padding:2px 6px;border-radius:3px;color:var(--accent-light);font-family:monospace}.markdown strong{color:var(--accent-light)}.markdown em{color:var(--accent-light);opacity:0.8}.markdown hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 
 /* === Sidebar: search input === */
 .sidebar-search{position:relative;margin-bottom:12px}
@@ -643,114 +646,34 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
    НОВЫЕ ЭФФЕКТЫ И АНИМАЦИИ
    ============================================================ */
 
-/* 1. Глитч-эффект на заголовке "ТЕРСКИЙ МИР" в auth */
+/* 1. Глитч-эффект на заголовке "ТЕРСКИЙ МИР" в auth — ОТКЛЮЧЕНО (лагает) */
 @keyframes glitchShift{
   0%,100%{transform:translate(0)}
-  20%{transform:translate(-1px,1px)}
-  40%{transform:translate(-1px,-1px)}
-  60%{transform:translate(1px,1px)}
-  80%{transform:translate(1px,-1px)}
 }
 .auth-title{position:relative}
-.auth-title::before,.auth-title::after{
-  content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;
-  background:var(--bg);overflow:hidden;
-}
-.auth-title::before{
-  color:var(--accent);clip-path:inset(0 0 60% 0);
-  animation:glitchShift 3.5s infinite linear alternate-reverse;
-  opacity:0.7;mix-blend-mode:screen;
-}
-.auth-title::after{
-  color:#c44d4d;clip-path:inset(60% 0 0 0);
-  animation:glitchShift 2.7s infinite linear alternate-reverse;
-  opacity:0.5;mix-blend-mode:screen;
-}
+/* Глитч ::before/::after убран для производительности */
 
-/* 2. Анимированный градиент-бордер для важных карточек */
-@keyframes borderFlow{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
+/* 2. Анимированный градиент-бордер — упрощён (без бесконечной анимации) */
 .animated-border{
   position:relative;background:rgba(17,24,26,0.6);border-radius:8px;
-}
-.animated-border::before{
-  content:'';position:absolute;inset:0;border-radius:8px;padding:1px;
-  background:linear-gradient(120deg,var(--accent),var(--accent-light),var(--accent),#5dba84,var(--accent));
-  background-size:300% 100%;animation:borderFlow 4s linear infinite;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  pointer-events:none;
+  border:1px solid rgba(58,125,116,0.5);
 }
 
-/* 3. Свечение для primary кнопок при hover */
-@keyframes glowPulse{
-  0%,100%{box-shadow:0 0 12px rgba(58,125,116,0.3),0 0 24px rgba(58,125,116,0.12)}
-  50%{box-shadow:0 0 18px rgba(58,125,116,0.5),0 0 36px rgba(58,125,116,0.2)}
-}
-.btn-primary:hover{animation:glowPulse 1.5s ease-in-out infinite}
+/* 3. Свечение для primary кнопок при hover — ОТКЛЮЧЕНО (бесконечная анимация лагает) */
+.btn-primary:hover{box-shadow:0 0 12px rgba(58,125,116,0.4),0 0 24px rgba(58,125,116,0.15)}
 
-/* 4. Эффект "отблеска" на кнопках (sweep) */
-@keyframes sweep{
-  0%{transform:translateX(-100%)}
-  100%{transform:translateX(200%)}
-}
+/* 4. Эффект "отблеска" на кнопках (sweep) — ОТКЛЮЧЕНО (создаёт ::after на каждой кнопке) */
 .btn{position:relative;overflow:hidden}
-.btn::after{
-  content:'';position:absolute;top:0;left:0;width:30%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
-  transform:translateX(-100%);pointer-events:none;
-}
-.btn:hover::after{animation:sweep 0.7s ease-out}
 
-/* 5. Лёгкая "дрожь" иконок при hover */
-@keyframes wiggle{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-4deg)}
-  75%{transform:rotate(4deg)}
-}
-.nav-item:hover .nav-icon,.list-item:hover .list-item-icon{
-  animation:wiggle 0.4s ease-in-out;
-}
+/* 5. Лёгкая "дрожь" иконок при hover — ОТКЛЮЧЕНО (может лагать на слабых устройствах) */
+@keyframes wiggle{0%,100%{}}
 
-/* 6. Параллакс-фон с медленно движущимися пятнами */
-.parallax-bg{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
-}
-.parallax-bg::before,.parallax-bg::after{
-  content:'';position:absolute;border-radius:50%;filter:blur(80px);opacity:0.3;
-}
-.parallax-bg::before{
-  width:500px;height:500px;background:var(--accent);top:-100px;left:-100px;
-  animation:floatBlob1 22s ease-in-out infinite;
-}
-.parallax-bg::after{
-  width:600px;height:600px;background:var(--secondary);bottom:-150px;right:-150px;
-  animation:floatBlob2 28s ease-in-out infinite;
-}
-@keyframes floatBlob1{
-  0%,100%{transform:translate(0,0) scale(1)}
-  33%{transform:translate(120px,80px) scale(1.1)}
-  66%{transform:translate(60px,-60px) scale(0.95)}
-}
-@keyframes floatBlob2{
-  0%,100%{transform:translate(0,0) scale(1)}
-  50%{transform:translate(-100px,-80px) scale(1.15)}
-}
+/* 6. Параллакс-фон — ОТКЛЮЧЕНО (лагает, оставляем статику) */
+.parallax-bg{display:none}
 
-/* 7. Скан-линии (subtle CRT-эффект) на лого */
-.scanlines{position:relative;overflow:hidden}
-.scanlines::after{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(58,125,116,0.025) 2px,rgba(58,125,116,0.025) 4px);
-  animation:scanMove 8s linear infinite;
-}
-@keyframes scanMove{
-  0%{background-position:0 0}
-  100%{background-position:0 100px}
-}
+/* 7. Скан-линии (CRT-эффект) — ОТКЛЮЧЕНО (лагает) */
+.scanlines::after{display:none}
+@keyframes scanMove{0%,100%{}}
 
 /* 8. Текст-печать для подсказок */
 @keyframes typewriter{
@@ -835,19 +758,9 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 .ornate-corners::before{top:6px;left:6px;border-right:none;border-bottom:none}
 .ornate-corners::after{bottom:6px;right:6px;border-left:none;border-top:none}
 
-/* 17. Лёгкий grain (зерно) поверх фона для атмосферы */
-.grain-overlay{
-  position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.04;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grainShift 0.6s steps(2) infinite;
-}
-@keyframes grainShift{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(-1%,1%)}
-  50%{transform:translate(1%,-1%)}
-  75%{transform:translate(-1%,-1%)}
-  100%{transform:translate(1%,1%)}
-}
+/* 17. Лёгкий grain (зерно) поверх фона для атмосферы — ОТКЛЮЧЕНО (лагает) */
+.grain-overlay{display:none}
+@keyframes grainShift{0%,100%{}}
 
 /* 18. Skeleton shimmer улучшенный (с цветным отблеском) */
 .skeleton-line,.skeleton-block,.skeleton-avatar{
@@ -855,14 +768,14 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
   background-size:200% 100%;animation:shimmer 1.6s ease-in-out infinite;
 }
 
-/* 19. Появление модала с пружиной */
+/* 19. Появление модала — БЕЗ translate (чтобы не улетало в угол) */
 @keyframes modalSpring{
-  0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
-  60%{opacity:1;transform:translate(-50%,-50%) scale(1.03)}
-  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  0%{opacity:0;transform:scale(0.92)}
+  60%{opacity:1;transform:scale(1.02)}
+  100%{opacity:1;transform:scale(1)}
 }
 .quick-edit-modal,.cmd-palette,.confirm-modal{
-  animation:modalSpring 0.35s cubic-bezier(0.34,1.56,0.64,1) both !important;
+  animation:modalSpring 0.25s ease-out both !important;
 }
 
 /* 20. Hover-эффект для нав-айтемов с подсветкой слева */
@@ -884,12 +797,8 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 }
 .cursor-glow.visible{opacity:1}
 
-/* 22. Лого - медленное вращение обводки */
-@keyframes slowSpin{
-  from{transform:rotate(0deg)}
-  to{transform:rotate(360deg)}
-}
-.logo-spin circle:nth-child(2){transform-origin:center;animation:slowSpin 60s linear infinite}
+/* 22. Лого - медленное вращение обводки — ОТКЛЮЧЕНО (бесконечная анимация лагает) */
+@keyframes slowSpin{0%,100%{}}
 
 /* 23. Заполнение прогресс-бара (для форм) плавное */
 .form-progress-bar{transition:width 0.4s cubic-bezier(0.4,0,0.2,1) !important}
@@ -901,13 +810,8 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 }
 .section-rise{animation:sectionRise 0.5s ease-out both}
 
-/* 25. Пульсация для важных цифр */
-@keyframes valueGlow{
-  0%,100%{text-shadow:0 0 0 transparent}
-  50%{text-shadow:0 0 12px rgba(58,125,116,0.4)}
-}
-.stat-card-value{transition:text-shadow 0.3s}
-.stat-card:hover .stat-card-value{animation:valueGlow 1.5s ease-in-out infinite}
+/* 25. Пульсация для важных цифр — ОТКЛЮЧЕНО (бесконечная анимация лагает) */
+.stat-card:hover .stat-card-value{text-shadow:0 0 12px rgba(58,125,116,0.4)}
 
 /* 26. Подсветка ссылки в markdown при hover */
 .markdown a{position:relative;transition:color 0.2s}
@@ -954,10 +858,6 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="parallax-bg"></div>
-<div class="grain-overlay"></div>
-<div class="cursor-glow" id="cursor-glow"></div>
-<div class="top-loader" id="top-loader"></div>
 <div id="app"></div>
 <div id="toast-container" class="toast-container"></div>
 <script>
@@ -1090,6 +990,11 @@ const el=(tag,attrs={},...children)=>{
     else if(k==='html')e.innerHTML=attrs[k];
     else if(k==='style'&&typeof attrs[k]==='object')Object.assign(e.style,attrs[k]);
     else if(k.startsWith('on')&&typeof attrs[k]==='function')e.addEventListener(k.slice(2).toLowerCase(),attrs[k]);
+    /* === Task 12 / Bug #3: Boolean attributes (disabled, checked, readonly, hidden, etc.)
+       must NOT be set when value is false — setAttribute('disabled', false) makes the
+       element disabled because HTML treats attribute presence as truthy. === */
+    else if(attrs[k]===false)continue;
+    else if(attrs[k]===true)e.setAttribute(k,'');
     else if(attrs[k]!=null)e.setAttribute(k,attrs[k]);
   }
   for(const c of children){
@@ -2505,25 +2410,37 @@ const App={
     fbAuth.onAuthStateChanged(async(user)=>{
       this.clearSubscriptions();
       if(user){
-        const snap=await fbDb.ref('users/'+user.uid).get();
-        if(snap.exists()){
+        /* === Task 12 / Bug #1: Race condition fix — load profile from DB, retry if not yet saved === */
+        let profile=null;
+        for(let attempt=0;attempt<3;attempt++){
+          try{
+            const snap=await fbDb.ref('users/'+user.uid).get();
+            if(snap.exists()){profile={id:user.uid,...snap.val()};break}
+          }catch(e){/* ignore — will retry */}
+          /* Profile not yet saved (race condition during registration) — wait and retry */
+          await new Promise(r=>setTimeout(r,500));
+        }
+        if(profile){
           this.currentUser=user;
-          this.userProfile={id:user.uid,...snap.val()};
+          this.userProfile=profile;
         }else{
+          /* Fallback after 3 retries: profile really doesn't exist (user created externally
+             e.g. via Firebase console). Create a minimal one WITHOUT email-split name. */
           const usersSnap=await fbDb.ref('users').get();
           const isFirst=!usersSnap.exists();
-          const profile={
-            email:user.email,name:user.email.split('@')[0],
+          const fallbackProfile={
+            email:user.email||'',name:'Новый правитель',
             role:isFirst?'ADMIN':'PLAYER',
             createdAt:new Date().toISOString(),
             lastLoginAt:new Date().toISOString(),
             bio:'',avatarUrl:''
           };
-          await fbDb.ref('users/'+user.uid).set(profile);
+          try{await fbDb.ref('users/'+user.uid).set(fallbackProfile)}catch(e){}
           this.currentUser=user;
-          this.userProfile={id:user.uid,...profile};
+          this.userProfile={id:user.uid,...fallbackProfile};
+          console.warn('Profile was missing for user '+user.uid+' — created fallback. Please update name in profile.');
         }
-        await fbDb.ref('users/'+user.uid+'/lastLoginAt').set(new Date().toISOString());
+        try{await fbDb.ref('users/'+user.uid+'/lastLoginAt').set(new Date().toISOString())}catch(e){}
         this.subscribeToData();
         /* First-visit hint + browser notifications permission request */
         showHotkeyHintOnce();
@@ -2533,8 +2450,17 @@ const App={
           if(handleHashNavigation()){/* navigated */}
         },400);
       }else{
+        /* === Task 12 / Bug #9: Reset view when user logs out === */
         this.currentUser=null;
         this.userProfile=null;
+        this.view='dashboard';
+        this.selectedId=null;
+        this.sidebarOpen=false;
+        this._sidebarQuery='';
+        /* Clear localStorage navigation state (if used by older versions) */
+        try{localStorage.removeItem('tersky-nav')}catch(e){}
+        /* Clear in-memory notification seen items so new login starts fresh */
+        try{Object.keys(_seenItems).forEach(k=>{delete _seenItems[k]})}catch(e){}
       }
       this._initialAuthChecked=true;
       this.render();
@@ -2547,26 +2473,59 @@ const App={
   subscribeToData(){
     const collections=['factions','posts','news','chats','battles','chronicle','bestiary','users','profileRequests'];
     collections.forEach(col=>{
-      this.unsubscribers.push(
-        fbDb.ref(col).on('value',snap=>{
-          const val=snap.val()||{};
-          this.cache[col]=Object.entries(val).map(([id,v])=>({id,...(v||{})})).sort((a,b)=>{
-            if(col==='news')return (b.isPinned?1:0)-(a.isPinned?1:0)||((b.createdAt||0)-(a.createdAt||0));
-            const da=a.createdAt,db=b.createdAt;
-            if(typeof da==='number'&&typeof db==='number')return db-da;
-            const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
-            return tb-ta;
-          });
-          /* === Task 9: detect newly added items, create notifications === */
-          try{detectNewItemsAndNotify()}catch(e){}
-          if(this.currentUser)this.render();
-        })
-      );
+      const ref=fbDb.ref(col);
+      const cb=snap=>{
+        const val=snap.val()||{};
+        this.cache[col]=Object.entries(val).map(([id,v])=>({id,...(v||{})})).sort((a,b)=>{
+          if(col==='news')return (b.isPinned?1:0)-(a.isPinned?1:0)||((b.createdAt||0)-(a.createdAt||0));
+          const da=a.createdAt,db=b.createdAt;
+          if(typeof da==='number'&&typeof db==='number')return db-da;
+          const ta=da?new Date(da).getTime():0,tb=db?new Date(db).getTime():0;
+          return tb-ta;
+        });
+        /* === Task 9: detect newly added items, create notifications === */
+        try{detectNewItemsAndNotify()}catch(e){}
+        /* === Task 12 / Bug #4: Always render if cache exists; render() guards on currentUser === */
+        if(this.currentUser)this.render();
+      };
+      ref.on('value',cb);
+      /* === Task 12 / Bug #4: Store proper unsubscribe (ref.off with callback) === */
+      this.unsubscribers.push(()=>{try{ref.off('value',cb)}catch(e){}});
     });
   },
 
   setView(view,selectedId=null){this.view=view;this.selectedId=selectedId;this.sidebarOpen=false;this.render();window.scrollTo(0,0)},
-  async logout(){try{await fbAuth.signOut()}catch(e){}},
+  /* === Task 12 / Bug #9 + enhancement: logout with confirmation === */
+  async logout(opts={}){
+    /* If triggered by user click (not auto-logout), confirm first */
+    if(!opts.silent){
+      const ok=await ConfirmDialog(
+        'Выйти из системы?',
+        'Несохранённые данные будут потеряны. Убедитесь, что все черновики сохранены.',
+        'Выйти','Отмена'
+      );
+      if(!ok)return;
+    }
+    try{
+      this.clearSubscriptions();
+      /* Reset view BEFORE signOut so re-render after auth change doesn't restore stale view */
+      this.view='dashboard';
+      this.selectedId=null;
+      this.sidebarOpen=false;
+      this._sidebarQuery='';
+      try{localStorage.removeItem('tersky-nav')}catch(e){}
+      /* === Task 12 / Bug #7: Clear per-user localStorage data so next user starts fresh === */
+      try{
+        localStorage.removeItem('tersky-notifications');
+        localStorage.removeItem('tersky-hotkey-hint-shown');
+        /* Clear draft data */
+        Object.keys(localStorage).filter(k=>k.indexOf('tersky-draft-')===0).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+      }catch(e){}
+      /* Clear in-memory seen items so new login starts fresh */
+      try{Object.keys(_seenItems).forEach(k=>{delete _seenItems[k]})}catch(e){}
+      await fbAuth.signOut();
+    }catch(e){console.error('Logout error:',e)}
+  },
 
   reloadAllData(){
     if(!this.currentUser)return;
@@ -2668,9 +2627,18 @@ function AuthScreen(){
     if(state.mode==='register'&&password.length<6){toast('Ошибка','Пароль минимум 6 символов','error');return}
     try{
       if(state.mode==='register'){
+        /* === Task 12 / Bug #1: Race condition fix ===
+           1. Check user count in DB BEFORE creating auth user (so role is correct).
+           2. After createUserWithEmailAndPassword, immediately save the profile
+              with the form's name so onAuthStateChanged doesn't fall back to email-split.
+           3. onAuthStateChanged retries loading the profile (3 attempts × 500ms). */
+        let isFirst=false;
+        try{
+          const usersSnap=await fbDb.ref('users').get();
+          isFirst=!usersSnap.exists();
+        }catch(e){/* ignore — default to PLAYER */}
         const cred=await fbAuth.createUserWithEmailAndPassword(email.toLowerCase(),password);
-        const usersSnap=await fbDb.ref('users').get();
-        const isFirst=!usersSnap.exists();
+        /* Save profile IMMEDIATELY — name from form, role determined above */
         await fbDb.ref('users/'+cred.user.uid).set({
           email:email.toLowerCase(),name,role:isFirst?'ADMIN':'PLAYER',
           createdAt:new Date().toISOString(),lastLoginAt:new Date().toISOString(),
@@ -2858,6 +2826,16 @@ function AppShell(){
 }
 
 function renderView(){
+  /* === Task 12 / Bug #8: Guard admin views — redirect non-admins to dashboard === */
+  if(typeof App.view==='string'&&App.view.indexOf('admin-')===0){
+    const role=App.userProfile&&App.userProfile.role;
+    if(role!=='ADMIN'){
+      console.warn('Access denied to view "'+App.view+'" (role='+role+'). Redirecting to dashboard.');
+      /* Defer setView to avoid re-render recursion */
+      setTimeout(()=>App.setView('dashboard'),0);
+      return el('div',{class:'card text-center'},el('p',{class:'text-muted'},'Перенаправление на главную…'));
+    }
+  }
   switch(App.view){
     case'dashboard':return DashboardView();
     case'activity':return ActivityView();
@@ -4068,7 +4046,22 @@ function modeLabel(mode){
 function PostsView(){
   const wrap=el('div',{class:'flex flex-col gap-4'});
   const myPosts=App.cache.posts.filter(p=>p.authorId===App.userProfile.id);
-  if(App.selectedId&&App.selectedId!=='__new__'){
+  /* === Task 12 enhancement: support edit mode via 'edit:<postId>' selectedId === */
+  let editPost=null;
+  if(App.selectedId&&typeof App.selectedId==='string'&&App.selectedId.indexOf('__edit__:')===0){
+    const editId=App.selectedId.slice('__edit__:'.length);
+    editPost=App.cache.posts.find(p=>p.id===editId);
+    if(!editPost){
+      wrap.appendChild(EmptyState('file','Пост не найден','Возможно, он был удалён'));
+      return wrap;
+    }
+    /* Only author can edit, and only if post is not yet verdicted */
+    if(editPost.authorId!==App.userProfile.id){wrap.appendChild(EmptyState('file','Доступ запрещён','Вы можете редактировать только свои посты'));return wrap}
+    if(editPost.status==='VERDICTED'){wrap.appendChild(EmptyState('file','Редактирование недоступно','Пост уже получил вердикт и не может быть изменён'));return wrap}
+    wrap.appendChild(PostForm(editPost));
+    return wrap;
+  }
+  if(App.selectedId&&App.selectedId!=='__new__'&&!editPost){
     const post=myPosts.find(p=>p.id===App.selectedId)||App.cache.posts.find(p=>p.id===App.selectedId);
     if(post&&(post.authorId===App.userProfile.id||App.userProfile.role==='ADMIN')){
       wrap.appendChild(PostDetail(post));return wrap;
@@ -4106,10 +4099,21 @@ function PostsView(){
   return wrap;
 }
 /* ====== Дельта-журнал: блок «Изменения в статистике» (ВАРИАНТ D) ====== */
+/* === Task 12 / Bug #10: Helper to normalize changes (could be array OR object from RTDB) === */
+function normalizeChanges(changes){
+  if(Array.isArray(changes))return changes.filter(c=>c&&typeof c==='object');
+  if(changes&&typeof changes==='object'){
+    /* RTDB sometimes stores arrays as objects with numeric keys — convert back */
+    return Object.keys(changes).map(k=>changes[k]).filter(c=>c&&typeof c==='object');
+  }
+  return [];
+}
 function renderDeltaJournal(changes,verdict){
+  const list=normalizeChanges(changes);
+  if(list.length===0)return el('div',{class:'delta-banner'},el('div',{class:'delta-banner-title'},el('span',{html:ICONS.stats}),'Изменения в статистике ('+(verdict&&verdict.applied?'применены':'черновик')+')'),el('p',{class:'text-muted text-xs italic'},'Нет зафиксированных изменений.'));
   const wrap=el('div',{class:'delta-banner'});
   wrap.appendChild(el('div',{class:'delta-banner-title'},el('span',{html:ICONS.stats}),'Изменения в статистике ('+(verdict&&verdict.applied?'применены':'черновик')+')'));
-  changes.forEach(ch=>{
+  list.forEach(ch=>{
     const isAdd=ch.operation==='add';
     const isSub=ch.operation==='subtract';
     const isSet=ch.operation==='set';
@@ -4205,12 +4209,20 @@ function PostCard(post,index){
   ));
   return card;
 }
-function PostForm(){
-  const state={title:'',content:'',context:'',turnNumber:'',weekNumber:'',attachments:[]};
+function PostForm(editing){
+  /* === Task 12 enhancement: accept editing post for editing existing post === */
+  const state={
+    title:editing?editing.title||'':'',
+    content:editing?editing.content||'':'',
+    context:editing?editing.context||'':'',
+    turnNumber:editing?(editing.turnNumber!=null?String(editing.turnNumber):''):'',
+    weekNumber:editing?(editing.weekNumber!=null?String(editing.weekNumber):''):'',
+    attachments:editing&&Array.isArray(editing.attachments)?JSON.parse(JSON.stringify(editing.attachments)):[]
+  };
   const wrap=el('div',{class:'card card-glow'});
   /* === Header row: title + templates dropdown === */
   const headerRow=el('div',{class:'flex justify-between items-center mb-4'});
-  headerRow.appendChild(el('h2',{style:{fontSize:'18px'}},'Новый пост'));
+  headerRow.appendChild(el('h2',{style:{fontSize:'18px'}},editing?'Редактирование поста':'Новый пост'));
   const headerRight=el('div',{class:'flex items-center gap-2'});
   /* Templates dropdown */
   const tplWrap=el('div',{class:'templates-dropdown'});
@@ -4257,12 +4269,12 @@ function PostForm(){
   const progress=FormProgress(()=>{return (state.title.trim()?1:0)+(state.content.trim().length>=10?1:0)},()=>2);
   wrap.appendChild(progress.wrap);
   const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
-  const titleInput=el('input',{class:'input',placeholder:'Действия княжества на 5-й неделе...',oninput:e=>{state.title=e.target.value;progress.update();draftHandle.schedule()},required:true});
+  const titleInput=el('input',{class:'input',placeholder:'Действия княжества на 5-й неделе...',value:state.title,oninput:e=>{state.title=e.target.value;progress.update();draftHandle.schedule()},required:true});
   const contentTa=WikiEditor(state.content,v=>{state.content=v;progress.update();draftHandle.schedule()},'Опишите действия вашего княжества... Поддерживается вики-разметка.',200);
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Заголовок *'),titleInput));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
-    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',placeholder:'5',oninput:e=>{state.turnNumber=e.target.value;draftHandle.schedule()}})),
-    el('div',{class:'field-group'},el('label',{class:'label'},'Неделя'),el('input',{class:'input',type:'number',placeholder:'13',oninput:e=>{state.weekNumber=e.target.value;draftHandle.schedule()}}))
+    el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',placeholder:'5',value:state.turnNumber,oninput:e=>{state.turnNumber=e.target.value;draftHandle.schedule()}})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Неделя'),el('input',{class:'input',type:'number',placeholder:'13',value:state.weekNumber,oninput:e=>{state.weekNumber=e.target.value;draftHandle.schedule()}}))
   ));
   const contentField=el('div',{class:'field-group'},
     el('label',{class:'label'},'Ролевое содержание *'),
@@ -4273,10 +4285,10 @@ function PostForm(){
   /* === Char counter on content (max 5000) === */
   const counterInst=attachCharCounter(contentTa,5000,contentField);
   /* === Draft autosave setup === */
-  const draftHandle=setupDraftAutosave('post',null,()=>({title:state.title,content:state.content,context:state.context,turnNumber:state.turnNumber,weekNumber:state.weekNumber}));
+  const draftHandle=setupDraftAutosave('post',editing?editing.id:null,()=>({title:state.title,content:state.content,context:state.context,turnNumber:state.turnNumber,weekNumber:state.weekNumber}));
   /* Attach draft indicator below progress bar */
   draftHandle.attachIndicator(progress.wrap);
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Контекст / Пояснение (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения для администратора...',style:{minHeight:'80px'},oninput:e=>{state.context=e.target.value;draftHandle.schedule()}})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Контекст / Пояснение (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения для администратора...',style:{minHeight:'80px'},oninput:e=>{state.context=e.target.value;draftHandle.schedule()}},state.context)));
   const attList=el('div',{class:'flex flex-wrap gap-2'});
   const fileLabel=el('label',{class:'flex items-center gap-2',style:{cursor:'pointer'}},
     el('input',{type:'file',style:{display:'none'},onchange:e=>{
@@ -4305,48 +4317,69 @@ function PostForm(){
   }
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Вложения'),attList,fileLabel));
   form.appendChild(el('div',{class:'flex gap-2 justify-end',style:{marginTop:'8px'}},
-    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('posts')},'Отмена'),
-    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.send}),'Отправить')
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('posts',editing?editing.id:null)},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.send}),editing?'Сохранить изменения':'Отправить')
   ));
   wrap.appendChild(form);
-  /* === Offer restore draft (if exists) === */
-  offerRestoreDraft('post',null,(draft)=>{
-    if(draft.title!==undefined){state.title=draft.title;titleInput.value=draft.title||''}
-    if(draft.content!==undefined){state.content=draft.content;contentTa.setValue(draft.content||'')}
-    if(draft.context!==undefined){state.context=draft.context}
-    if(draft.turnNumber!==undefined){state.turnNumber=draft.turnNumber}
-    if(draft.weekNumber!==undefined){state.weekNumber=draft.weekNumber}
-    progress.update();
-    counterInst&&counterInst.update();
-    toast('Черновик восстановлен','Отредактируйте и отправьте пост','success');
-  });
+  /* === Offer restore draft (if exists) — only for new posts, not editing === */
+  if(!editing){
+    offerRestoreDraft('post',null,(draft)=>{
+      if(draft.title!==undefined){state.title=draft.title;titleInput.value=draft.title||''}
+      if(draft.content!==undefined){state.content=draft.content;contentTa.setValue(draft.content||'')}
+      if(draft.context!==undefined){state.context=draft.context}
+      if(draft.turnNumber!==undefined){state.turnNumber=draft.turnNumber}
+      if(draft.weekNumber!==undefined){state.weekNumber=draft.weekNumber}
+      progress.update();
+      counterInst&&counterInst.update();
+      toast('Черновик восстановлен','Отредактируйте и отправьте пост','success');
+    });
+  }
+  /* Initialize progress bar */
+  progress.update();
   return wrap;
   async function submit(){
     if(state.title.length<3||state.content.length<10){toast('Ошибка','Заполните заголовок и содержание','error');return}
     const faction=App.cache.factions.find(f=>f.userId===App.userProfile.id);
     try{
-      await RTDB.push('posts',{
-        title:state.title,content:state.content,context:state.context,
-        turnNumber:state.turnNumber?Number(state.turnNumber):null,
-        weekNumber:state.weekNumber?Number(state.weekNumber):null,
-        status:'PENDING',isPublic:false,
-        authorId:App.userProfile.id,authorName:App.userProfile.name,
-        factionId:faction?faction.id:null,
-        attachments:state.attachments,
-      });
-      /* Clear draft on successful submit */
-      draftHandle.clearOnSuccess();
-      toast('Пост отправлен','Ожидает вердикта администратора','success');
-      App.setView('posts');
+      if(editing){
+        /* === Task 12 enhancement: update existing post === */
+        await RTDB.update('posts/'+editing.id,{
+          title:state.title,content:state.content,context:state.context,
+          turnNumber:state.turnNumber?Number(state.turnNumber):null,
+          weekNumber:state.weekNumber?Number(state.weekNumber):null,
+          attachments:state.attachments,
+          /* Preserve other fields (status, authorId, factionId, etc.) */
+        });
+        draftHandle.clearOnSuccess();
+        toast('Пост обновлён','','success');
+        App.setView('posts',editing.id);
+      }else{
+        await RTDB.push('posts',{
+          title:state.title,content:state.content,context:state.context,
+          turnNumber:state.turnNumber?Number(state.turnNumber):null,
+          weekNumber:state.weekNumber?Number(state.weekNumber):null,
+          status:'PENDING',isPublic:false,
+          authorId:App.userProfile.id,authorName:App.userProfile.name,
+          factionId:faction?faction.id:null,
+          attachments:state.attachments,
+        });
+        /* Clear draft on successful submit */
+        draftHandle.clearOnSuccess();
+        toast('Пост отправлен','Ожидает вердикта администратора','success');
+        App.setView('posts');
+      }
     }catch(e){toast('Ошибка',e.message,'error')}
   }
 }
 function PostDetail(post){
   const wrap=el('div',{class:'flex flex-col gap-4'});
+  /* === Task 12 enhancement: Edit button for author when post is not verdicted === */
+  const canEditPost=post.authorId===App.userProfile.id&&post.status!=='VERDICTED';
   /* === Top row: back + actions (share, bookmark, print) === */
   wrap.appendChild(el('div',{class:'flex items-center justify-between',style:{flexWrap:'wrap',gap:'8px'}},
     el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('posts')},el('span',{html:ICONS.back}),'Назад к постам'),
     el('div',{class:'flex items-center gap-1'},
+      canEditPost?el('button',{class:'btn btn-ghost btn-sm','data-tooltip':'Редактировать пост',onclick:()=>App.setView('posts','__edit__:'+post.id)},el('span',{html:ICONS.edit}),'Редактировать'):null,
       el('button',{class:'btn btn-ghost btn-icon btn-sm','data-tooltip':isBookmarked(post.id)?'Убрать закладку':'В закладки',onclick:(e)=>{
         const added=toggleBookmark(post.id);
         toast(added?'Добавлено в закладки':'Убрано из закладок','','info');
@@ -4468,8 +4501,10 @@ function PostDetail(post){
       ));
     }
     /* === Дельта-журнал изменений статистики (ВАРИАНТ D) === */
-    if(Array.isArray(verdict.changes)&&verdict.changes.length>0){
-      vCard.appendChild(renderDeltaJournal(verdict.changes,verdict));
+    /* === Task 12 / Bug #10: Use normalizeChanges for robustness (handles array OR object form) === */
+    const normalizedChanges=normalizeChanges(verdict.changes);
+    if(normalizedChanges.length>0){
+      vCard.appendChild(renderDeltaJournal(normalizedChanges,verdict));
     }
     wrap.appendChild(vCard);
   }else{
@@ -4547,7 +4582,7 @@ function AdminPostsView(){
           el('div',{class:'flex-1 min-w-0'},
             el('div',{class:'flex items-center gap-2 mb-2',style:{flexWrap:'wrap'}},
               post.status==='PENDING'?el('span',{class:'badge badge-warning',html:ICONS.clock+' Ожидает'}):el('span',{class:'badge badge-success',html:ICONS.check+' Вердикт'}),
-              faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+faction.name}):null,
+              faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+escapeHtml(faction.name)}):null,
               post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
               isNew?el('span',{class:'new-badge'},'Новое'):null
             ),
@@ -4579,7 +4614,7 @@ function VerdictEditor(post){
   const postCard=el('div',{class:'card'});
   const ts=RTDB.ts(post.createdAt);
   postCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
-    faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+faction.name}):null,
+    faction?el('span',{class:'badge badge-accent',html:ICONS.shield+' '+escapeHtml(faction.name)}):null,
     post.turnNumber?el('span',{class:'badge'},'Ход '+post.turnNumber):null,
     el('span',{class:'text-muted',style:{fontSize:'10px',marginLeft:'auto'}},(post.authorName||'')+' · '+fmtDate(ts))
   ));
@@ -5435,7 +5470,15 @@ function AdminBattlesView(){
               el('span',{class:'flex items-center gap-1',html:ICONS.check+' '+posted+'/'+total+' написали'})
             )
           ),
-          el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('admin-battles',battle.id)},'Редактировать ',el('span',{html:ICONS.chevron}))
+          el('div',{class:'flex flex-col gap-1',style:{flexShrink:'0'}},
+            el('button',{class:'btn btn-ghost btn-sm',onclick:()=>App.setView('admin-battles',battle.id)},'Редактировать ',el('span',{html:ICONS.chevron})),
+            el('button',{class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:async e=>{
+              e.stopPropagation();
+              const ok=await ConfirmDialog('Удалить баталию?','Баталия «'+battle.name+'» и все данные о силах будут удалены без возможности восстановления.','Удалить','Отмена',{danger:true});
+              if(!ok)return;
+              try{await RTDB.remove('battles/'+battle.id);toast('Баталия удалена')}catch(err){toast('Ошибка',err.message,'error')}
+            }},el('span',{html:ICONS.trash}))
+          )
         )
       ));
     });
@@ -5480,7 +5523,12 @@ function BattleEditor(battle){
   const card=el('div',{class:'card'});
   card.appendChild(el('div',{class:'flex items-center gap-3 mb-4'},
     el('div',{class:'list-item-icon',style:{background:'rgba(196,77,77,0.15)',borderColor:'rgba(196,77,77,0.3)',color:'#f87171'},html:ICONS.swords}),
-    el('div',{class:'flex-1'},el('h2',{style:{fontSize:'18px'}},battle.name),el('p',{class:'text-muted text-xs'},battle.location||'Место не указано'))
+    el('div',{class:'flex-1'},el('h2',{style:{fontSize:'18px'}},battle.name),el('p',{class:'text-muted text-xs'},battle.location||'Место не указано')),
+    el('button',{class:'btn btn-ghost btn-sm text-danger',onclick:async()=>{
+      const ok=await ConfirmDialog('Удалить баталию?','Баталия «'+battle.name+'» и все данные о силах будут удалены без возможности восстановления.','Удалить','Отмена',{danger:true});
+      if(!ok)return;
+      try{await RTDB.remove('battles/'+battle.id);toast('Баталия удалена');App.setView('admin-battles')}catch(e){toast('Ошибка',e.message,'error')}
+    }},el('span',{html:ICONS.trash}),'Удалить')
   ));
   card.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Статус баталии'),
     (()=>{const sel=el('select',{class:'select',onchange:async e=>{try{await RTDB.update('battles/'+battle.id,{status:e.target.value})}catch(err){toast('Ошибка',err.message,'error')}}});
@@ -6004,81 +6052,9 @@ document.addEventListener('DOMContentLoaded',()=>{
    ВИЗУАЛЬНЫЕ ЭФФЕКТЫ И АНИМАЦИИ
    ============================================================ */
 function initVisualEffects(){
-  // 1. Cursor glow — подсветка под курсором
-  const glow=document.getElementById('cursor-glow');
-  if(glow){
-    let glowVisible=false;
-    let rafGlow=null;
-    let lastX=0,lastY=0;
-    document.addEventListener('mousemove',e=>{
-      lastX=e.clientX;lastY=e.clientY;
-      if(!glowVisible){glow.classList.add('visible');glowVisible=true}
-      if(!rafGlow){
-        rafGlow=requestAnimationFrame(()=>{
-          glow.style.left=lastX+'px';
-          glow.style.top=lastY+'px';
-          rafGlow=null;
-        });
-      }
-    });
-    document.addEventListener('mouseleave',()=>{glow.classList.remove('visible');glowVisible=false});
-  }
+  // ТОЛЬКО ЛЕГКИЕ ЭФФЕКТЫ (без тяжёлых обработчиков mousemove/scroll/MutationObserver)
 
-  // 2. Top loader — показывается при загрузке данных
-  // Используется через showTopLoader() / hideTopLoader()
-  window.showTopLoader=()=>{
-    const tl=document.getElementById('top-loader');
-    if(!tl)return;
-    tl.classList.remove('done');
-    tl.classList.add('loading');
-  };
-  window.hideTopLoader=()=>{
-    const tl=document.getElementById('top-loader');
-    if(!tl)return;
-    tl.classList.remove('loading');
-    tl.classList.add('done');
-    setTimeout(()=>{tl.classList.remove('done');tl.style.width='0'},700);
-  };
-
-  // 3. Активация glitch на auth-title (добавляем data-text)
-  const applyGlitch=()=>{
-    document.querySelectorAll('.auth-title').forEach(el=>{
-      if(!el.getAttribute('data-text')){
-        el.setAttribute('data-text',el.textContent);
-      }
-    });
-  };
-  applyGlitch();
-  // Периодически переприменяем (после re-render)
-  setInterval(applyGlitch,1000);
-
-  // 4. Эффект "печати" для подзаголовков (только при первом визите)
-  if(!localStorage.getItem('tersky-seen-typewriter')){
-    setTimeout(()=>{
-      const sub=document.querySelector('.auth-subtitle');
-      if(sub&&!sub.classList.contains('typewriter')){
-        const txt=sub.textContent;
-        sub.textContent='';
-        sub.classList.add('typewriter');
-        let i=0;
-        const typeInt=setInterval(()=>{
-          i++;
-          sub.textContent=txt.slice(0,i);
-          if(i>=txt.length){
-            clearInterval(typeInt);
-            // Убираем каретку через 2 сек
-            setTimeout(()=>{
-              sub.style.borderRight='none';
-              sub.classList.remove('typewriter');
-            },2000);
-            localStorage.setItem('tersky-seen-typewriter','1');
-          }
-        },45);
-      }
-    },800);
-  }
-
-  // 5. Skeleton-эффект для всех картинок — плавное появление
+  // 1. Плавное появление картинок
   document.addEventListener('load',e=>{
     if(e.target.tagName==='IMG'){
       e.target.style.opacity='0';
@@ -6089,60 +6065,28 @@ function initVisualEffects(){
     }
   },true);
 
-  // 6. Lazy fade-in для всех .card при появлении в viewport
-  if('IntersectionObserver' in window){
-    const observer=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('blur-in');
-          observer.unobserve(entry.target);
-        }
-      });
-    },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
-    // Применяем к новым .card при каждом render
-    const observeCards=()=>{
-      document.querySelectorAll('.card:not(.blur-in):not(.card-glow)').forEach(c=>observer.observe(c));
-    };
-    observeCards();
-    setInterval(observeCards,800);
+  // 2. Scroll progress bar (тонкая полоса сверху — дёшево, rAF-trottled)
+  let scrollProgress=document.querySelector('.scroll-progress');
+  if(!scrollProgress){
+    scrollProgress=document.createElement('div');
+    scrollProgress.className='scroll-progress';
+    scrollProgress.style.cssText='position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-light));z-index:9999;width:0;transition:width 0.1s;pointer-events:none';
+    document.body.appendChild(scrollProgress);
   }
+  let scrollTicking=false;
+  document.addEventListener('scroll',()=>{
+    if(!scrollTicking){
+      requestAnimationFrame(()=>{
+        const sh=document.documentElement.scrollHeight-window.innerHeight;
+        const pct=sh>0?Math.min(100,(window.scrollY/sh)*100):0;
+        scrollProgress.style.width=pct+'%';
+        scrollTicking=false;
+      });
+      scrollTicking=true;
+    }
+  },{passive:true});
 
-  // 7. Ripple-эффект на кнопках (как Material Design)
-  document.addEventListener('click',e=>{
-    const btn=e.target.closest('.btn');
-    if(!btn)return;
-    const rect=btn.getBoundingClientRect();
-    const ripple=document.createElement('span');
-    const size=Math.max(rect.width,rect.height);
-    ripple.style.cssText=`position:absolute;border-radius:50%;background:rgba(143,191,181,0.3);pointer-events:none;width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;transform:scale(0);opacity:1;transition:transform 0.6s ease-out,opacity 0.6s ease-out`;
-    btn.appendChild(ripple);
-    requestAnimationFrame(()=>{
-      ripple.style.transform='scale(2.5)';
-      ripple.style.opacity='0';
-    });
-    setTimeout(()=>ripple.remove(),600);
-  });
-
-  // 8. Эффект "магнита" для primary-кнопок (cursor притягивается)
-  document.addEventListener('mousemove',e=>{
-    const btn=e.target.closest('.btn-primary');
-    if(!btn)return;
-    const rect=btn.getBoundingClientRect();
-    const x=e.clientX-rect.left-rect.width/2;
-    const y=e.clientY-rect.top-rect.height/2;
-    btn.style.transform=`translate(${x*0.15}px,${y*0.15}px)`;
-  });
-  document.addEventListener('mouseout',e=>{
-    const btn=e.target.closest('.btn-primary');
-    if(btn)btn.style.transform='';
-  });
-  // Сброс при уходе с кнопки
-  document.addEventListener('mouseleave',e=>{
-    const btns=document.querySelectorAll('.btn-primary');
-    btns.forEach(b=>b.style.transform='');
-  });
-
-  // 9. Анимация чисел при появлении (count-up) — для всех элементов с data-count
+  // 3. Анимация чисел при появлении (count-up) — только для stat-card-value, rAF
   if('IntersectionObserver' in window){
     const countObs=new IntersectionObserver(entries=>{
       entries.forEach(entry=>{
@@ -6152,13 +6096,13 @@ function initVisualEffects(){
           el.dataset.countAnimated='1';
           const target=parseInt(el.getAttribute('data-count'))||0;
           if(target>0&&typeof countUp==='function'){
-            countUp(el,target,1000);
+            countUp(el,target,800);
           }
           countObs.unobserve(el);
         }
       });
     },{threshold:0.5});
-    // Наблюдаем за stat-card-value которые не имеют data-count
+    // Один раз при загрузке view — без setInterval
     const observeCountTargets=()=>{
       document.querySelectorAll('.stat-card-value:not([data-count-animated])').forEach(el=>{
         const num=parseInt(el.textContent.replace(/[^\d-]/g,''));
@@ -6170,73 +6114,18 @@ function initVisualEffects(){
       });
     };
     observeCountTargets();
-    setInterval(observeCountTargets,1500);
-  }
-
-  // 10. Эффект "дыхания" для логотипа (если на странице)
-  const logos=document.querySelectorAll('.logo-svg');
-  // не трогаем — flicker уже есть
-
-  // 11. Параллакс для скролла (subtle движение фона)
-  let scrollTicking=false;
-  document.addEventListener('scroll',()=>{
-    if(!scrollTicking){
-      requestAnimationFrame(()=>{
-        const y=window.scrollY;
-        const bg=document.querySelector('.parallax-bg');
-        if(bg){
-          bg.style.transform=`translateY(${y*0.15}px)`;
-        }
-        scrollTicking=false;
-      });
-      scrollTicking=true;
-    }
-  },{passive:true});
-
-  // 12. Кнопка "scroll to top" с прогрессом чтения
-  let scrollProgress=document.querySelector('.scroll-progress');
-  if(!scrollProgress){
-    scrollProgress=document.createElement('div');
-    scrollProgress.className='scroll-progress';
-    scrollProgress.style.cssText='position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-light));z-index:9999;width:0;transition:width 0.1s';
-    document.body.appendChild(scrollProgress);
-  }
-  document.addEventListener('scroll',()=>{
-    const sh=document.documentElement.scrollHeight-window.innerHeight;
-    const pct=sh>0?Math.min(100,(window.scrollY/sh)*100):0;
-    scrollProgress.style.width=pct+'%';
-  },{passive:true});
-
-  // 13. Периодическое "мигание" активного nav-item (subtle)
-  // Удаляем чтобы не отвлекало
-
-  // 14. Анимация при появлении новых элементов в DOM (MutationObserver)
-  if('MutationObserver' in window){
-    const mo=new MutationObserver(mutations=>{
-      mutations.forEach(m=>{
-        m.addedNodes.forEach(node=>{
-          if(node.nodeType===1&&node.classList){
-            if(node.classList.contains('list-item')||node.classList.contains('card-hover')){
-              node.style.opacity='0';
-              node.style.transform='translateY(10px)';
-              requestAnimationFrame(()=>{
-                node.style.transition='opacity 0.3s ease,transform 0.3s ease';
-                node.style.opacity='1';
-                node.style.transform='';
-              });
-            }
-          }
-        });
-      });
-    });
-    mo.observe(document.body,{childList:true,subtree:true});
+    // Перепроверяем при смене view (без интервала)
+    const origSetView=App.setView.bind(App);
+    App.setView=function(v,id){
+      origSetView(v,id);
+      setTimeout(observeCountTargets,100);
+    };
   }
 }
 
 /* Хелпер: показать toast с анимацией для успеха */
 function successToast(title,desc){
   toast(title,desc,'success');
-  // Лёгкая вибрация (если поддерживается)
   if(navigator.vibrate)navigator.vibrate(15);
 }
 
@@ -7162,14 +7051,18 @@ function detectNewItemsAndNotify(){
     _seenItems._initialized=true;
     return;
   }
-  /* Notify about new posts (admin: any; player: only their own with verdict) */
+  /* Notify about new posts (admin: any except own; player: only their own with verdict) */
   const isAdmin=App.userProfile.role==='ADMIN';
   newPosts.forEach(p=>{
     _seenItems['post_'+p.id]=true;
+    /* === Task 12 / Bug #7: Don't notify about own actions === */
     if(isAdmin){
-      addNotification('new_post','Новый пост от '+(p.authorName||'игрока'),p.title,{view:isAdmin?'admin-posts':'posts',id:p.id});
+      /* Admin gets notified about OTHER players' new posts, not their own */
+      if(p.authorId!==App.userProfile.id){
+        addNotification('new_post','Новый пост от '+(p.authorName||'игрока'),p.title,{view:'admin-posts',id:p.id});
+      }
     }else if(p.authorId===App.userProfile.id&&p.status==='VERDICTED'&&p.verdict){
-      /* Notify player that their post got a verdict */
+      /* Player gets notified when their own post receives a verdict (admin is NOT notified about verdicts) */
       addNotification('verdict','Вынесен вердикт',p.title,{view:'posts',id:p.id});
     }
   });
