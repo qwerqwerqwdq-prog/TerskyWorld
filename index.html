@@ -40,8 +40,10 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 .header{position:sticky;top:0;z-index:40;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;background:rgba(17,24,26,0.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
 .header-title{font-family:'Cinzel',serif;font-size:15px;font-weight:600;letter-spacing:0.08em;color:var(--fg)}
 .header-subtitle{font-size:10px;color:var(--fg-muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:2px}
-.header-spacer{flex:1}.header-user{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px}
-.header-avatar{width:32px;height:32px;border-radius:50%;background:rgba(58,125,116,0.2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:'Cinzel',serif;font-weight:600}
+.header-spacer{flex:1}.header-user{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px;cursor:pointer;transition:background 0.15s}
+.header-user:hover{background:rgba(58,125,116,0.1)}
+.header-avatar{width:32px;height:32px;border-radius:50%;background:rgba(58,125,116,0.2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:'Cinzel',serif;font-weight:600;overflow:hidden}
+.header-avatar img{width:100%;height:100%;object-fit:cover}
 .layout{display:flex;flex:1;min-height:0}
 .sidebar{width:240px;flex-shrink:0;background:rgba(13,20,20,0.8);backdrop-filter:blur(8px);border-right:1px solid var(--border);overflow-y:auto;padding:12px;position:sticky;top:56px;height:calc(100vh - 56px)}
 .sidebar-section-title{padding:8px 12px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim)}
@@ -130,10 +132,15 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 .stat-section-icon{width:36px;height:36px;border-radius:6px;background:rgba(58,125,116,0.15);border:1px solid rgba(58,125,116,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
 .stat-section-title{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--fg)}
 .stat-section-desc{font-size:12px;color:var(--fg-muted);margin-top:2px}
-.stat-section-body{padding:0 16px 16px}
+/* === Animatable body: max-height + opacity + padding transition === */
+.stat-section-body{max-height:0;opacity:0;padding:0 16px;overflow:hidden;transition:max-height 0.35s ease-in-out,opacity 0.25s ease,padding 0.3s ease}
+.stat-section.expanded .stat-section-body{max-height:2400px;opacity:1;padding:0 16px 16px}
+.stat-section-chevron{display:flex;align-items:center;justify-content:center;transition:transform 0.25s ease;color:var(--fg-muted)}
+.stat-section.expanded .stat-section-chevron{transform:rotate(90deg)}
 .stat-field{padding:12px;background:rgba(24,33,31,0.4);border:1px solid var(--border);border-radius:6px;margin-bottom:8px}
 .stat-field-label{font-size:10px;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.1em;font-family:'Cinzel',serif;margin-bottom:4px}
 .stat-field-value{font-size:14px;color:var(--fg)}
+.stat-field-value-number{font-family:'Cinzel',serif;font-weight:600;font-size:20px;color:var(--fg)}
 .stat-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .stat-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
@@ -153,10 +160,17 @@ a{color:var(--accent-light)}button{font-family:inherit;cursor:pointer}
 .empty-title{font-family:'Cinzel',serif;font-size:18px;color:var(--fg);margin-bottom:4px}
 .empty-desc{color:var(--fg-muted);font-size:14px;max-width:360px;margin:0 auto}
 .loading-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-card{max-width:640px;width:100%;max-height:85vh;overflow-y:auto}
+.effect-row{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:6px;background:rgba(24,33,31,0.4);border:1px solid var(--border);margin-bottom:6px;font-size:12px}
+.effect-row .effect-info{flex:1;min-width:0}
+.effect-row .effect-target{font-family:'Cinzel',serif;color:var(--accent-light);font-size:11px}
+.effect-row .effect-detail{color:var(--fg-muted);font-size:11px;margin-top:2px}
+.effect-row .effect-note{color:var(--fg);font-style:italic;font-size:11px;margin-top:2px}
 @media(max-width:1024px){.auth-left{display:none}}
 @media(max-width:768px){.sidebar{position:fixed;left:-240px;transition:left 0.3s;z-index:50}.sidebar.open{left:0}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40}.sidebar-overlay.open{display:block}.main{padding:12px}.stat-grid-4,.force-grid{grid-template-columns:repeat(2,1fr)}.menu-toggle{display:flex!important}}
 .menu-toggle{display:none}
-.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.p-4{padding:16px}.p-6{padding:24px}.text-sm{font-size:14px}.text-xs{font-size:12px}.text-muted{color:var(--fg-muted)}.text-accent{color:var(--accent-light)}.text-danger{color:var(--danger)}.text-warning{color:var(--warning)}.text-success{color:var(--success)}.text-center{text-align:center}.italic{font-style:italic}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.05em}.flex-1{flex:1}.min-w-0{min-width:0}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flex-wrap{flex-wrap:wrap}.hidden{display:none!important}.w-full{width:100%}.text-glow{text-shadow:0 0 8px rgba(58,125,116,0.4)}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}.mt-2{margin-top:8px}.mt-4{margin-top:16px}.mt-6{margin-top:24px}.mb-2{margin-bottom:8px}.mb-4{margin-bottom:16px}.mb-6{margin-bottom:24px}.p-4{padding:16px}.p-6{padding:24px}.text-sm{font-size:14px}.text-xs{font-size:12px}.text-muted{color:var(--fg-muted)}.text-accent{color:var(--accent-light)}.text-danger{color:var(--danger)}.text-warning{color:var(--warning)}.text-success{color:var(--success)}.text-center{text-align:center}.italic{font-style:italic}.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:0.05em}.flex-1{flex:1}.min-w-0{min-width:0}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.flex-wrap{flex-wrap:wrap}.hidden{display:none!important}.w-full{width:100%}.text-glow{text-shadow:0 0 8px rgba(58,125,116,0.4)}
 .markdown h1{font-size:22px;margin:16px 0 8px}.markdown h2{font-size:18px;margin:16px 0 8px}.markdown h3{font-size:16px;margin:12px 0 6px}.markdown p{margin-bottom:12px;line-height:1.6}.markdown ul,.markdown ol{margin:8px 0 12px 20px}.markdown li{margin-bottom:4px}.markdown blockquote{border-left:2px solid var(--accent);padding-left:16px;font-style:italic;color:var(--fg-muted);margin:12px 0}.markdown code{background:rgba(24,33,31,0.6);padding:2px 6px;border-radius:3px;color:var(--accent-light);font-family:monospace}.markdown strong{color:var(--accent-light)}.markdown em{color:var(--accent-light);opacity:0.8}.markdown hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 </style>
 </head>
@@ -199,6 +213,7 @@ const ICONS={
   book:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
   paw:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10z"/></svg>',
   users:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+  user:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
   flag:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>',
   file:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
   logout:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
@@ -224,6 +239,9 @@ const ICONS={
   mail:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
   sword:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/></svg>',
   ship:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18h18M5 14l7-10 7 10M9 18v-4M15 18v-4"/></svg>',
+  arrowUp:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+  arrowDown:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+  bolt:'<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
 };
 
 const $=(s,r=document)=>r.querySelector(s);
@@ -283,22 +301,23 @@ function toast(title,desc='',type='info'){
   c.appendChild(t);
   setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300)},3500);
 }
+function uid(prefix='id'){return prefix+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 
-/* ====== Секции статистики фракции ====== */
-const STAT_SECTIONS=[
-  {key:'NAME',title:'Название',icon:'flag',desc:'Наименование государства',fields:[
+/* ====== Старые секции (используются только для миграции) ====== */
+const LEGACY_STAT_SECTIONS=[
+  {key:'NAME',title:'Название',icon:'flag',fields:[
     {key:'state',label:'Государство',type:'text'},
     {key:'ruler',label:'Правитель',type:'text'},
     {key:'motto',label:'Девиз',type:'text'},
   ]},
-  {key:'RELATIONS',title:'Связи',icon:'handshake',desc:'Дипломатия, военные, экономические и тайные связи',fields:[
+  {key:'RELATIONS',title:'Связи',icon:'handshake',fields:[
     {key:'diplomacy',label:'Дипломатия',type:'list'},
     {key:'military',label:'Военные связи',type:'list'},
     {key:'economic',label:'Экономические',type:'list'},
     {key:'internal',label:'Внутренние',type:'list'},
     {key:'secret',label:'Секретные',type:'list'},
   ]},
-  {key:'TREASURY',title:'Казна',icon:'coins',desc:'Доходы, расходы, баланс, резервы',fields:[
+  {key:'TREASURY',title:'Казна',icon:'coins',fields:[
     {key:'income',label:'Доходы/мес (солей)',type:'number'},
     {key:'expenses',label:'Расходы/мес (солей)',type:'number'},
     {key:'balance',label:'Баланс/мес (солей)',type:'number'},
@@ -307,7 +326,7 @@ const STAT_SECTIONS=[
     {key:'shares',label:'Паи',type:'text'},
     {key:'pending',label:'Ждут денег',type:'text'},
   ]},
-  {key:'ARMY',title:'Армия',icon:'swords',desc:'Пехота, кавалерия, флот, ордена',fields:[
+  {key:'ARMY',title:'Армия',icon:'swords',fields:[
     {key:'meleeInfantry',label:'Пехота ближнего боя',type:'number'},
     {key:'rangedInfantry',label:'Пехота дальнего боя',type:'number'},
     {key:'cavalry',label:'Кавалерия',type:'number'},
@@ -316,10 +335,10 @@ const STAT_SECTIONS=[
     {key:'convoyService',label:'Конвойная служба',type:'text'},
     {key:'cadres',label:'Кадры',type:'text'},
   ]},
-  {key:'RELIGION',title:'Религия',icon:'church',desc:'Религиозный состав населения',fields:[
+  {key:'RELIGION',title:'Религия',icon:'church',fields:[
     {key:'faiths',label:'Вероисповедания',type:'list'},
   ]},
-  {key:'POPULATION',title:'Население',icon:'users',desc:'Численность и состав населения',fields:[
+  {key:'POPULATION',title:'Население',icon:'users',fields:[
     {key:'total',label:'Всего',type:'number'},
     {key:'authorities',label:'Власти',type:'number'},
     {key:'militaryGarrisons',label:'Гарнизоны',type:'number'},
@@ -329,7 +348,7 @@ const STAT_SECTIONS=[
     {key:'mages',label:'Маги',type:'number'},
     {key:'vagrants',label:'Бродяги',type:'number'},
   ]},
-  {key:'HORSES',title:'Коневодство',icon:'horse',desc:'Поголовье, приплод, экспорт, дефицит',fields:[
+  {key:'HORSES',title:'Коневодство',icon:'horse',fields:[
     {key:'total',label:'Поголовье',type:'number'},
     {key:'offspring',label:'Приплод/год',type:'number'},
     {key:'exportObligations',label:'Экспорт',type:'number'},
@@ -338,11 +357,11 @@ const STAT_SECTIONS=[
     {key:'rules',label:'Правила',type:'text'},
     {key:'mageService',label:'Маги при деле',type:'text'},
   ]},
-  {key:'INSTITUTIONS',title:'Учреждения',icon:'building',desc:'Работающие и ожидающие учреждения',fields:[
+  {key:'INSTITUTIONS',title:'Учреждения',icon:'building',fields:[
     {key:'working',label:'Работающие',type:'list'},
     {key:'pending',label:'Ожидают срока',type:'list'},
   ]},
-  {key:'GOVERNANCE',title:'Управление',icon:'crown',desc:'Сенат, бюрократия, планирование, князь',fields:[
+  {key:'GOVERNANCE',title:'Управление',icon:'crown',fields:[
     {key:'rating',label:'Рейтинг управления (%)',type:'number'},
     {key:'senateHouses',label:'Дома Сената',type:'text'},
     {key:'bureaucracy',label:'Бюрократия',type:'text'},
@@ -351,15 +370,217 @@ const STAT_SECTIONS=[
     {key:'prince',label:'Князь',type:'text'},
   ]},
 ];
-function defaultStatContent(key){
-  const s=STAT_SECTIONS.find(x=>x.key===key);
-  if(!s)return {};
-  const o={};
-  s.fields.forEach(f=>{o[f.key]=f.type==='list'?[]:(f.type==='number'?0:'')});
-  return o;
+
+/* ====== Новая система: гибкая статистика фракции ====== */
+const SECTION_ICON_OPTIONS=[
+  {key:'flag',label:'Знамя'},
+  {key:'handshake',label:'Связи'},
+  {key:'coins',label:'Казна'},
+  {key:'swords',label:'Армия'},
+  {key:'church',label:'Религия'},
+  {key:'users',label:'Население'},
+  {key:'horse',label:'Коневодство'},
+  {key:'building',label:'Учреждения'},
+  {key:'crown',label:'Управление'},
+  {key:'scroll',label:'Документы'},
+  {key:'shield',label:'Защита'},
+  {key:'book',label:'Летопись'},
+  {key:'paw',label:'Существа'},
+  {key:'news',label:'Вести'},
+  {key:'ship',label:'Флот'},
+];
+
+const FIELD_TYPE_OPTIONS=[
+  {key:'text',label:'Текст'},
+  {key:'number',label:'Число'},
+  {key:'list',label:'Список'},
+];
+
+function defaultFieldValue(type){
+  if(type==='list')return [];
+  if(type==='number')return 0;
+  return '';
 }
-function createDefaultStats(){
-  return STAT_SECTIONS.map((s,i)=>({sectionKey:s.key,sectionTitle:s.title,content:defaultStatContent(s.key),order:i}));
+
+function defaultFactionStats(){
+  const defaults=[
+    {title:'Название',icon:'flag',fields:[
+      {label:'Государство',type:'text',value:''},
+      {label:'Правитель',type:'text',value:''},
+      {label:'Девиз',type:'text',value:''},
+    ]},
+    {title:'Связи',icon:'handshake',fields:[
+      {label:'Дипломатические',type:'list',value:[]},
+      {label:'Военные',type:'list',value:[]},
+      {label:'Экономические',type:'list',value:[]},
+      {label:'Секретные',type:'list',value:[]},
+    ]},
+    {title:'Казна',icon:'coins',fields:[
+      {label:'Доход/мес (солей)',type:'number',value:0},
+      {label:'Расход/мес (солей)',type:'number',value:0},
+      {label:'Баланс/мес',type:'number',value:0},
+      {label:'Алмазная казна',type:'number',value:0},
+    ]},
+    {title:'Армия',icon:'swords',fields:[
+      {label:'Пехота ближнего боя',type:'number',value:0},
+      {label:'Пехота дальнего боя',type:'number',value:0},
+      {label:'Кавалерия',type:'number',value:0},
+      {label:'Флот',type:'number',value:0},
+      {label:'Ордена',type:'text',value:''},
+    ]},
+    {title:'Религия',icon:'church',fields:[
+      {label:'Вероисповедания',type:'list',value:[]},
+    ]},
+    {title:'Население',icon:'users',fields:[
+      {label:'Всего',type:'number',value:0},
+      {label:'Власти',type:'number',value:0},
+      {label:'Гарнизоны',type:'number',value:0},
+      {label:'Торговые семьи',type:'number',value:0},
+    ]},
+    {title:'Учреждения',icon:'building',fields:[
+      {label:'Работающие',type:'list',value:[]},
+      {label:'Ожидают срока',type:'list',value:[]},
+    ]},
+    {title:'Управление',icon:'crown',fields:[
+      {label:'Рейтинг управления (%)',type:'number',value:0},
+      {label:'Дома Сената',type:'text',value:''},
+      {label:'Бюрократия',type:'text',value:''},
+      {label:'Князь',type:'text',value:''},
+    ]},
+  ];
+  return defaults.map((s,i)=>({
+    id:'sec_'+(i+1),
+    title:s.title,
+    icon:s.icon,
+    order:i,
+    fields:s.fields.map((f,j)=>({id:'f'+(j+1),label:f.label,type:f.type,value:f.value}))
+  }));
+}
+
+/* Конвертация старого формата статистики в новый */
+function migrateStats(oldStats){
+  if(!oldStats||!Array.isArray(oldStats)){
+    return defaultFactionStats();
+  }
+  // Если уже новый формат (есть fields) — нормализуем
+  if(oldStats.length>0&&oldStats[0].fields){
+    return oldStats.map((s,i)=>{
+      const legacy=LEGACY_STAT_SECTIONS.find(x=>x.key===s.sectionKey);
+      return {
+        id:s.id||('sec_'+(i+1)),
+        title:s.title||s.sectionTitle||(legacy?legacy.title:('Секция '+(i+1))),
+        icon:s.icon||(legacy?legacy.icon:'file'),
+        order:typeof s.order==='number'?s.order:i,
+        fields:Array.isArray(s.fields)?s.fields.map((f,j)=>({
+          id:f.id||('f'+(j+1)),
+          label:f.label||('Поле '+(j+1)),
+          type:f.type||'text',
+          value:f.value!==undefined?f.value:defaultFieldValue(f.type||'text')
+        })):[]
+      };
+    });
+  }
+  // Старый формат: массив {sectionKey, sectionTitle, content, order}
+  return oldStats.map((s,i)=>{
+    const legacy=LEGACY_STAT_SECTIONS.find(x=>x.key===s.sectionKey);
+    const fields=(legacy?legacy.fields:[]).map((f,j)=>{
+      const val=s.content?s.content[f.key]:undefined;
+      return {
+        id:'f'+(j+1),
+        label:f.label,
+        type:f.type,
+        value:val!==undefined&&val!==null?val:defaultFieldValue(f.type)
+      };
+    });
+    return {
+      id:'sec_'+(i+1),
+      title:s.sectionTitle||(legacy?legacy.title:('Секция '+(i+1))),
+      icon:legacy?legacy.icon:'file',
+      order:typeof s.order==='number'?s.order:i,
+      fields
+    };
+  });
+}
+
+/* Поиск поля по id внутри секции */
+function findField(section,fieldId){
+  if(!section||!Array.isArray(section.fields))return null;
+  return section.fields.find(f=>f.id===fieldId)||null;
+}
+function findSection(faction,sectionId){
+  if(!faction.stats)return null;
+  return faction.stats.find(s=>s.id===sectionId)||null;
+}
+
+/* Применение одного эффекта к значению поля */
+function applyEffectToValue(oldValue,effect){
+  const mode=effect.mode||'set';
+  const amount=Number(effect.amount)||0;
+  if(effect.fieldType==='list'){
+    if(mode==='set'){
+      // Для list — amount интерпретируем как строку с разделителями
+      const parts=String(effect.amount||'').split('\n').map(s=>s.trim()).filter(Boolean);
+      return parts;
+    }
+    return oldValue;
+  }
+  if(effect.fieldType==='text'){
+    if(mode==='set')return String(effect.amount||'');
+    return oldValue;
+  }
+  // number
+  const oldNum=Number(oldValue)||0;
+  if(mode==='add')return oldNum+amount;
+  if(mode==='subtract')return oldNum-amount;
+  if(mode==='set')return amount;
+  if(mode==='percent_add')return Math.round(oldNum*(1+amount/100));
+  if(mode==='percent_subtract')return Math.round(oldNum*(1-amount/100));
+  return oldNum;
+}
+
+/* Применение мгновенных эффектов к stats фракции */
+function applyInstantEffects(stats,effects){
+  if(!effects||!effects.length)return stats;
+  const newStats=stats.map(s=>({...s,fields:s.fields.map(f=>({...f}))}));
+  effects.forEach(eff=>{
+    if(eff.timing!=='instant')return;
+    const section=newStats.find(s=>s.id===eff.targetSectionId);
+    if(!section)return;
+    const field=findField(section,eff.targetFieldId);
+    if(!field)return;
+    field.value=applyEffectToValue(field.value,{...eff,fieldType:field.type});
+  });
+  return newStats;
+}
+
+/* Применение одного тика для pendingEffect */
+function applyPendingEffectTick(stats,effect){
+  const section=stats.find(s=>s.id===effect.targetSectionId);
+  if(!section)return stats;
+  const field=findField(section,effect.targetFieldId);
+  if(!field)return stats;
+  field.value=applyEffectToValue(field.value,{...effect,fieldType:field.type});
+  return stats;
+}
+
+/* ====== Раскрытые секции: localStorage persistence ====== */
+const EXPANDED_KEY='tersky-expanded-sections';
+function getExpandedSections(){
+  try{return JSON.parse(localStorage.getItem(EXPANDED_KEY)||'{}')}catch(e){return {}}
+}
+function saveExpandedSections(obj){
+  try{localStorage.setItem(EXPANDED_KEY,JSON.stringify(obj))}catch(e){}
+}
+function isSectionExpanded(factionId,sectionId,sectionIndex){
+  const key=factionId+':'+sectionId;
+  const stored=getExpandedSections();
+  if(stored.hasOwnProperty(key))return !!stored[key];
+  return sectionIndex===0;
+}
+function setSectionExpanded(factionId,sectionId,expanded){
+  const stored=getExpandedSections();
+  stored[factionId+':'+sectionId]=!!expanded;
+  saveExpandedSections(stored);
 }
 
 /* ====== Realtime Database helpers ====== */
@@ -416,7 +637,7 @@ const App={
   view:'dashboard',selectedId:null,sidebarOpen:false,
   currentUser:null,userProfile:null,
   unsubscribers:[],
-  cache:{factions:[],posts:[],news:[],chats:[],battles:[],chronicle:[],bestiary:[],users:[]},
+  cache:{factions:[],posts:[],news:[],chats:[],battles:[],chronicle:[],bestiary:[],users:[],profileRequests:[]},
 
   init(){
     document.addEventListener('contextmenu',e=>{e.preventDefault();return false});
@@ -450,6 +671,7 @@ const App={
             role:isFirst?'ADMIN':'PLAYER',
             createdAt:new Date().toISOString(),
             lastLoginAt:new Date().toISOString(),
+            bio:'',avatarUrl:''
           };
           await fbDb.ref('users/'+user.uid).set(profile);
           this.currentUser=user;
@@ -469,7 +691,7 @@ const App={
   clearSubscriptions(){this.unsubscribers.forEach(u=>{try{u()}catch(e){}});this.unsubscribers=[]},
 
   subscribeToData(){
-    const collections=['factions','posts','news','chats','battles','chronicle','bestiary','users'];
+    const collections=['factions','posts','news','chats','battles','chronicle','bestiary','users','profileRequests'];
     collections.forEach(col=>{
       this.unsubscribers.push(
         fbDb.ref(col).on('value',snap=>{
@@ -547,14 +769,14 @@ function AuthScreen(){
     if(state.mode==='register'){
       form.appendChild(el('div',{class:'field-group'},
         el('label',{class:'label'},'Имя правителя'),
-        el('input',{class:'input',placeholder:'Князь...',value:state.name,oninput:e=>state.name=e.target.value,required:true})
+        el('input',{class:'input',placeholder:'Имя правителя...',value:state.name,oninput:e=>state.name=e.target.value,required:true})
       ));
     }
     form.appendChild(el('div',{class:'field-group'},
       el('label',{class:'label'},'Электронная почта'),
       el('div',{class:'input-with-icon'},
         el('span',{class:'icon',html:ICONS.mail}),
-        el('input',{class:'input',type:'email',placeholder:'посол@княжество.рф',value:state.email,oninput:e=>state.email=e.target.value,required:true})
+        el('input',{class:'input',type:'email',placeholder:'правитель@государство.рф',value:state.email,oninput:e=>state.email=e.target.value,required:true})
       )
     ));
     form.appendChild(el('div',{class:'field-group'},
@@ -581,6 +803,7 @@ function AuthScreen(){
         await fbDb.ref('users/'+cred.user.uid).set({
           email:email.toLowerCase(),name,role:isFirst?'ADMIN':'PLAYER',
           createdAt:new Date().toISOString(),lastLoginAt:new Date().toISOString(),
+          bio:'',avatarUrl:''
         });
         toast('Добро пожаловать',isFirst?'Аккаунт администратора создан':'Аккаунт создан','success');
       }else{
@@ -608,6 +831,7 @@ function AppShell(){
   const faction=App.cache.factions.find(f=>f.userId===u.id);
   const playerNav=[
     {key:'dashboard',label:'Сводка',icon:'dashboard'},
+    {key:'profile',label:'Профиль',icon:'user'},
     {key:'my-faction',label:'Моё княжество',icon:'shield'},
     {key:'posts',label:'Мои посты',icon:'scroll'},
     {key:'chats',label:'Переговоры',icon:'chat'},
@@ -618,6 +842,7 @@ function AppShell(){
   ];
   const adminNav=[
     {key:'admin-users',label:'Игроки',icon:'users'},
+    {key:'admin-profile-requests',label:'Запросы профилей',icon:'mail'},
     {key:'admin-factions',label:'Фракции',icon:'flag'},
     {key:'admin-posts',label:'Все посты',icon:'file'},
     {key:'admin-news',label:'Новости',icon:'news'},
@@ -639,8 +864,8 @@ function AppShell(){
       el('span',{class:'header-title',style:{fontSize:'13px'}},faction.name),
       faction.isApproved?null:el('span',{class:'text-warning',style:{fontSize:'10px'}},'(на утверждении)')
     ):null,
-    el('div',{class:'header-user'},
-      el('div',{class:'header-avatar'},u.name[0]?.toUpperCase()||'?'),
+    el('div',{class:'header-user',onclick:()=>App.setView('profile')},
+      el('div',{class:'header-avatar'},u.avatarUrl?el('img',{src:u.avatarUrl,alt:u.name}):document.createTextNode(u.name[0]?.toUpperCase()||'?')),
       el('div',{},el('div',{style:{fontSize:'13px',fontWeight:'500'}},u.name),el('div',{style:{fontSize:'10px',color:'var(--fg-muted)'}},isAdmin?'Администратор':'Игрок'))
     ),
     el('button',{class:'btn btn-ghost btn-icon',title:'Выйти',onclick:()=>App.logout()},el('span',{html:ICONS.logout}))
@@ -682,6 +907,7 @@ function AppShell(){
 function renderView(){
   switch(App.view){
     case'dashboard':return DashboardView();
+    case'profile':return ProfileView();
     case'my-faction':return FactionView();
     case'posts':return PostsView();
     case'chats':return ChatsView();
@@ -690,6 +916,7 @@ function renderView(){
     case'chronicle':return ChronicleView();
     case'bestiary':return BestiaryView();
     case'admin-users':return AdminUsersView();
+    case'admin-profile-requests':return AdminProfileRequestsView();
     case'admin-factions':return AdminFactionsView();
     case'admin-posts':return AdminPostsView();
     case'admin-news':return AdminNewsView();
@@ -795,8 +1022,181 @@ function DashboardView(){
   return wrap;
 }
 
+/* ====== PROFILE VIEW ====== */
+function ProfileView(){
+  const u=App.userProfile;
+  const isAdmin=u.role==='ADMIN';
+  const wrap=el('div',{class:'flex flex-col gap-6',style:{maxWidth:'800px',margin:'0 auto'}});
+  wrap.appendChild(PageHeader('Профиль','Ваш правительственный профиль в Терском Мире'));
+  const card=el('div',{class:'card card-glow'});
+  const top=el('div',{class:'flex items-start gap-4',style:{flexWrap:'wrap'}});
+  const avatarSize=80;
+  const avatarEl=u.avatarUrl?
+    el('img',{src:u.avatarUrl,alt:u.name,style:{width:avatarSize+'px',height:avatarSize+'px',borderRadius:'50%',objectFit:'cover',border:'2px solid var(--accent)'}}):
+    el('div',{style:{width:avatarSize+'px',height:avatarSize+'px',borderRadius:'50%',background:'rgba(58,125,116,0.2)',border:'2px solid var(--accent)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--accent)',fontFamily:'Cinzel,serif',fontWeight:'700',fontSize:'32px'}},u.name[0]?.toUpperCase()||'?');
+  top.appendChild(avatarEl);
+  top.appendChild(el('div',{class:'flex-1',style:{minWidth:'240px'}},
+    el('h2',{class:'text-glow',style:{fontSize:'22px'}},u.name),
+    el('div',{class:'flex items-center gap-2 mt-2',style:{flexWrap:'wrap'}},
+      isAdmin?el('span',{class:'badge badge-accent',html:ICONS.crown+' Администратор'}):el('span',{class:'badge',html:ICONS.user+' Игрок'}),
+    ),
+    el('div',{class:'flex items-center gap-3 mt-2',style:{fontSize:'12px',color:'var(--fg-muted)'}},
+      el('span',{class:'flex items-center gap-1',html:ICONS.mail+' '+u.email})
+    ),
+    el('div',{class:'flex items-center gap-3 mt-1',style:{fontSize:'11px',color:'var(--fg-dim)'}},
+      u.createdAt?el('span',{class:'flex items-center gap-1',html:ICONS.clock+' Регистрация: '+fmtDateShort(RTDB.ts(u.createdAt))}):null,
+      u.lastLoginAt?el('span',{class:'flex items-center gap-1',html:ICONS.check+' Последний вход: '+fmtDate(RTDB.ts(u.lastLoginAt))}):null
+    )
+  ));
+  top.appendChild(el('button',{class:'btn btn-primary',onclick:()=>openProfileEditor(u)},el('span',{html:ICONS.edit}),'Редактировать профиль'));
+  card.appendChild(top);
+  if(u.bio){
+    card.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},
+      el('p',{class:'label'},'Описание / Bio'),
+      el('p',{class:'text-sm italic',style:{lineHeight:'1.6',whiteSpace:'pre-wrap'}},u.bio)
+    ));
+  }
+  wrap.appendChild(card);
+  /* Активные запросы профиля (для игрока — свои; для админа — все) */
+  const myRequests=App.cache.profileRequests.filter(r=>r.userId===u.id&&r.status==='PENDING');
+  if(myRequests.length>0){
+    const reqCard=el('div',{class:'card',style:{background:'rgba(212,165,67,0.05)',borderColor:'rgba(212,165,67,0.25)'}});
+    reqCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3'},
+      el('span',{html:ICONS.clock,style:{color:'var(--warning)',width:'16px',height:'16px'}}),
+      el('h3',{style:{fontSize:'14px'}},'Запросы на изменение профиля')
+    ));
+    myRequests.forEach(r=>{
+      reqCard.appendChild(el('div',{class:'card mb-2',style:{background:'rgba(24,33,31,0.4)',padding:'10px'}},
+        el('div',{class:'text-xs text-muted'},'Создан: '+fmtDate(RTDB.ts(r.createdAt))),
+        r.newData&&r.newData.name?el('div',{class:'text-xs mt-1'},'Новое имя: ',el('strong',{},r.newData.name)):null,
+        r.newData&&r.newData.bio?el('div',{class:'text-xs mt-1'},'Новое описание: ',el('span',{class:'italic'},r.newData.bio.slice(0,80)+(r.newData.bio.length>80?'…':''))):null,
+        el('div',{class:'mt-2'},el('span',{class:'badge badge-warning'},'Ожидает одобрения администратора'))
+      ));
+    });
+    wrap.appendChild(reqCard);
+  }
+  return wrap;
+}
+function openProfileEditor(user){
+  const modal=el('div',{class:'modal-overlay'});
+  const card=el('div',{class:'card card-glow modal-card'});
+  const isAdmin=user.role==='ADMIN';
+  card.appendChild(el('h2',{class:'mb-4'},'Редактирование профиля'));
+  const state={name:user.name||'',avatarUrl:user.avatarUrl||'',bio:user.bio||''};
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},
+    el('label',{class:'label'},'Имя *'),
+    el('input',{class:'input',value:state.name,oninput:e=>state.name=e.target.value,required:true})
+  ));
+  form.appendChild(el('div',{class:'field-group'},
+    el('label',{class:'label'},'URL аватара (опц.)'),
+    el('input',{class:'input',type:'url',placeholder:'https://...',value:state.avatarUrl,oninput:e=>state.avatarUrl=e.target.value})
+  ));
+  form.appendChild(el('div',{class:'field-group'},
+    el('label',{class:'label'},'Описание / Bio'),
+    el('textarea',{class:'textarea',style:{minHeight:'100px'},placeholder:'Расскажите о себе, своём стиле игры и правителе княжества...',oninput:e=>state.bio=e.target.value},state.bio)
+  ));
+  form.appendChild(el('p',{class:'text-muted text-xs italic'},isAdmin?
+    'Изменения будут применены сразу, так как вы администратор.':
+    'Запрос будет отправлен администратору на одобрение.'));
+  form.appendChild(el('div',{class:'flex gap-2 justify-end mt-4'},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>modal.remove()},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Сохранить')
+  ));
+  card.appendChild(form);
+  modal.appendChild(card);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
+  document.body.appendChild(modal);
+  async function save(){
+    const newData={
+      name:state.name.trim(),
+      avatarUrl:state.avatarUrl.trim(),
+      bio:state.bio
+    };
+    if(!newData.name){toast('Ошибка','Имя обязательно','error');return}
+    try{
+      if(isAdmin){
+        await RTDB.update('users/'+user.id,newData);
+        toast('Профиль обновлён','','success');
+        modal.remove();App.render();
+      }else{
+        const oldData={name:user.name||'',avatarUrl:user.avatarUrl||'',bio:user.bio||''};
+        await RTDB.push('profileRequests',{
+          userId:user.id,
+          userName:user.name||'',
+          userEmail:user.email||'',
+          oldData,
+          newData,
+          status:'PENDING',
+        });
+        toast('Запрос отправлен','Запрос на изменение профиля отправлен администратору на одобрение','success');
+        modal.remove();App.render();
+      }
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+/* ====== ADMIN PROFILE REQUESTS VIEW ====== */
+function AdminProfileRequestsView(){
+  const wrap=el('div',{class:'flex flex-col gap-4'});
+  wrap.appendChild(PageHeader('Запросы профилей','Одобрение запросов игроков на изменение профиля'));
+  const pending=App.cache.profileRequests.filter(r=>r.status==='PENDING');
+  if(pending.length===0){
+    wrap.appendChild(EmptyState('mail','Нет запросов','Все запросы профилей обработаны'));
+  }else{
+    pending.forEach(r=>{
+      const user=App.cache.users.find(u=>u.id===r.userId)||{name:r.userName,email:r.userEmail};
+      const card=el('div',{class:'card'});
+      card.appendChild(el('div',{class:'flex items-start gap-4',style:{flexWrap:'wrap'}},
+        el('div',{class:'header-avatar',style:{flexShrink:'0'}},user.name?user.name[0]?.toUpperCase():'?'),
+        el('div',{class:'flex-1',style:{minWidth:'240px'}},
+          el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},
+            el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},user.name||r.userName),
+            el('span',{class:'badge badge-warning'},'Ожидает')
+          ),
+          el('p',{class:'text-muted text-xs mt-1'},r.userEmail||user.email),
+          el('p',{class:'text-muted',style:{fontSize:'10px',marginTop:'4px'}},'Создан: '+fmtDate(RTDB.ts(r.createdAt)))
+        )
+      ));
+      const diff=el('div',{class:'mt-3 flex flex-col gap-2'});
+      function diffRow(label,oldVal,newVal){
+        if(oldVal===newVal)return;
+        diff.appendChild(el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)',padding:'10px'}},
+          el('div',{class:'label'},label),
+          el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},
+            el('span',{class:'text-xs text-muted',style:{textDecoration:'line-through',opacity:'0.6'}},oldVal||'(пусто)'),
+            el('span',{html:ICONS.chevron,style:{width:'12px',height:'12px',color:'var(--accent)'}}),
+            el('span',{class:'text-sm',style:{color:'var(--accent-light)'}},newVal||'(пусто)')
+          )
+        ));
+      }
+      diffRow('Имя',r.oldData&&r.oldData.name,r.newData&&r.newData.name);
+      diffRow('Аватар URL',r.oldData&&r.oldData.avatarUrl,r.newData&&r.newData.avatarUrl);
+      diffRow('Описание / Bio',r.oldData&&r.oldData.bio,r.newData&&r.newData.bio);
+      card.appendChild(diff);
+      card.appendChild(el('div',{class:'flex gap-2 mt-3'},
+        el('button',{class:'btn btn-primary btn-sm',onclick:async()=>{
+          try{
+            await RTDB.update('users/'+r.userId,r.newData);
+            await RTDB.update('profileRequests/'+r.id,{status:'APPROVED',reviewedAt:new Date().toISOString(),reviewedBy:App.userProfile.id});
+            toast('Запрос одобрен','Профиль игрока обновлён','success');
+          }catch(e){toast('Ошибка',e.message,'error')}
+        }},el('span',{html:ICONS.check}),'Одобрить'),
+        el('button',{class:'btn btn-ghost btn-sm text-danger',onclick:async()=>{
+          if(!confirm('Отклонить запрос?'))return;
+          try{
+            await RTDB.remove('profileRequests/'+r.id);
+            toast('Запрос отклонён','','info');
+          }catch(e){toast('Ошибка',e.message,'error')}
+        }},el('span',{html:ICONS.close}),'Отклонить')
+      ));
+      wrap.appendChild(card);
+    });
+  }
+  return wrap;
+}
+
 /* ====== FACTION VIEW ====== */
-const _expandedSections={};
 function FactionView(){
   let faction;
   if(App.selectedId){faction=App.cache.factions.find(f=>f.id===App.selectedId)}
@@ -812,10 +1212,10 @@ function RegisterFaction(){
   const form=el('form',{onsubmit:e=>{e.preventDefault();submit()}});
   form.appendChild(el('div',{class:'field-group'},
     el('label',{class:'label'},'Название государства *'),
-    el('input',{class:'input',placeholder:'Великое Княжество Помское',value:state.name,oninput:e=>state.name=e.target.value,required:true})
+    el('input',{class:'input',placeholder:'Новое Государство',value:state.name,oninput:e=>state.name=e.target.value,required:true})
   ));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
-    el('div',{class:'field-group'},el('label',{class:'label'},'Короткое название'),el('input',{class:'input',placeholder:'Пома',value:state.shortName,oninput:e=>state.shortName=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Короткое название'),el('input',{class:'input',placeholder:'Новое',value:state.shortName,oninput:e=>state.shortName=e.target.value})),
     el('div',{class:'field-group'},el('label',{class:'label'},'Цвет герба'),
       el('div',{class:'flex items-center gap-2'},
         el('input',{type:'color',value:state.bannerColor,oninput:e=>state.bannerColor=e.target.value,style:{height:'40px',width:'56px',borderRadius:'6px',border:'1px solid var(--border)',background:'rgba(10,15,15,0.6)',cursor:'pointer'}}),
@@ -840,7 +1240,8 @@ function RegisterFaction(){
         name:state.name,shortName:state.shortName,motto:state.motto,
         description:state.description,bannerColor:state.bannerColor,
         isApproved:false,userId:App.userProfile.id,
-        stats:createDefaultStats(),
+        stats:defaultFactionStats(),
+        pendingEffects:[],
       });
       toast('Княжество создано','Ожидает утверждения администратором','success');
       App.setView('my-faction',id);
@@ -849,6 +1250,8 @@ function RegisterFaction(){
 }
 function FactionDetails(faction){
   const isAdmin=App.userProfile.role==='ADMIN';
+  const isOwner=faction.userId===App.userProfile.id;
+  const canEdit=isAdmin;
   const wrap=el('div',{class:'flex flex-col gap-6'});
   const header=el('div',{class:'card card-glow',style:{overflow:'hidden',padding:'0'}});
   header.appendChild(el('div',{style:{height:'8px',background:faction.bannerColor||'#3a7d74'}}));
@@ -869,101 +1272,355 @@ function FactionDetails(faction){
     }},'Утвердить'));
   }
   header.appendChild(hb);wrap.appendChild(header);
-  wrap.appendChild(el('h2',{class:'flex items-center gap-2',style:{fontSize:'18px'}},el('span',{html:ICONS.crown,style:{color:'var(--accent)'}}),'Статистика государства'));
-  const stats=faction.stats||[];
-  stats.forEach((stat,i)=>{
-    const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey)||{icon:'file',desc:''};
-    const card=el('div',{class:'stat-section'});
-    const isOpen=_expandedSections[stat.sectionKey]||(i===0&&!_expandedSections.hasOwnProperty(stat.sectionKey));
-    const hdr=el('button',{class:'stat-section-header',onclick:()=>{_expandedSections[stat.sectionKey]=!isOpen;App.render()}});
-    hdr.appendChild(el('div',{class:'stat-section-icon',html:ICONS[section.icon]||ICONS.file}));
-    hdr.appendChild(el('div',{class:'flex-1'},el('div',{class:'stat-section-title'},stat.sectionTitle),el('div',{class:'stat-section-desc'},section.desc)));
-    hdr.appendChild(el('div',{class:'text-muted',html:isOpen?ICONS.close:ICONS.plus}));
-    card.appendChild(hdr);
-    if(isOpen){
-      const body=el('div',{class:'stat-section-body'});
-      body.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'12px'}}));
-      body.appendChild(renderStatContent(stat));
-      if(isAdmin){
-        body.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{marginTop:'12px'},onclick:()=>openStatEditor(faction,stat)},el('span',{html:ICONS.edit}),'Редактировать секцию'));
-      }
-      card.appendChild(body);
+
+  /* Блок активных эффектов (pendingEffects) */
+  const pendingEffects=Array.isArray(faction.pendingEffects)?faction.pendingEffects:[];
+  if(pendingEffects.length>0){
+    const effCard=el('div',{class:'card',style:{background:'rgba(58,125,116,0.05)',borderColor:'rgba(58,125,116,0.3)'}});
+    effCard.appendChild(el('div',{class:'flex items-center justify-between mb-3'},
+      el('div',{class:'flex items-center gap-2'},
+        el('span',{html:ICONS.bolt,style:{color:'var(--accent)',width:'16px',height:'16px'}}),
+        el('h3',{style:{fontSize:'14px'}},'Активные эффекты ('+pendingEffects.length+')')
+      ),
+      isAdmin?el('div',{class:'flex items-center gap-2'},
+        (()=>{const inp=el('input',{type:'number',min:'1',value:'1',style:{width:'60px',padding:'4px 8px',background:'rgba(10,15,15,0.6)',border:'1px solid var(--border)',borderRadius:'4px',color:'var(--fg)',fontFamily:'Cormorant Garamond,serif'}});return inp})(),
+        el('button',{class:'btn btn-primary btn-sm',onclick:async e=>{
+          const inputEl=e.target.previousElementSibling;
+          const n=Math.max(1,parseInt(inputEl.value,10)||1);
+          await applyPendingEffectsNTurns(faction,n);
+        }},'Применить N ходов')
+      ):null
+    ));
+    pendingEffects.forEach((eff,idx)=>{
+      effCard.appendChild(el('div',{class:'effect-row'},
+        el('div',{class:'effect-info'},
+          el('div',{class:'effect-target'},eff.fieldName||'поле'),
+          el('div',{class:'effect-detail'},
+            modeLabel(eff.mode)+' '+eff.amount+
+            (eff.timing==='per_turn'?' · каждый ход':eff.timing==='over_turns'?' · осталось ходов: '+eff.turns:' · мгновенно')
+          ),
+          eff.note?el('div',{class:'effect-note'},eff.note):null
+        ),
+        isAdmin?el('button',{class:'btn btn-ghost btn-sm',onclick:async ()=>{
+          await applyPendingEffectsNTurns(faction,1,idx);
+        }},'Применить ход'):null
+      ));
+    });
+    if(isAdmin){
+      effCard.appendChild(el('div',{class:'mt-3'},el('button',{class:'btn btn-ghost btn-sm text-danger',onclick:async()=>{
+        if(!confirm('Очистить все активные эффекты?'))return;
+        try{await RTDB.update('factions/'+faction.id,{pendingEffects:[]});toast('Эффекты очищены')}catch(e){toast('Ошибка',e.message,'error')}
+      }},'Очистить все эффекты')));
     }
+    wrap.appendChild(effCard);
+  }
+
+  wrap.appendChild(el('div',{class:'flex items-center justify-between',style:{flexWrap:'wrap',gap:'8px'}},
+    el('h2',{class:'flex items-center gap-2',style:{fontSize:'18px'}},el('span',{html:ICONS.crown,style:{color:'var(--accent)'}}),'Статистика государства'),
+    canEdit?el('div',{class:'flex gap-2'},
+      el('button',{class:'btn btn-ghost btn-sm',onclick:()=>openAddSection(faction)},el('span',{html:ICONS.plus}),'Добавить секцию')
+    ):null
+  ));
+
+  /* Гарантируем миграцию к новому формату */
+  const rawStats=Array.isArray(faction.stats)?faction.stats:[];
+  const stats=migrateStats(rawStats);
+  stats.forEach((section,i)=>{
+    const isOpen=isSectionExpanded(faction.id,section.id,i);
+    const card=el('div',{class:'stat-section'+(isOpen?' expanded':'')});
+    const hdr=el('button',{class:'stat-section-header',onclick:()=>{
+      const next=!card.classList.contains('expanded');
+      card.classList.toggle('expanded');
+      setSectionExpanded(faction.id,section.id,next);
+    }});
+    hdr.appendChild(el('div',{class:'stat-section-icon',html:ICONS[section.icon]||ICONS.file}));
+    hdr.appendChild(el('div',{class:'flex-1'},el('div',{class:'stat-section-title'},section.title),el('div',{class:'stat-section-desc'},section.fields.length+' '+pluralFields(section.fields.length))));
+    hdr.appendChild(el('div',{class:'stat-section-chevron',html:ICONS.chevron}));
+    card.appendChild(hdr);
+    const body=el('div',{class:'stat-section-body'});
+    body.appendChild(el('div',{class:'ornament',style:{opacity:'0.3',marginBottom:'12px'}}));
+    body.appendChild(renderStatContent(section));
+    if(canEdit){
+      body.appendChild(el('div',{class:'flex gap-2 mt-2',style:{flexWrap:'wrap',marginTop:'12px'}},
+        el('button',{class:'btn btn-ghost btn-sm',onclick:()=>openStatEditor(faction,section)},el('span',{html:ICONS.edit}),'Редактировать секцию'),
+        el('button',{class:'btn btn-ghost btn-sm',onclick:()=>moveSection(faction,section.id,-1),disabled:i===0,title:'Переместить вверх'},el('span',{html:ICONS.arrowUp})),
+        el('button',{class:'btn btn-ghost btn-sm',onclick:()=>moveSection(faction,section.id,1),disabled:i===stats.length-1,title:'Переместить вниз'},el('span',{html:ICONS.arrowDown})),
+        el('button',{class:'btn btn-ghost btn-sm text-danger',onclick:()=>deleteSection(faction,section.id)},el('span',{html:ICONS.trash}),'Удалить секцию')
+      ));
+    }
+    card.appendChild(body);
     wrap.appendChild(card);
   });
   return wrap;
 }
-function renderStatContent(stat){
-  const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey);
-  if(!section)return el('p',{class:'text-muted italic text-sm'},'Нет данных');
+function pluralFields(n){return n===1?'поле':(n>=2&&n<=4?'поля':'полей')}
+
+function renderStatContent(section){
+  if(!section||!section.fields||section.fields.length===0){
+    return el('p',{class:'text-muted italic text-sm'},'Нет данных');
+  }
   const wrap=el('div',{});
   const gridClass=section.fields.length<=4?'stat-grid-2':(section.fields.length<=6?'stat-grid-3':'stat-grid-4');
   const grid=el('div',{class:gridClass});
+  let renderedCount=0;
   section.fields.forEach(f=>{
-    const val=stat.content?stat.content[f.key]:undefined;
+    const val=f.value;
     if(f.type==='list'){
-      if(!val||!val.length)return;
+      const items=Array.isArray(val)?val.filter(Boolean):[];
+      if(items.length===0)return;
       grid.appendChild(el('div',{class:'stat-field',style:{gridColumn:'1 / -1'}},
         el('div',{class:'stat-field-label'},f.label),
-        el('ul',{style:{listStyle:'none',paddingLeft:'0'}},
-          ...val.map(item=>el('li',{style:{marginBottom:'4px',display:'flex',gap:'8px'}},el('span',{style:{color:'var(--accent)'}},'•'),el('span',{class:'text-sm'},item)))
+        el('ul',{style:{listStyle:'none',paddingLeft:'0',marginTop:'4px'}},
+          ...items.map(item=>el('li',{style:{marginBottom:'4px',display:'flex',gap:'8px',alignItems:'flex-start'}},el('span',{style:{color:'var(--accent)',flexShrink:'0'}},'•'),el('span',{class:'text-sm'},String(item))))
         )
       ));
+      renderedCount++;
     }else if(f.type==='number'){
-      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value',style:{fontFamily:'Cinzel,serif',fontWeight:'600',fontSize:'18px'}},String(val||0))));
+      const num=typeof val==='number'?val:(Number(val)||0);
+      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value-number'},formatNumber(num))));
+      renderedCount++;
     }else{
-      if(!val)return;
-      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value'},val)));
+      const txt=val==null?'':String(val);
+      if(!txt)return;
+      grid.appendChild(el('div',{class:'stat-field'},el('div',{class:'stat-field-label'},f.label),el('div',{class:'stat-field-value'},txt)));
+      renderedCount++;
     }
   });
-  if(grid.children.length===0)return el('p',{class:'text-muted italic text-sm'},'Нет данных');
+  if(renderedCount===0)return el('p',{class:'text-muted italic text-sm'},'Нет данных');
   wrap.appendChild(grid);
   return wrap;
 }
-function openStatEditor(faction,stat){
-  const modal=el('div',{style:{position:'fixed',inset:'0',background:'rgba(0,0,0,0.7)',zIndex:'200',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'}});
-  const card=el('div',{class:'card card-glow',style:{maxWidth:'600px',width:'100%',maxHeight:'80vh',overflowY:'auto'}});
-  const section=STAT_SECTIONS.find(s=>s.key===stat.sectionKey);
-  card.appendChild(el('h2',{style:{marginBottom:'16px'}},'Редактирование: '+stat.sectionTitle));
+function formatNumber(n){
+  if(typeof n!=='number')n=Number(n)||0;
+  return n.toLocaleString('ru-RU');
+}
+
+/* ====== Редактор секции (полностью гибкий) ====== */
+function openStatEditor(faction,section){
+  const modal=el('div',{class:'modal-overlay'});
+  const card=el('div',{class:'card card-glow modal-card'});
+  /* Глубокая копия для локального редактирования */
+  const local=JSON.parse(JSON.stringify(section));
+  card.appendChild(el('div',{class:'flex items-center justify-between mb-4'},
+    el('h2',{},'Редактирование секции'),
+    el('button',{class:'btn btn-ghost btn-icon',onclick:()=>modal.remove()},el('span',{html:ICONS.close}))
+  ));
   const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
-  const inputs={};
-  section.fields.forEach(f=>{
-    const val=stat.content?stat.content[f.key]:'';
-    if(f.type==='list'){
-      const ta=el('textarea',{class:'textarea',style:{minHeight:'100px'},placeholder:'Каждый пункт с новой строки'},Array.isArray(val)?val.join('\n'):'');
-      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),ta));
-      inputs[f.key]={el:ta,type:'list'};
-    }else if(f.type==='number'){
-      const inp=el('input',{class:'input',type:'number',value:val||0});
-      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
-      inputs[f.key]={el:inp,type:'number'};
-    }else{
-      const inp=el('input',{class:'input',value:val||''});
-      form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
-      inputs[f.key]={el:inp,type:'text'};
+  /* Заголовок секции */
+  form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
+    el('div',{class:'field-group'},el('label',{class:'label'},'Название секции'),
+      el('input',{class:'input',value:local.title,oninput:e=>local.title=e.target.value,required:true})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Иконка секции'),
+      (()=>{const sel=el('select',{class:'select',onchange:e=>local.icon=e.target.value});
+        SECTION_ICON_OPTIONS.forEach(opt=>{const o=el('option',{value:opt.key},opt.label);if(opt.key===local.icon)o.selected=true;sel.appendChild(o)});
+        return sel;
+      })()
+    )
+  ));
+  /* Список полей */
+  const fieldsTitle=el('div',{class:'flex items-center justify-between'},
+    el('label',{class:'label'},'Поля секции'),
+    el('span',{class:'text-muted text-xs'},local.fields.length+' '+pluralFields(local.fields.length))
+  );
+  form.appendChild(fieldsTitle);
+  const fieldsList=el('div',{class:'flex flex-col gap-2',style:{marginBottom:'12px'}});
+  function renderFields(){
+    fieldsList.innerHTML='';
+    if(local.fields.length===0){
+      fieldsList.appendChild(el('p',{class:'text-muted italic text-xs',style:{padding:'12px',textAlign:'center',border:'1px dashed var(--border)',borderRadius:'6px'}},'В секции нет полей. Добавьте новое поле ниже.'));
+      return;
     }
+    local.fields.forEach((f,idx)=>{
+      const item=el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)',padding:'10px'}});
+      const top=el('div',{class:'flex items-center gap-2 mb-2'});
+      const labelInput=el('input',{class:'input',style:{flex:'1',fontSize:'13px'},value:f.label,oninput:e=>f.label=e.target.value,placeholder:'Название поля'});
+      const typeBadge=el('span',{class:'badge'},f.type==='number'?'Число':(f.type==='list'?'Список':'Текст'));
+      const delBtn=el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:()=>{local.fields.splice(idx,1);renderFields()}},el('span',{html:ICONS.trash}));
+      top.appendChild(labelInput);top.appendChild(typeBadge);top.appendChild(delBtn);
+      item.appendChild(top);
+      /* Value editor depending on type */
+      if(f.type==='list'){
+        const ta=el('textarea',{class:'textarea',style:{minHeight:'60px',fontSize:'12px'},placeholder:'Каждый пункт с новой строки'},Array.isArray(f.value)?f.value.join('\n'):'');
+        ta.addEventListener('input',()=>{f.value=ta.value.split('\n').map(s=>s.trim()).filter(Boolean)});
+        item.appendChild(ta);
+      }else if(f.type==='number'){
+        const inp=el('input',{class:'input',type:'number',value:typeof f.value==='number'?f.value:(Number(f.value)||0),style:{fontSize:'13px'}});
+        inp.addEventListener('input',()=>{f.value=Number(inp.value)||0});
+        item.appendChild(inp);
+      }else{
+        const inp=el('input',{class:'input',value:f.value||'',style:{fontSize:'13px'}});
+        inp.addEventListener('input',()=>{f.value=inp.value});
+        item.appendChild(inp);
+      }
+      fieldsList.appendChild(item);
+    });
+  }
+  renderFields();
+  form.appendChild(fieldsList);
+  /* Добавление нового поля */
+  const newField={type:'text',label:''};
+  const addRow=el('div',{class:'card',style:{background:'rgba(58,125,116,0.05)',borderColor:'rgba(58,125,116,0.25)',padding:'10px',marginBottom:'12px'}});
+  addRow.appendChild(el('div',{class:'label'},'Добавить новое поле'));
+  const addFlex=el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}});
+  const typeSel=el('select',{class:'select',style:{flex:'0 0 130px'}});
+  FIELD_TYPE_OPTIONS.forEach(opt=>{const o=el('option',{value:opt.key},opt.label);if(opt.key===newField.type)o.selected=true;typeSel.appendChild(o)});
+  typeSel.addEventListener('change',()=>{newField.type=typeSel.value});
+  const labelInput=el('input',{class:'input',placeholder:'Название поля',style:{flex:'1',minWidth:'160px'}});
+  labelInput.addEventListener('input',()=>{newField.label=labelInput.value});
+  const addBtn=el('button',{type:'button',class:'btn btn-primary btn-sm'},el('span',{html:ICONS.plus}),'Добавить поле');
+  addBtn.addEventListener('click',()=>{
+    if(!newField.label.trim()){toast('Ошибка','Введите название поля','error');return}
+    local.fields.push({id:uid('f'),label:newField.label.trim(),type:newField.type,value:defaultFieldValue(newField.type)});
+    newField.label='';labelInput.value='';
+    renderFields();
   });
-  form.appendChild(el('div',{class:'flex gap-2 justify-end',style:{marginTop:'16px'}},
+  addFlex.appendChild(typeSel);addFlex.appendChild(labelInput);addFlex.appendChild(addBtn);
+  addRow.appendChild(addFlex);
+  form.appendChild(addRow);
+  form.appendChild(el('div',{class:'flex gap-2 justify-end'},
     el('button',{type:'button',class:'btn btn-ghost',onclick:()=>modal.remove()},'Отмена'),
-    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Сохранить')
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),'Сохранить секцию')
+  ));
+  card.appendChild(form);
+  modal.appendChild(card);
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
+  document.body.appendChild(modal);
+  async function save(){
+    if(!local.title.trim()){toast('Ошибка','Введите название секции','error');return}
+    /* Нормализуем поля */
+    const cleanedFields=local.fields.map(f=>({
+      id:f.id||uid('f'),
+      label:(f.label||'Поле').trim(),
+      type:f.type||'text',
+      value:f.value!==undefined?f.value:defaultFieldValue(f.type||'text')
+    })).filter(f=>f.label);
+    const stats=migrateStats(faction.stats||[]);
+    const idx=stats.findIndex(s=>s.id===local.id);
+    if(idx>=0){
+      stats[idx]={...stats[idx],title:local.title.trim(),icon:local.icon,fields:cleanedFields};
+    }
+    try{
+      await RTDB.update('factions/'+faction.id,{stats});
+      toast('Секция обновлена','','success');
+      modal.remove();App.render();
+    }catch(e){toast('Ошибка',e.message,'error')}
+  }
+}
+
+function openAddSection(faction){
+  const modal=el('div',{class:'modal-overlay'});
+  const card=el('div',{class:'card card-glow modal-card',style:{maxWidth:'500px'}});
+  card.appendChild(el('div',{class:'flex items-center justify-between mb-4'},
+    el('h2',{},'Новая секция'),
+    el('button',{class:'btn btn-ghost btn-icon',onclick:()=>modal.remove()},el('span',{html:ICONS.close}))
+  ));
+  const local={title:'',icon:'flag'};
+  const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название секции *'),
+    el('input',{class:'input',placeholder:'Например: Бригады, Копейщики, Универсальные бойцы...',oninput:e=>local.title=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Иконка секции'),
+    (()=>{const sel=el('select',{class:'select',onchange:e=>local.icon=e.target.value});
+      SECTION_ICON_OPTIONS.forEach(opt=>{const o=el('option',{value:opt.key},opt.label);if(opt.key===local.icon)o.selected=true;sel.appendChild(o)});
+      return sel;
+    })()
+  ));
+  form.appendChild(el('p',{class:'text-muted text-xs italic'},'Пустая секция будет создана. После сохранения откройте её и добавьте нужные поля.'));
+  form.appendChild(el('div',{class:'flex gap-2 justify-end mt-4'},
+    el('button',{type:'button',class:'btn btn-ghost',onclick:()=>modal.remove()},'Отмена'),
+    el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.plus}),'Создать секцию')
   ));
   card.appendChild(form);modal.appendChild(card);
   modal.addEventListener('click',e=>{if(e.target===modal)modal.remove()});
   document.body.appendChild(modal);
   async function save(){
-    const newContent={};
-    Object.entries(inputs).forEach(([key,{el:e,type}])=>{
-      if(type==='list')newContent[key]=e.value.split('\n').map(s=>s.trim()).filter(Boolean);
-      else if(type==='number')newContent[key]=Number(e.value)||0;
-      else newContent[key]=e.value;
-    });
-    stat.content=newContent;
+    if(!local.title.trim()){toast('Ошибка','Введите название секции','error');return}
+    const stats=migrateStats(faction.stats||[]);
+    const newSection={
+      id:uid('sec'),
+      title:local.title.trim(),
+      icon:local.icon,
+      order:stats.length,
+      fields:[]
+    };
+    stats.push(newSection);
     try{
-      await RTDB.update('factions/'+faction.id,{stats:faction.stats});
-      toast('Сохранено','Секция обновлена','success');
-      modal.remove();App.render();
+      await RTDB.update('factions/'+faction.id,{stats});
+      toast('Секция создана','','success');
+      modal.remove();
+      setSectionExpanded(faction.id,newSection.id,true);
+      App.render();
     }catch(e){toast('Ошибка',e.message,'error')}
   }
+}
+
+async function moveSection(faction,sectionId,direction){
+  const stats=migrateStats(faction.stats||[]);
+  const idx=stats.findIndex(s=>s.id===sectionId);
+  if(idx<0)return;
+  const newIdx=idx+direction;
+  if(newIdx<0||newIdx>=stats.length)return;
+  const tmp=stats[idx];stats[idx]=stats[newIdx];stats[newIdx]=tmp;
+  /* Переписать order */
+  stats.forEach((s,i)=>s.order=i);
+  try{
+    await RTDB.update('factions/'+faction.id,{stats});
+    toast('Секция перемещена','','info');
+  }catch(e){toast('Ошибка',e.message,'error')}
+}
+
+async function deleteSection(faction,sectionId){
+  if(!confirm('Удалить секцию целиком? Все поля секции будут потеряны.'))return;
+  const stats=migrateStats(faction.stats||[]).filter(s=>s.id!==sectionId);
+  stats.forEach((s,i)=>s.order=i);
+  try{
+    await RTDB.update('factions/'+faction.id,{stats});
+    toast('Секция удалена','','info');
+  }catch(e){toast('Ошибка',e.message,'error')}
+}
+
+/* ====== Применение pendingEffects (N тиков) ====== */
+async function applyPendingEffectsNTurns(faction,turns,onlyIdx){
+  try{
+    const stats=migrateStats(faction.stats||[]);
+    let pending=Array.isArray(faction.pendingEffects)?faction.pendingEffects.map(e=>({...e})):[];
+    const updates=[];
+    for(let i=0;i<turns;i++){
+      let applied=false;
+      const toRemove=[];
+      pending.forEach((eff,idx)=>{
+        if(onlyIdx!==undefined&&idx!==onlyIdx)return;
+        /* Применить один тик */
+        const section=stats.find(s=>s.id===eff.targetSectionId);
+        if(section){
+          const field=findField(section,eff.targetFieldId);
+          if(field){
+            field.value=applyEffectToValue(field.value,{...eff,fieldType:field.type});
+            applied=true;
+            if(eff.timing==='over_turns'){
+              eff.turns=(eff.turns||0)-1;
+              if(eff.turns<=0)toRemove.push(idx);
+            }
+            /* per_turn — остаётся в pending */
+          }else{
+            toRemove.push(idx);
+          }
+        }else{
+          toRemove.push(idx);
+        }
+      });
+      /* Удалить завершённые (с конца) */
+      toRemove.reverse().forEach(idx=>pending.splice(idx,1));
+      if(!applied)break;
+      if(pending.length===0)break;
+      if(onlyIdx!==undefined)break;
+    }
+    await RTDB.update('factions/'+faction.id,{stats,pendingEffects:pending});
+    toast('Эффекты применены','','success');
+  }catch(e){toast('Ошибка',e.message,'error')}
+}
+
+function modeLabel(mode){
+  return {add:'+',set:'=',subtract:'−',percent_add:'+%',percent_subtract:'−%'}[mode]||'=';
 }
 
 /* ====== POSTS VIEW ====== */
@@ -1126,6 +1783,20 @@ function PostDetail(post){
     if(verdict.technicalText){
       vCard.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},el('p',{class:'label'},'Техническая часть'),el('p',{class:'text-sm',style:{whiteSpace:'pre-wrap'}},verdict.technicalText)));
     }
+    if(verdict.effects&&verdict.effects.length){
+      vCard.appendChild(el('div',{class:'card mt-4',style:{background:'rgba(24,33,31,0.4)'}},
+        el('p',{class:'label'},'Применённые эффекты на статистику'),
+        el('div',{class:'flex flex-col gap-1 mt-2'},
+          ...verdict.effects.map(eff=>el('div',{class:'effect-row'},
+            el('div',{class:'effect-info'},
+              el('div',{class:'effect-target'},eff.fieldName||'поле'),
+              el('div',{class:'effect-detail'},modeLabel(eff.mode)+' '+eff.amount+' · '+(eff.timing==='instant'?'мгновенно':eff.timing==='per_turn'?'каждый ход':'ходов: '+eff.turns)),
+              eff.note?el('div',{class:'effect-note'},eff.note):null
+            )
+          ))
+        )
+      ));
+    }
     wrap.appendChild(vCard);
   }else{
     wrap.appendChild(el('div',{class:'card text-center',style:{background:'rgba(212,165,67,0.05)',borderColor:'rgba(212,165,67,0.2)'}},
@@ -1182,7 +1853,12 @@ function VerdictEditor(post){
   wrap.appendChild(el('button',{class:'btn btn-ghost btn-sm',style:{alignSelf:'flex-start'},onclick:()=>App.setView('admin-posts')},el('span',{html:ICONS.back}),'Назад к постам'));
   const faction=App.cache.factions.find(f=>f.id===post.factionId);
   const existingVerdict=post.verdict;
-  const state={roleplayText:existingVerdict?existingVerdict.roleplayText:'',technicalText:existingVerdict?existingVerdict.technicalText:'',statChanges:existingVerdict&&existingVerdict.statChanges?[...existingVerdict.statChanges]:[]};
+  const state={
+    roleplayText:existingVerdict?existingVerdict.roleplayText:'',
+    technicalText:existingVerdict?existingVerdict.technicalText:'',
+    effects:existingVerdict&&Array.isArray(existingVerdict.effects)?JSON.parse(JSON.stringify(existingVerdict.effects)):[],
+    showEffectForm:false
+  };
   const postCard=el('div',{class:'card'});
   const ts=RTDB.ts(post.createdAt);
   postCard.appendChild(el('div',{class:'flex items-center gap-2 mb-3',style:{flexWrap:'wrap'}},
@@ -1216,45 +1892,169 @@ function VerdictEditor(post){
   const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Ролевая часть (нарратив) *'),el('textarea',{class:'textarea',placeholder:'Опишите, что произошло по итогам поста игрока...',style:{minHeight:'150px'},oninput:e=>state.roleplayText=e.target.value},state.roleplayText)));
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Техническая часть (опц.)'),el('textarea',{class:'textarea',placeholder:'Технические пояснения...',style:{minHeight:'80px'},oninput:e=>state.technicalText=e.target.value},state.technicalText)));
-  const statSection=el('div',{class:'field-group'});
-  statSection.appendChild(el('div',{class:'flex items-center justify-between'},el('label',{class:'label'},'Изменения статистики'),el('button',{type:'button',class:'btn btn-ghost btn-sm',onclick:()=>{state.statChanges.push({sectionKey:'TREASURY',content:defaultStatContent('TREASURY')});renderStatChanges()}},el('span',{html:ICONS.plus}),'Добавить секцию')));
-  const statList=el('div',{class:'flex flex-col gap-3'});
-  statSection.appendChild(statList);
-  form.appendChild(statSection);
-  function renderStatChanges(){
-    statList.innerHTML='';
-    if(state.statChanges.length===0){
-      statList.appendChild(el('p',{class:'text-muted italic text-xs',style:{padding:'12px',textAlign:'center',border:'1px dashed var(--border)',borderRadius:'6px'}},'Нет изменений статистики. Добавьте секцию, чтобы автоматически обновить статы фракции.'));
+
+  /* Секция эффектов */
+  const effSection=el('div',{class:'field-group'});
+  effSection.appendChild(el('div',{class:'flex items-center justify-between'},
+    el('label',{class:'label'},'Эффекты на статистику'),
+    el('button',{type:'button',class:'btn btn-ghost btn-sm',onclick:()=>{state.showEffectForm=!state.showEffectForm;renderEffectsForm()}},el('span',{html:ICONS.plus}),'Добавить эффект')
+  ));
+  const effList=el('div',{class:'flex flex-col gap-2',style:{marginTop:'8px'}});
+  effSection.appendChild(effList);
+  const effFormWrap=el('div');
+  effSection.appendChild(effFormWrap);
+
+  /* Получаем секции фракции автора (для выбора target) */
+  function getFactionStats(){
+    if(!faction)return [];
+    return migrateStats(faction.stats||[]);
+  }
+  function renderEffectsList(){
+    effList.innerHTML='';
+    if(state.effects.length===0){
+      effList.appendChild(el('p',{class:'text-muted italic text-xs',style:{padding:'12px',textAlign:'center',border:'1px dashed var(--border)',borderRadius:'6px'}},'Нет эффектов. Добавьте эффект, чтобы изменить статистику фракции.'));
       return;
     }
-    state.statChanges.forEach((change,index)=>{
-      const section=STAT_SECTIONS.find(s=>s.key===change.sectionKey);
-      const item=el('div',{class:'card',style:{background:'rgba(24,33,31,0.4)'}});
-      const select=el('select',{class:'select',style:{marginBottom:'8px'},onchange:e=>{change.sectionKey=e.target.value;change.content=defaultStatContent(change.sectionKey);renderStatChanges()}});
-      STAT_SECTIONS.forEach(s=>{const opt=el('option',{value:s.key},s.title);if(s.key===change.sectionKey)opt.selected=true;select.appendChild(opt)});
-      item.appendChild(el('div',{class:'flex items-center gap-2 mb-2'},select,el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm',onclick:()=>{state.statChanges.splice(index,1);renderStatChanges()}},el('span',{html:ICONS.close}))));
-      if(section){
-        section.fields.forEach(f=>{
-          const val=change.content[f.key];
-          if(f.type==='list'){
-            const ta=el('textarea',{class:'textarea',style:{minHeight:'60px',fontSize:'12px'},placeholder:f.label+' (каждый пункт с новой строки)'},Array.isArray(val)?val.join('\n'):'');
-            ta.oninput=()=>{change.content[f.key]=ta.value.split('\n').map(s=>s.trim()).filter(Boolean)};
-            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),ta));
-          }else if(f.type==='number'){
-            const inp=el('input',{class:'input',type:'number',value:val||0,style:{fontSize:'12px'}});
-            inp.oninput=()=>{change.content[f.key]=Number(inp.value)||0};
-            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
-          }else{
-            const inp=el('input',{class:'input',value:val||'',style:{fontSize:'12px'}});
-            inp.oninput=()=>{change.content[f.key]=inp.value};
-            item.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},f.label),inp));
-          }
-        });
-      }
-      statList.appendChild(item);
+    state.effects.forEach((eff,idx)=>{
+      effList.appendChild(el('div',{class:'effect-row'},
+        el('div',{class:'effect-info'},
+          el('div',{class:'effect-target'},eff.fieldName||('поле '+eff.targetFieldId)),
+          el('div',{class:'effect-detail'},
+            modeLabel(eff.mode)+' '+eff.amount+
+            ' · '+(eff.timing==='instant'?'сразу':eff.timing==='per_turn'?'каждый ход':'в течение '+eff.turns+' ходов')
+          ),
+          eff.note?el('div',{class:'effect-note'},eff.note):null
+        ),
+        el('button',{type:'button',class:'btn btn-ghost btn-icon btn-sm text-danger',onclick:()=>{state.effects.splice(idx,1);renderEffectsList()}},el('span',{html:ICONS.trash}))
+      ));
     });
   }
-  renderStatChanges();
+  function renderEffectsForm(){
+    effFormWrap.innerHTML='';
+    if(!state.showEffectForm)return;
+    if(!faction){
+      effFormWrap.appendChild(el('div',{class:'card',style:{background:'rgba(212,165,67,0.05)',borderColor:'rgba(212,165,67,0.25)',padding:'10px'}},
+        el('p',{class:'text-xs text-warning'},'У автора поста нет фракции. Невозможно создать эффект на статистику.')
+      ));
+      return;
+    }
+    const stats=getFactionStats();
+    const local={targetSectionId:'',targetFieldId:'',mode:'add',amount:0,timing:'instant',turns:10,note:''};
+    const formInner=el('div',{class:'card',style:{background:'rgba(58,125,116,0.05)',borderColor:'rgba(58,125,116,0.25)',padding:'12px'}});
+    formInner.appendChild(el('div',{class:'label'},'Новый эффект'));
+    /* Row 1: section + field */
+    const row1=el('div',{class:'stat-grid-2 mb-2'});
+    const sectionSel=el('select',{class:'select',onchange:()=>{
+      local.targetSectionId=sectionSel.value;
+      local.targetFieldId='';
+      rebuildFieldSelect();
+    }});
+    sectionSel.appendChild(el('option',{value:''},'— Выберите секцию —'));
+    stats.forEach(s=>sectionSel.appendChild(el('option',{value:s.id},s.title)));
+    row1.appendChild(el('div',{},el('label',{class:'label',style:{fontSize:'10px'}},'Секция'),sectionSel));
+    const fieldSelWrap=el('div',{},el('label',{class:'label',style:{fontSize:'10px'}},'Поле'));
+    row1.appendChild(fieldSelWrap);
+    formInner.appendChild(row1);
+    function rebuildFieldSelect(){
+      const oldFieldSel=fieldSelWrap.querySelector('select');
+      if(oldFieldSel)oldFieldSel.remove();
+      const fieldSel=el('select',{class:'select',onchange:()=>{
+        local.targetFieldId=fieldSel.value;
+        const sec=stats.find(s=>s.id===local.targetSectionId);
+        const f=findField(sec,local.targetFieldId);
+        /* Авто-выбор подходящего mode для не-number полей */
+        if(f&&(f.type==='list'||f.type==='text')){
+          modeSel.value='set';
+          local.mode='set';
+          updateAmountInput();
+        }
+      }});
+      fieldSel.appendChild(el('option',{value:''},'— Выберите поле —'));
+      const sec=stats.find(s=>s.id===local.targetSectionId);
+      if(sec){
+        sec.fields.forEach(f=>fieldSel.appendChild(el('option',{value:f.id},f.label+' ('+f.type+')')));
+      }
+      fieldSelWrap.appendChild(fieldSel);
+    }
+    /* Row 2: amount + mode */
+    const row2=el('div',{class:'stat-grid-2 mb-2'});
+    const amountInputWrap=el('div',{},el('label',{class:'label',style:{fontSize:'10px'}},'Значение'));
+    row2.appendChild(amountInputWrap);
+    const modeSel=el('select',{class:'select',onchange:()=>{local.mode=modeSel.value;updateAmountInput()}});
+    [['add','Добавить (+)'],['set','Установить (=)'],['subtract','Вычесть (−)'],['percent_add','Увеличить на % (+%)'],['percent_subtract','Уменьшить на % (−%)']].forEach(([k,l])=>{
+      const o=el('option',{value:k},l);modeSel.appendChild(o);
+    });
+    row2.appendChild(el('div',{},el('label',{class:'label',style:{fontSize:'10px'}},'Тип изменения'),modeSel));
+    formInner.appendChild(row2);
+    function updateAmountInput(){
+      const old=amountInputWrap.querySelector('input,textarea');
+      if(old)old.remove();
+      const sec=stats.find(s=>s.id===local.targetSectionId);
+      const f=findField(sec,local.targetFieldId);
+      /* Для set на list — показываем textarea; иначе — number input */
+      if(f&&f.type==='list'&&local.mode==='set'){
+        const ta=el('textarea',{class:'textarea',style:{minHeight:'50px',fontSize:'12px'},placeholder:'Каждый пункт с новой строки',oninput:e=>local.amount=e.target.value});
+        amountInputWrap.appendChild(ta);
+      }else if(f&&f.type==='text'&&local.mode==='set'){
+        const inp=el('input',{class:'input',style:{fontSize:'12px'},oninput:e=>local.amount=e.target.value});
+        amountInputWrap.appendChild(inp);
+      }else{
+        const inp=el('input',{class:'input',type:'number',value:'0',style:{fontSize:'12px'},oninput:e=>local.amount=Number(inp.value)||0});
+        amountInputWrap.appendChild(inp);
+      }
+    }
+    /* Row 3: timing + turns */
+    const row3=el('div',{class:'stat-grid-2 mb-2'});
+    const timingSel=el('select',{class:'select',onchange:()=>{
+      local.timing=timingSel.value;
+      turnsWrap.style.display=local.timing==='over_turns'?'block':'none';
+    }});
+    [['instant','Сразу'],['per_turn','Каждый ход'],['over_turns','В течение N ходов']].forEach(([k,l])=>{
+      const o=el('option',{value:k},l);timingSel.appendChild(o);
+    });
+    row3.appendChild(el('div',{},el('label',{class:'label',style:{fontSize:'10px'}},'Время применения'),timingSel));
+    const turnsWrap=el('div',{style:{display:'none'}},el('label',{class:'label',style:{fontSize:'10px'}},'Кол-во ходов'),
+      el('input',{class:'input',type:'number',min:'1',value:'10',oninput:e=>local.turns=Number(e.target.value)||1}));
+    row3.appendChild(turnsWrap);
+    formInner.appendChild(row3);
+    /* Row 4: note */
+    formInner.appendChild(el('div',{class:'field-group'},
+      el('label',{class:'label',style:{fontSize:'10px'}},'Комментарий (необязательно)'),
+      el('input',{class:'input',style:{fontSize:'12px'},placeholder:'Например: Торговля принесла +3000 солей/мес',oninput:e=>local.note=e.target.value})
+    ));
+    formInner.appendChild(el('div',{class:'flex gap-2 justify-end'},
+      el('button',{type:'button',class:'btn btn-ghost btn-sm',onclick:()=>{state.showEffectForm=false;renderEffectsForm()}},'Отмена'),
+      el('button',{type:'button',class:'btn btn-primary btn-sm',onclick:()=>{
+        if(!local.targetSectionId){toast('Ошибка','Выберите секцию','error');return}
+        if(!local.targetFieldId){toast('Ошибка','Выберите поле','error');return}
+        const sec=stats.find(s=>s.id===local.targetSectionId);
+        const f=findField(sec,local.targetFieldId);
+        if(!f){toast('Ошибка','Поле не найдено','error');return}
+        if(local.timing==='over_turns' && (!local.turns||local.turns<1)){toast('Ошибка','Укажите кол-во ходов','error');return}
+        const eff={
+          id:uid('eff'),
+          targetSectionId:local.targetSectionId,
+          targetFieldId:local.targetFieldId,
+          fieldName:f.label,
+          fieldType:f.type,
+          mode:local.mode,
+          amount:local.amount,
+          timing:local.timing,
+          turns:local.timing==='over_turns'?local.turns:0,
+          note:local.note||''
+        };
+        state.effects.push(eff);
+        state.showEffectForm=false;
+        renderEffectsList();
+        renderEffectsForm();
+      }},el('span',{html:ICONS.plus}),'Добавить')
+    ));
+    effFormWrap.appendChild(formInner);
+  }
+  renderEffectsList();
+  renderEffectsForm();
+  form.appendChild(effSection);
+
   form.appendChild(el('div',{class:'flex justify-end gap-2',style:{marginTop:'8px'}},
     el('button',{type:'button',class:'btn btn-ghost',onclick:()=>App.setView('admin-posts')},'Отмена'),
     el('button',{type:'submit',class:'btn btn-primary'},el('span',{html:ICONS.save}),existingVerdict?'Обновить вердикт':'Вынести вердикт')
@@ -1265,25 +2065,27 @@ function VerdictEditor(post){
     if(state.roleplayText.length<5){toast('Ошибка','Ролевая часть обязательна','error');return}
     const verdict={
       roleplayText:state.roleplayText,technicalText:state.technicalText,
-      statChanges:state.statChanges,adminId:App.userProfile.id,adminName:App.userProfile.name,
+      effects:state.effects,adminId:App.userProfile.id,adminName:App.userProfile.name,
       createdAt:new Date().toISOString(),
     };
     try{
       await RTDB.update('posts/'+post.id,{status:'VERDICTED',verdict});
-      if(faction&&state.statChanges.length){
-        const factionStats=[...faction.stats];
-        state.statChanges.forEach(change=>{
-          let stat=factionStats.find(s=>s.sectionKey===change.sectionKey);
-          if(!stat){
-            const section=STAT_SECTIONS.find(s=>s.key===change.sectionKey);
-            stat={sectionKey:change.sectionKey,sectionTitle:section?section.title:change.sectionKey,content:defaultStatContent(change.sectionKey),order:factionStats.length};
-            factionStats.push(stat);
-          }
-          stat.content=change.content;
-        });
-        await RTDB.update('factions/'+faction.id,{stats:factionStats});
+      if(faction&&state.effects.length){
+        const stats=migrateStats(faction.stats||[]);
+        const instantEffects=state.effects.filter(e=>e.timing==='instant');
+        const pendingEffects=state.effects.filter(e=>e.timing==='per_turn'||e.timing==='over_turns');
+        let newStats=stats;
+        if(instantEffects.length){
+          newStats=applyInstantEffects(stats,instantEffects);
+        }
+        const updateData={stats:newStats};
+        if(pendingEffects.length){
+          const existingPending=Array.isArray(faction.pendingEffects)?faction.pendingEffects:[];
+          updateData.pendingEffects=[...existingPending,...pendingEffects];
+        }
+        await RTDB.update('factions/'+faction.id,updateData);
       }
-      toast('Вердикт вынесен','Статистика обновлена','success');
+      toast('Вердикт вынесен',state.effects.length?'Статистика обновлена':'Вердикт сохранён','success');
       App.setView('admin-posts');
     }catch(e){toast('Ошибка',e.message,'error')}
   }
@@ -1574,7 +2376,7 @@ function AdminChatsView(){
   return wrap;
 }
 function openSummary(chat){
-  const modal=el('div',{style:{position:'fixed',inset:'0',background:'rgba(0,0,0,0.7)',zIndex:'200',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'}});
+  const modal=el('div',{class:'modal-overlay'});
   const card=el('div',{class:'card card-glow',style:{maxWidth:'500px',width:'100%'}});
   card.appendChild(el('h2',{class:'mb-4'},'Итог встречи'));
   const ta=el('textarea',{class:'textarea',style:{minHeight:'120px'},placeholder:'Опишите итог дипломатической встречи...'},chat.summary||'');
@@ -1602,7 +2404,7 @@ function ChatForm(){
   const wrap=el('div',{class:'card card-glow'});
   wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новые переговоры'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('admin-chats')},el('span',{html:ICONS.close}))));
   const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Встреча Лодерфеса и Помы',oninput:e=>state.name=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Встреча правителей',oninput:e=>state.name=e.target.value,required:true})));
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Тема'),el('input',{class:'input',placeholder:'Торговый договор',oninput:e=>state.topic=e.target.value})));
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Описание'),el('textarea',{class:'textarea',style:{minHeight:'60px'},placeholder:'Контекст переговоров...',oninput:e=>state.description=e.target.value})));
   const usersWithFactions=App.cache.users.filter(u=>{
@@ -1809,9 +2611,9 @@ function BattleForm(){
   const wrap=el('div',{class:'card card-glow'});
   wrap.appendChild(el('div',{class:'flex justify-between items-center mb-4'},el('h2',{style:{fontSize:'18px'}},'Новая баталия'),el('button',{class:'btn btn-ghost btn-icon',onclick:()=>App.setView('admin-battles')},el('span',{html:ICONS.close}))));
   const form=el('form',{onsubmit:e=>{e.preventDefault();save()}});
-  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Осада Рифа',oninput:e=>state.name=e.target.value,required:true})));
+  form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Название *'),el('input',{class:'input',placeholder:'Осада крепости',oninput:e=>state.name=e.target.value,required:true})));
   form.appendChild(el('div',{class:'stat-grid-2 mb-4'},
-    el('div',{class:'field-group'},el('label',{class:'label'},'Место'),el('input',{class:'input',placeholder:'Гойский остров',oninput:e=>state.location=e.target.value})),
+    el('div',{class:'field-group'},el('label',{class:'label'},'Место'),el('input',{class:'input',placeholder:'Пограничные земли',oninput:e=>state.location=e.target.value})),
     el('div',{class:'field-group'},el('label',{class:'label'},'Ход'),el('input',{class:'input',type:'number',oninput:e=>state.turnNumber=e.target.value}))
   ));
   form.appendChild(el('div',{class:'field-group'},el('label',{class:'label'},'Дедлайн постов'),el('input',{class:'input',type:'datetime-local',oninput:e=>state.postDeadline=e.target.value})));
@@ -2103,13 +2905,15 @@ function AdminFactionsView(){
   }else{
     App.cache.factions.forEach(faction=>{
       const owner=App.cache.users.find(u=>u.id===faction.userId);
+      const pendingCount=Array.isArray(faction.pendingEffects)?faction.pendingEffects.length:0;
       wrap.appendChild(el('div',{class:'card'},
         el('div',{class:'flex items-start gap-4'},
           el('div',{class:'list-item-icon',html:ICONS.shield}),
           el('div',{class:'flex-1 min-w-0'},
             el('div',{class:'flex items-center gap-2',style:{flexWrap:'wrap'}},
               el('h3',{class:'text-sm',style:{fontFamily:'Cinzel,serif'}},faction.name),
-              faction.isApproved?el('span',{class:'badge badge-success',html:ICONS.check+' Утверждено'}):el('span',{class:'badge badge-warning',html:ICONS.clock+' На утверждении'})
+              faction.isApproved?el('span',{class:'badge badge-success',html:ICONS.check+' Утверждено'}):el('span',{class:'badge badge-warning',html:ICONS.clock+' На утверждении'}),
+              pendingCount>0?el('span',{class:'badge badge-accent',html:ICONS.bolt+' Эффектов: '+pendingCount}):null
             ),
             faction.shortName?el('p',{class:'text-xs text-muted mt-1'},'Короткое: '+faction.shortName):null,
             faction.motto?el('p',{class:'text-xs italic text-accent mt-1'},'«'+faction.motto+'»'):null,
